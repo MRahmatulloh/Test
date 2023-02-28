@@ -51,7 +51,7 @@ class Goods extends MyModel
     public function rules()
     {
         return [
-            [['name', 'code', 'img'], 'required'],
+            [['name', 'code'], 'required'],
             [['category_id', 'status'], 'integer'],
             [['name', 'code', 'img'], 'string', 'max' => 255],
             [['name'], 'unique'],

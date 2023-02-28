@@ -102,7 +102,7 @@ AppAsset::register($this);
                 </div>
             </a>
             <ul>
-                <li><a href="/history">Остаток товаров</a></li>
+                <li><a href="/balance">Остаток товаров</a></li>
                 <li><a href="Alerts.html">Инвентаризация</a></li>
             </ul>
         </li>

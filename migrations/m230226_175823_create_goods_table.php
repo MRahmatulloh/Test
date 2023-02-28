@@ -17,7 +17,7 @@ class m230226_175823_create_goods_table extends Migration
             'name' => $this->string(255)->notNull()->unique(),
             'code' => $this->string(255)->notNull()->unique(),
             'category_id' => $this->integer(),
-            'img' => $this->string(255)->notNull(),
+            'img' => $this->string(255)->null(),
             'status' => $this->integer()->defaultValue(10),
             'created_at' => $this->integer()->notNull(),
             'updated_at' => $this->integer()->notNull(),

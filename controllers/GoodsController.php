@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Goods;
 use app\models\search\GoodsSearch;
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -72,19 +73,24 @@ class GoodsController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post())) {
-                //// file upload part
-                $last_id = Goods::findBySql('select max(id) as id from goods')->asArray()->one();
-                $last_id = ++$last_id['id'];
-                $model->file = UploadedFile::getInstance($model,'file');
-                $fileName = '';
 
                 if ($model->file) {
+                    $last_id = (Goods::find()
+                            ->orderBy(['id' => SORT_DESC])
+                            ->one())->id ?? 0 + 1;
+
+                    $model->file = UploadedFile::getInstance($model, 'file');
                     $fileName = $last_id.'_'. time() . '.' . $model->file->extension;
                     $model->file->saveAs('img/goods/' . $fileName , false);
+                    $model->img = $fileName;
                 }
-                $model->img = $fileName;
-                ////
-                $model->save();
+
+                if ($model->save()) {
+                    Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно сохранены'));
+                } else {
+                    Yii::$app->session->setFlash('error', Yii::t('app', 'Ошибка сохранения данных'));
+                }
+
                 return $this->redirect(['index']);
             }
         }
@@ -106,18 +112,22 @@ class GoodsController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post())) {
-            //// file upload part
-            $last_id = $model->id;
-            $model->file = UploadedFile::getInstance($model,'file');
-            $fileName = '';
-
             if ($model->file) {
+                $last_id = (Goods::find()
+                        ->orderBy(['id' => SORT_DESC])
+                        ->one())->id ?? 0 + 1;
+
+                $model->file = UploadedFile::getInstance($model, 'file');
                 $fileName = $last_id.'_'. time() . '.' . $model->file->extension;
                 $model->file->saveAs('img/goods/' . $fileName , false);
+                $model->img = $fileName;
             }
-            $model->img = $fileName;
-            ////
-            $model->save();
+
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно сохранены'));
+            } else {
+                Yii::$app->session->setFlash('error', Yii::t('app', 'Ошибка сохранения данных'));
+            }
             return $this->redirect(['index']);
         }
 
