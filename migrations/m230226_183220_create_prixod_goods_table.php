@@ -18,8 +18,9 @@ class m230226_183220_create_prixod_goods_table extends Migration
             'goods_id' => $this->integer()->notNull(),
             'currency_id' => $this->integer()->notNull(),
             'amount' => $this->double(4)->notNull(),
-            'cost' => $this->double(4),
+            'cost' => $this->double(4)->notNull(),
             'cost_usd' => $this->double(4),
+            'rasxod_goods_id' => $this->integer()->null(),
             'created_at' => $this->integer()->notNull(),
             'updated_at' => $this->integer()->notNull(),
         ]);

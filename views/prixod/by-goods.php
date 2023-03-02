@@ -1,6 +1,7 @@
 <?php
 
 use app\assets\AppAsset;
+use app\models\Currency;
 use kartik\date\DatePicker;
 use kartik\select2\Select2;
 use yii\grid\GridView;
@@ -10,7 +11,7 @@ use yii\widgets\ActiveForm;
 /** @var yii\web\View $this */
 /** @var app\models\search\PrixodGoodsSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
-/** @var app\models\PrixodGoods $model */
+/** @var app\models\search\Filter $searchModel */
 /** @var yii\widgets\ActiveForm $form */
 
 $this->title = 'Приход по товаром ';
@@ -22,14 +23,13 @@ AppAsset::register($this);
 
     <h2><?= Html::encode($this->title) ?></h2>
 
-    <br>
     <div class="prixod-goods-form">
 
         <?php $form = ActiveForm::begin(['method' => 'get']); ?>
 
         <div class="row">
             <div class="col-3">
-                <?= $form->field($model, 'date1')->widget(DatePicker::classname(), [
+                <?= $form->field($searchModel, 'from')->widget(DatePicker::classname(), [
                     'type' => 3,
                     'pluginOptions' => [
                         'autoclose' => true,
@@ -38,7 +38,7 @@ AppAsset::register($this);
                 ]); ?>
             </div>
             <div class="col-3">
-                <?= $form->field($model, 'date2')->widget(DatePicker::classname(), [
+                <?= $form->field($searchModel, 'to')->widget(DatePicker::classname(), [
                     'type' => 3,
                     'pluginOptions' => [
                         'autoclose' => true,
@@ -65,7 +65,7 @@ AppAsset::register($this);
             ['class' => 'yii\grid\SerialColumn'],
 
             [
-//                'attribute' => 'date',
+                'label' => 'Дата',
                 'value' => function ($data) {
                     return dateView($data->prixod->date);
                 },
@@ -74,11 +74,21 @@ AppAsset::register($this);
             ],
 
             [
-//                'attribute' => 'number',
+                'label' => 'Клиент',
+                'attribute' => 'client_id',
+                'value' => function ($data) {
+                    return $data->prixod->client->name;
+                },
+                'contentOptions' => ['class' => 'text-right'],
+                'filter' => []
+            ],
+
+            [
+                'label' => 'Приход',
                 'format' => 'raw',
                 'value' => function ($data) {
 
-                    return \yii\helpers\Html::a(
+                    return Html::a(
                         $data->prixod->number,
                         \Yii::$app->getUrlManager()->createUrl(
                             array('prixod/goods-list', 'id' => $data->prixod->id)
@@ -124,8 +134,8 @@ AppAsset::register($this);
 
             [
                 'attribute' => 'summa',
-                'value' => function ($model) {
-                    return pul2($model->cost * $model->amount, 2);
+                'value' => function ($searchModel) {
+                    return pul2($searchModel->cost * $searchModel->amount, 2);
                 },
                 'contentOptions' => ['class' => 'text-right'],
                 'filter' => ''
@@ -137,7 +147,7 @@ AppAsset::register($this);
                 'filter' => Select2::widget([
                     'model' => $searchModel,
                     'attribute' => 'currency_id',
-                    'data' => \app\models\Client::selectList(),
+                    'data' => Currency::selectList(),
                     'initValueText' => $searchModel->currency_id,
                     'options' => ['placeholder' => 'Выберите ...'],
                     'pluginOptions' => [

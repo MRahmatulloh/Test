@@ -15,6 +15,7 @@ use yii\behaviors\TimestampBehavior;
  * @property float $amount
  * @property float|null $cost
  * @property float|null $cost_usd
+ * @property int|null $rasxod_goods_id
  * @property int $created_at
  * @property int $updated_at
  *
@@ -51,7 +52,7 @@ class PrixodGoods extends MyModel
     {
         return [
             [['prixod_id', 'goods_id', 'currency_id', 'amount'], 'required'],
-            [['prixod_id', 'goods_id', 'currency_id'], 'integer'],
+            [['prixod_id', 'goods_id', 'currency_id', 'rasxod_goods_id'], 'integer'],
             [['amount', 'cost', 'cost_usd', 'summa'], 'number'],
             [['currency_id'], 'exist', 'skipOnError' => true, 'targetClass' => Currency::class, 'targetAttribute' => ['currency_id' => 'id']],
             [['goods_id'], 'exist', 'skipOnError' => true, 'targetClass' => Goods::class, 'targetAttribute' => ['goods_id' => 'id']],
