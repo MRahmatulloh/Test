@@ -5,10 +5,12 @@ namespace app\controllers;
 use app\models\CurrencyRates;
 use app\models\Prixod;
 use app\models\PrixodGoods;
+use app\models\search\Filter;
 use app\models\search\PrixodGoodsSearch;
 use app\models\search\PrixodSearch;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -182,6 +184,23 @@ class PrixodController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'model' => $model,
+        ]);
+    }
+
+    public function actionByGoods()
+    {
+        $searchModel = new PrixodGoodsSearch();
+
+        $searchModel->from = date('Y-01-01');
+        $searchModel->to = date('Y-m-d');
+
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        $searchModel->from = dateView($searchModel->from);
+        $searchModel->to = dateView($searchModel->to);
+        return $this->render('by-goods', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
         ]);
     }
 
