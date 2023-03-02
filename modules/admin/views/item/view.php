@@ -42,7 +42,7 @@ $animateIcon = ' <i class="glyphicon glyphicon-refresh glyphicon-refresh-animate
             'data-method' => 'post',
         ]);
         ?>
-        <?= Html::a(Yii::t('rbac-admin', 'Create'), ['create'], ['class' => 'btn btn-success']); ?>
+        <?= Html::a(Yii::t('rbac-admin', 'Создать'), ['create'], ['class' => 'btn btn-success']); ?>
     </p>
     <div class="row">
         <div class="col-sm-11">
@@ -65,7 +65,7 @@ $animateIcon = ' <i class="glyphicon glyphicon-refresh glyphicon-refresh-animate
             <table class="table table-striped table-bordered">
                 <tbody>
                     <tr>
-                        <th><?= Yii::t('rbac-admin', 'Assigned users'); ?></th>
+                        <th><?= Yii::t('rbac-admin', 'Назначенные пользователи'); ?></th>
                     </tr>
                     <tr>
                         <td id="list-users"></td>

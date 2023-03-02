@@ -5,6 +5,7 @@ namespace app\models\search;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\PrixodGoods;
+
 /**
  * This is the model class for filtering any purposes.
  *
@@ -14,6 +15,7 @@ use app\models\PrixodGoods;
  * @property int $warehouse_id
  * @property int $client_id
  */
+
 /**
  * PrixodGoodsSearch represents the model behind the search form of `app\models\PrixodGoods`.
  */
@@ -22,6 +24,7 @@ class PrixodGoodsSearch extends PrixodGoods
     public $from;
     public $to;
     public $warehouse_id;
+    public $client_name;
     public $client_id;
 
     /**
@@ -33,6 +36,7 @@ class PrixodGoodsSearch extends PrixodGoods
             [['id', 'prixod_id', 'goods_id', 'currency_id', 'warehouse_id',
                 'client_id'], 'integer'],
             [['amount', 'cost', 'cost_usd'], 'number'],
+            [['client_name'], 'string'],
             [['from', 'to'], 'safe']
         ];
     }
@@ -46,6 +50,14 @@ class PrixodGoodsSearch extends PrixodGoods
         return Model::scenarios();
     }
 
+    public function attributeLabels()
+    {
+        return [
+            'from' => 'Дата с',
+            'to' => 'По',
+        ];
+    }
+
     /**
      * Creates data provider instance with search query applied
      *
@@ -56,7 +68,7 @@ class PrixodGoodsSearch extends PrixodGoods
     public function search($params)
     {
         $query = PrixodGoods::find()
-            ->joinWith('prixod p');
+            ->joinWith(['prixod p', 'prixod.client c']);
 
         // add conditions that should always apply here
 
@@ -65,8 +77,6 @@ class PrixodGoodsSearch extends PrixodGoods
         ]);
 
         $this->load($params);
-
-//        prd($this);
 
         if (!$this->to)
             $this->to = date('Y-m-d');
@@ -80,8 +90,8 @@ class PrixodGoodsSearch extends PrixodGoods
         }
 
         // grid filtering conditions
-        $query->andWhere(['>=', 'p.date',  dateBase($this->from)])
-            ->andWhere(['<=', 'p.date',  dateBase($this->to)]);
+        $query->andWhere(['>=', 'p.date', dateBase($this->from)])
+            ->andWhere(['<=', 'p.date', dateBase($this->to)]);
 
         $query->andFilterWhere([
             'prixod_id' => $this->prixod_id,
@@ -93,7 +103,8 @@ class PrixodGoodsSearch extends PrixodGoods
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
-//        prd($query->createCommand()->getRawSql());
+
+        $query->andFilterWhere(['like', 'c.name', $this->client_name]);
 
         return $dataProvider;
     }

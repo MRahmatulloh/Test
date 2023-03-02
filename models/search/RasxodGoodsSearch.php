@@ -11,6 +11,12 @@ use app\models\RasxodGoods;
  */
 class RasxodGoodsSearch extends RasxodGoods
 {
+    public $from;
+    public $to;
+    public $warehouse_id;
+    public $client_name;
+    public $client_id;
+
     /**
      * {@inheritdoc}
      */
@@ -19,6 +25,8 @@ class RasxodGoodsSearch extends RasxodGoods
         return [
             [['id', 'rasxod_id', 'goods_id', 'currency_id', 'prixod_goods_id'], 'integer'],
             [['amount', 'cost', 'cost_usd'], 'number'],
+            [['client_name'], 'string'],
+            [['from', 'to'], 'safe']
         ];
     }
 
@@ -31,6 +39,15 @@ class RasxodGoodsSearch extends RasxodGoods
         return Model::scenarios();
     }
 
+    public function attributeLabels()
+    {
+        return [
+            'from' => 'Дата с',
+            'to' => 'По',
+            'client_name' => 'Клиент'
+        ];
+    }
+
     /**
      * Creates data provider instance with search query applied
      *
@@ -40,7 +57,8 @@ class RasxodGoodsSearch extends RasxodGoods
      */
     public function search($params)
     {
-        $query = RasxodGoods::find();
+        $query = RasxodGoods::find()
+            ->joinWith(['rasxod r', 'rasxod.client c']);
 
         // add conditions that should always apply here
 
@@ -50,6 +68,11 @@ class RasxodGoodsSearch extends RasxodGoods
 
         $this->load($params);
 
+        if (!$this->to)
+            $this->to = date('Y-m-d');
+        if (!$this->from)
+            $this->from = date('Y-m-01');
+
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
@@ -57,6 +80,10 @@ class RasxodGoodsSearch extends RasxodGoods
         }
 
         // grid filtering conditions
+        // grid filtering conditions
+        $query->andWhere(['>=', 'r.date', dateBase($this->from)])
+            ->andWhere(['<=', 'r.date', dateBase($this->to)]);
+
         $query->andFilterWhere([
             'id' => $this->id,
             'rasxod_id' => $this->rasxod_id,
@@ -69,6 +96,8 @@ class RasxodGoodsSearch extends RasxodGoods
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
+
+        $query->andFilterWhere(['like', 'c.name', $this->client_name]);
 
         return $dataProvider;
     }

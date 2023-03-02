@@ -12,14 +12,14 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <div class="row">
-        <div class="col-3">
+    <div class="row d-block">
+        <div class="col-md-4 d-block">
             <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
         </div>
-        <div class="col-3">
+        <div class="col-md-4 d-block">
             <?= $form->field($model, 'code')->textInput() ?>
         </div>
-        <div class="col-3">
+        <div class="col-md-4 d-block">
             <div class="form-group">
                 <h6> </h6>
                 <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>

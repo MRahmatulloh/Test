@@ -8,7 +8,7 @@ use yii\web\YiiAsset;
 /* @var $this yii\web\View */
 /* @var $routes [] */
 
-$this->title = Yii::t('rbac-admin', 'Routes');
+$this->title = Yii::t('rbac-admin', 'Роуты');
 $this->params['breadcrumbs'][] = $this->title;
 
 AnimateAsset::register($this);

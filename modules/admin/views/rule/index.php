@@ -9,7 +9,7 @@ use yii\widgets\Pjax;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 /* @var $searchModel mdm\admin\models\searchs\BizRule */
 
-$this->title = Yii::t('rbac-admin', 'Rules');
+$this->title = Yii::t('rbac-admin', 'Правилы');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="role-index">
@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="col-6">
             <p class="text-right">
-                <?= Html::a(Yii::t('rbac-admin', 'Create Rule'), ['create'], ['class' => 'btn btn-success']) ?>
+                <?= Html::a(Yii::t('rbac-admin', 'Новая правила'), ['create'], ['class' => 'btn btn-success']) ?>
             </p>
         </div>
     </div>
@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
             [
                 'attribute' => 'name',
-                'label' => Yii::t('rbac-admin', 'Name'),
+                'label' => Yii::t('rbac-admin', 'Наименование'),
             ],
             ['class' => 'yii\grid\ActionColumn',],
         ],

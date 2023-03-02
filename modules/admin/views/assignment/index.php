@@ -10,7 +10,7 @@ use yii\widgets\Pjax;
 /* @var $usernameField string */
 /* @var $extraColumns string[] */
 
-$this->title = Yii::t('rbac-admin', 'Assignments');
+$this->title = Yii::t('rbac-admin', 'Настройка прав доступа');
 $this->params['breadcrumbs'][] = $this->title;
 
 $columns = [

@@ -28,7 +28,7 @@ AppAsset::register($this);
         <?php $form = ActiveForm::begin(['method' => 'get']); ?>
 
         <div class="row">
-            <div class="col-3">
+            <div class="col-md-3">
                 <?= $form->field($searchModel, 'from')->widget(DatePicker::classname(), [
                     'type' => 3,
                     'pluginOptions' => [
@@ -37,7 +37,7 @@ AppAsset::register($this);
                     ]
                 ]); ?>
             </div>
-            <div class="col-3">
+            <div class="col-md-3">
                 <?= $form->field($searchModel, 'to')->widget(DatePicker::classname(), [
                     'type' => 3,
                     'pluginOptions' => [
@@ -47,7 +47,7 @@ AppAsset::register($this);
                 ]); ?>
             </div>
 
-            <div class="col-3">
+            <div class="col-md-3">
                 <h6> </h6>
                 <?= Html::submitButton('Показать', ['class' => 'btn btn-success']) ?>
             </div>
@@ -69,18 +69,15 @@ AppAsset::register($this);
                 'value' => function ($data) {
                     return dateView($data->prixod->date);
                 },
-                'contentOptions' => ['class' => 'text-right'],
                 'filter' => ''
             ],
 
             [
                 'label' => 'Клиент',
-                'attribute' => 'client_id',
+                'attribute' => 'client_name',
                 'value' => function ($data) {
                     return $data->prixod->client->name;
                 },
-                'contentOptions' => ['class' => 'text-right'],
-                'filter' => []
             ],
 
             [

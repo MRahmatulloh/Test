@@ -26,7 +26,6 @@ use yii\behaviors\TimestampBehavior;
  */
 class PrixodGoods extends MyModel
 {
-    public $summa;
     /**
      * {@inheritdoc}
      */

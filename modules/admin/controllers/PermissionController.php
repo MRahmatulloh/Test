@@ -20,8 +20,8 @@ class PermissionController extends ItemController
     public function labels()
     {
         return[
-            'Item' => 'Permission',
-            'Items' => 'Permissions',
+            'Item' => 'Разрешение',
+            'Items' => 'Разрешения',
         ];
     }
 
