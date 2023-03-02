@@ -26,7 +26,7 @@ unset($rules[RouteRule::RULE_NAME]);
         </div>
         <div class="col-6">
             <p class="text-right">
-                <?= Html::a(Yii::t('rbac-admin', 'Create ' . $labels['Item']), ['create'], ['class' => 'btn btn-success']) ?>
+                <?= Html::a(Yii::t('rbac-admin', 'Создать ' . $labels['Item']), ['create'], ['class' => 'btn btn-success']) ?>
             </p>
         </div>
     </div>

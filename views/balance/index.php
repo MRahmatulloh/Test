@@ -91,7 +91,7 @@ AppAsset::register($this);
                 'filter' => Select2::widget([
                     'model' => $searchModel,
                     'attribute' => 'warehouse_id',
-                    'data' => Warehouse::selectList(),
+                    'data' => ['Все'] + Warehouse::selectList(),
                     'initValueText' => $searchModel->warehouse_id ?? 'Все',
                     'options' => ['placeholder' => 'Выберите ...'],
                     'pluginOptions' => [

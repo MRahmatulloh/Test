@@ -1,6 +1,8 @@
 <?php
 
 use app\assets\AppAsset;
+use app\models\Currency;
+use app\models\Goods;
 use kartik\date\DatePicker;
 use kartik\select2\Select2;
 use yii\grid\GridView;
@@ -10,7 +12,7 @@ use yii\widgets\ActiveForm;
 /** @var yii\web\View $this */
 /** @var app\models\search\RasxodGoodsSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
-/** @var app\models\RasxodGoods $model */
+/** @var app\models\search\Filter $searchModel */
 /** @var yii\widgets\ActiveForm $form */
 
 $this->title = 'Расход по товаром ';
@@ -18,18 +20,17 @@ $this->params['breadcrumbs'][] = $this->title;
 AppAsset::register($this);
 
 ?>
-<div class="prixod-goods-index">
+<div class="rasxod-goods-index">
 
     <h2><?= Html::encode($this->title) ?></h2>
 
-    <br>
-    <div class="prixod-goods-form">
+    <div class="rasxod-goods-form">
 
         <?php $form = ActiveForm::begin(['method' => 'get']); ?>
 
         <div class="row">
-            <div class="col-3">
-                <?= $form->field($model, 'date1')->widget(DatePicker::classname(), [
+            <div class="col-md-3">
+                <?= $form->field($searchModel, 'from')->widget(DatePicker::classname(), [
                     'type' => 3,
                     'pluginOptions' => [
                         'autoclose' => true,
@@ -37,8 +38,8 @@ AppAsset::register($this);
                     ]
                 ]); ?>
             </div>
-            <div class="col-3">
-                <?= $form->field($model, 'date2')->widget(DatePicker::classname(), [
+            <div class="col-md-3">
+                <?= $form->field($searchModel, 'to')->widget(DatePicker::classname(), [
                     'type' => 3,
                     'pluginOptions' => [
                         'autoclose' => true,
@@ -46,7 +47,8 @@ AppAsset::register($this);
                     ]
                 ]); ?>
             </div>
-            <div class="col-3">
+
+            <div class="col-md-3">
                 <h6> </h6>
                 <?= Html::submitButton('Показать', ['class' => 'btn btn-success']) ?>
             </div>
@@ -64,20 +66,26 @@ AppAsset::register($this);
             ['class' => 'yii\grid\SerialColumn'],
 
             [
-//                'attribute' => 'date',
+                'label' => 'Дата',
                 'value' => function ($data) {
                     return dateView($data->rasxod->date);
                 },
-                'contentOptions' => ['class' => 'text-right'],
                 'filter' => ''
             ],
 
             [
-//                'attribute' => 'number',
+                'attribute' => 'client_name',
+                'value' => function ($data) {
+                    return $data->rasxod->client->name;
+                },
+            ],
+
+            [
+                'label' => 'Расход',
                 'format' => 'raw',
                 'value' => function ($data) {
 
-                    return \yii\helpers\Html::a(
+                    return Html::a(
                         $data->rasxod->number,
                         \Yii::$app->getUrlManager()->createUrl(
                             array('rasxod/goods-list', 'id' => $data->rasxod->id)
@@ -94,7 +102,7 @@ AppAsset::register($this);
                 'filter' => Select2::widget([
                     'model' => $searchModel,
                     'attribute' => 'goods_id',
-                    'data' => \app\models\Goods::selectList(),
+                    'data' => Goods::selectList(),
                     'initValueText' => $searchModel->goods_id,
                     'options' => ['placeholder' => 'Выберите товар ...'],
                     'pluginOptions' => [
@@ -123,8 +131,8 @@ AppAsset::register($this);
 
             [
                 'attribute' => 'summa',
-                'value' => function ($model) {
-                    return pul2($model->cost * $model->amount, 2);
+                'value' => function ($searchModel) {
+                    return pul2($searchModel->cost * $searchModel->amount, 2);
                 },
                 'contentOptions' => ['class' => 'text-right'],
                 'filter' => ''
@@ -136,7 +144,7 @@ AppAsset::register($this);
                 'filter' => Select2::widget([
                     'model' => $searchModel,
                     'attribute' => 'currency_id',
-                    'data' => \app\models\Client::selectList(),
+                    'data' => Currency::selectList(),
                     'initValueText' => $searchModel->currency_id,
                     'options' => ['placeholder' => 'Выберите ...'],
                     'pluginOptions' => [

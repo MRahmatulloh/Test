@@ -31,10 +31,14 @@ class Prixod extends MyModel
 {
     use NumberGenerationTrait;
     const TYPES = [
-        1 => 'Внутренний',
-        2 => 'Импорт',
-        3 => 'Возврат',
+        1 => 'Внутренний рынок',
+        2 => 'Импорт'
     ];
+
+    public const TYPE_INTERNAL = 1;
+    public const TYPE_IMPORT = 2;
+    public const TYPE_RETURN = 3;
+    public const TYPE_MOVEMENT = 4;
 
     /**
      * {@inheritdoc}

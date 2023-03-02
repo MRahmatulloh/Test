@@ -1,7 +1,9 @@
 <?php
 
 use app\assets\AppAsset;
+use app\models\Client;
 use app\models\Prixod;
+use app\models\Warehouse;
 use kartik\select2\Select2;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
@@ -63,7 +65,7 @@ AppAsset::register($this);
                 'filter' => Select2::widget([
                     'model' => $searchModel,
                     'attribute' => 'client_id',
-                    'data' => \app\models\Client::selectList(),
+                    'data' => Client::selectList(),
                     'initValueText' => $searchModel->client_id,
                     'options' => ['placeholder' => 'Выберите клиент ...'],
                     'pluginOptions' => [
@@ -75,12 +77,29 @@ AppAsset::register($this);
             'comment',
 
             [
+                'attribute' => 'type',
+                'value' => function ($model) {
+                    return Prixod::TYPES[$model->type];
+                },
+                'filter' => Select2::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'type',
+                    'data' => Prixod::TYPES,
+                    'initValueText' => $searchModel->type,
+                    'options' => ['placeholder' => 'Выберите тип ...'],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ]),
+            ],
+
+            [
                 'attribute' => 'warehouse_id',
                 'value' => 'warehouse.name',
                 'filter' => Select2::widget([
                     'model' => $searchModel,
                     'attribute' => 'warehouse_id',
-                    'data' => \app\models\Warehouse::selectList(),
+                    'data' => Warehouse::selectList(),
                     'initValueText' => $searchModel->warehouse_id,
                     'options' => ['placeholder' => 'Выберите ...'],
                     'pluginOptions' => [

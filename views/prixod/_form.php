@@ -56,7 +56,7 @@ AppAsset::register($this);
                 ],
             ]) ?>
         </div>
-        <div class="col-3"></div>
+        <div class="col-md-3"></div>
     </div>
 
     <div class="form-group">

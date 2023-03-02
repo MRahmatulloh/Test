@@ -8,7 +8,7 @@ use mdm\admin\components\Helper;
 /* @var $searchModel mdm\admin\models\searchs\User */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('rbac-admin', 'Users');
+$this->title = Yii::t('rbac-admin', 'Пользователи');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">

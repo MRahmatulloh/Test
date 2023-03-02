@@ -10,6 +10,7 @@ use yii\behaviors\TimestampBehavior;
  *
  * @property int $id
  * @property string $date
+ * @property string|null $payment_date
  * @property string $number
  * @property int $client_id
  * @property int $warehouse_id
@@ -33,6 +34,12 @@ class Rasxod extends MyModel
         2 => 'Предоплата',
         3 => 'Рассрочка',
     ];
+
+    public const TYPE_FULL_PAYMENT = 1;
+    public const TYPE_PREPAYMENT = 2;
+    public const TYPE_CREDIT = 3;
+    public const TYPE_MOVEMENT = 4;
+
     /**
      * {@inheritdoc}
      */
@@ -58,7 +65,7 @@ class Rasxod extends MyModel
     {
         return [
             [['date', 'number', 'client_id', 'warehouse_id', 'type'], 'required'],
-            [['date'], 'safe'],
+            [['date', 'payment_date'], 'safe'],
             [['client_id', 'warehouse_id', 'type', 'status', 'created_by', 'updated_by'], 'integer'],
             [['number', 'comment'], 'string', 'max' => 255],
             [['client_id'], 'exist', 'skipOnError' => true, 'targetClass' => Client::class, 'targetAttribute' => ['client_id' => 'id']],
@@ -80,6 +87,7 @@ class Rasxod extends MyModel
             'comment' => 'Комментария',
             'type' => 'Тип',
             'status' => 'Статус',
+            'payment_date' => 'Дата оплаты',
             'created_by' => 'Created By',
             'updated_by' => 'Updated By',
             'created_at' => 'Created At',

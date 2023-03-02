@@ -16,9 +16,9 @@ if (!empty($fullnameField)) {
 }
 $userName = Html::encode($userName);
 
-$this->title = Yii::t('rbac-admin', 'Assignment') . ' : ' . $userName;
+$this->title = Yii::t('rbac-admin', 'Назначения для пользователя') . ' : ' . $userName;
 
-$this->params['breadcrumbs'][] = ['label' => Yii::t('rbac-admin', 'Assignments'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('rbac-admin', 'Назначения'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $userName;
 
 AnimateAsset::register($this);

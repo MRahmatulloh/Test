@@ -53,7 +53,7 @@ AppAsset::register($this);
             <div class="col-2">
                 <?= $form->field($model, 'cost')->textInput(['maxlength' => true]) ?>
             </div>
-            <div class="col-3">
+            <div class="col-md-3">
                 <?= $form->field($model, 'currency_id')->widget(Select2::className(), [
                     'data' => \app\models\Currency::selectList(),
                     'options' => ['placeholder' => 'Выберите валюты ...'],

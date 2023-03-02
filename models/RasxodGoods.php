@@ -25,7 +25,6 @@ use yii\behaviors\TimestampBehavior;
  */
 class RasxodGoods extends MyModel
 {
-    public $summa;
     public $prixod_id;
 
     /**

@@ -3,12 +3,10 @@
 namespace app\controllers;
 
 use app\models\CurrencyRates;
+use app\models\Prixod;
 use app\models\PrixodGoods;
-use app\models\Rasxod;
-use app\models\RasxodGoods;
 use app\models\search\PrixodGoodsSearch;
-use app\models\search\RasxodGoodsSearch;
-use app\models\search\RasxodSearch;
+use app\models\search\PrixodSearch;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Yii;
 use yii\web\Controller;
@@ -17,9 +15,9 @@ use yii\filters\VerbFilter;
 use function PHPUnit\Framework\fileExists;
 
 /**
- * RasxodController implements the CRUD actions for Rasxod model.
+ * ReturnController implements the CRUD actions for Prixod model.
  */
-class RasxodController extends Controller
+class ReturnController extends Controller
 {
     /**
      * @inheritDoc
@@ -40,13 +38,15 @@ class RasxodController extends Controller
     }
 
     /**
-     * Lists all Rasxod models.
+     * Lists all Prixod models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new RasxodSearch();
+        $searchModel = new PrixodSearch([
+            'type' => Prixod::TYPE_RETURN,
+        ]);
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -56,32 +56,34 @@ class RasxodController extends Controller
     }
 
     /**
-     * Displays a single Rasxod model.
+     * Displays a single Prixod model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
+//    public function actionView($id)
+//    {
+//        return $this->render('view', [
+//            'model' => $this->findModel($id),
+//        ]);
+//    }
 
     /**
-     * Creates a new Rasxod model.
+     * Creates a new Prixod model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new Rasxod([
+        $model = new Prixod([
             'date' => date('d.m.Y'),
+            'type' => Prixod::TYPE_RETURN,
         ]);
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post())) {
-                $model->number = $model->getNumber('create', 'R');
+                $model->number = $model->getNumber('create', 'PV');
+                $model->type = Prixod::TYPE_RETURN;
                 $model->created_by = Yii::$app->user->identity->getId();
 
                 if ($model->save()) {
@@ -100,7 +102,7 @@ class RasxodController extends Controller
     }
 
     /**
-     * Updates an existing Rasxod model.
+     * Updates an existing Prixod model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -112,7 +114,8 @@ class RasxodController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post())) {
-                $model->number = $model->getNumber('update', 'R');
+                $model->number = $model->getNumber('update', 'PV');
+                $model->type = Prixod::TYPE_RETURN;
                 $model->updated_by = Yii::$app->user->identity->getId();
 
                 if ($model->save()) {
@@ -131,7 +134,7 @@ class RasxodController extends Controller
     }
 
     /**
-     * Deletes an existing Rasxod model.
+     * Deletes an existing Prixod model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -145,63 +148,36 @@ class RasxodController extends Controller
     }
 
     /**
-     * Finds the Rasxod model based on its primary key value.
+     * Finds the Prixod model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return Rasxod the loaded model
+     * @return Prixod the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Rasxod::findOne(['id' => $id])) !== null) {
+        if (($model = Prixod::findOne(['id' => $id])) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionGoodsList($rasxod_id)
+    public function actionGoodsList($prixod_id)
     {
-        $searchModel = new RasxodGoodsSearch(['rasxod_id' => $rasxod_id]);
-        $model = new RasxodGoods(['rasxod_id' => $rasxod_id]);
+        $searchModel = new PrixodGoodsSearch(['prixod_id' => $prixod_id]);
+        $model = new PrixodGoods(['prixod_id' => $prixod_id]);
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post())) {
-                $model->cost_usd = CurrencyRates::getSummaUsd($model->rasxod->date, $model->currency_id, $model->cost);
-
-                if ($model->prixod_goods_id) {
-                    $model->goods_id = $model->prixodGoods->goods_id;
-                    $used = RasxodGoods::getPrixodedAmount($model->prixod_goods_id) ?? 0;
-                    $free = $model->prixodGoods->amount - $used;
-
-                    if (($free - $model->amount) < 0) {
-                        Yii::$app->session->setFlash('error', 'Не хвататет количество товара ' . $model->prixodGoods->goods->name . ', доступное количество: ' . $free);
-                        return $this->redirect(['rasxod/goods-list', 'rasxod_id' => $model->rasxod_id]);
-                    }
-                }
+                $model->cost_usd = CurrencyRates::getSummaUsd($model->prixod->date, $model->currency_id, $model->cost);
 
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно сохранены'));
                 } else {
                     Yii::$app->session->setFlash('error', Yii::t('app', 'Ошибка сохранения данных'));
                 }
-
-                return $this->redirect(['goods-list', 'rasxod_id' => $model->rasxod_id]);
-            }
-        }
-
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post())) {
-                $model->cost_usd = CurrencyRates::getSummaUsd($model->rasxod->date, $model->currency_id, $model->cost);
-
-                if ($model->save()) {
-                    Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно сохранены'));
-                } else {
-                    Yii::$app->session->setFlash('error', Yii::t('app', 'Ошибка сохранения данных'));
-                }
-
-                prd($model->errors);
 
                 return $this->redirect(Yii::$app->request->referrer);
             }
@@ -214,10 +190,9 @@ class RasxodController extends Controller
         ]);
     }
 
-
     public function actionByGoods()
     {
-        $searchModel = new RasxodGoodsSearch();
+        $searchModel = new PrixodGoodsSearch();
 
         $searchModel->from = date('Y-01-01');
         $searchModel->to = date('Y-m-d');
@@ -234,43 +209,43 @@ class RasxodController extends Controller
 
     public function actionPrint($id)
     {
-        $rasxod = $this::findModel($id);
+        $prixod = $this::findModel($id);
         $path = 'files/templates/';
 
-        if (!empty($rasxod)) {
+        if (!empty($prixod)) {
             $file = 'talabnoma.docx';
             $template = new TemplateProcessor( $path . $file);
 
             $variable = 'number';
-            $value = $rasxod->number;
+            $value = $prixod->number;
             $template->setValue($variable, $value);
 
             $variable = 'date';
-            $value = dateView($rasxod->date);
-            $template->setValue($variable, $value);
-
-            $variable = 'client';
-            $value = $rasxod->client->name;
-            $value = str_replace('&', '&amp;', $value);
+            $value = dateView($prixod->date);
             $template->setValue($variable, $value);
 
             $variable = 'clientLocal';
+            $value = $prixod->client->name;
+            $value = str_replace('&', '&amp;', $value);
+            $template->setValue($variable, $value);
+
+            $variable = 'client';
             $value = 'ООО «EASY MARKET»';
             $value = str_replace('&', '&amp;', $value);
             $template->setValue($variable, $value);
 
             $variable = 'warehouse';
-            $value = $rasxod->warehouse->name;
+            $value = $prixod->warehouse->name;
             $template->setValue($variable, $value);
 
-            $result = $rasxod->rasxodGoods;
+            $result = $prixod->prixodGoods;
 
-            // tovar degan shablon bor satrni nusxalash
+            // tovar degan shablon bor satrni nusxalash 
             $template->cloneRow('tovar', count($result));
             $k = 1;
             $summa = 0;
             $summa_amount = 0;
-            /** @var $tovar RasxodGoods */
+            /** @var $tovar PrixodGoods */
             foreach ($result as $tovar) {
 
                 $kk = $tovar->amount * $tovar->cost;
@@ -317,8 +292,8 @@ class RasxodController extends Controller
             $value = pul2($summa, 2);
             $template->setValue($variable, $value);
 
-            $date = str_replace("-", "_", DateBase($rasxod->date));
-            $number = str_replace("/", "_", $rasxod->number);
+            $date = str_replace("-", "_", DateBase($prixod->date));
+            $number = str_replace("/", "_", $prixod->number);
             $path .= $date . '_' . $number . '_' . 'nakladnoy.docx';
 
             $template->saveAs($path);

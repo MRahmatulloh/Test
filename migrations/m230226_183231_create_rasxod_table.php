@@ -15,6 +15,7 @@ class m230226_183231_create_rasxod_table extends Migration
         $this->createTable('{{%rasxod}}', [
             'id' => $this->primaryKey(),
             'date' => $this->date()->notNull(),
+            'payment_date' => $this->date()->null(),
             'number' => $this->string(255)->notNull(),
             'client_id' => $this->integer()->notNull(),
             'warehouse_id' => $this->integer()->notNull(),
