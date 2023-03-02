@@ -221,8 +221,13 @@ class PrixodController extends Controller
             $value = dateView($prixod->date);
             $template->setValue($variable, $value);
 
-            $variable = 'client';
+            $variable = 'clientLocal';
             $value = $prixod->client->name;
+            $value = str_replace('&', '&amp;', $value);
+            $template->setValue($variable, $value);
+
+            $variable = 'client';
+            $value = 'ООО «EASY MARKET»';
             $value = str_replace('&', '&amp;', $value);
             $template->setValue($variable, $value);
 

@@ -2,22 +2,23 @@
 
 use app\assets\AppAsset;
 use app\models\Client;
-use app\models\Rasxod;
+use app\models\Prixod;
 use app\models\Warehouse;
 use kartik\select2\Select2;
 use yii\grid\ActionColumn;
-use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Html;
+use yii\helpers\Url;
 
 /** @var yii\web\View $this */
-/** @var app\models\search\RasxodSearch $searchModel */
+/** @var app\models\search\PrixodSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Список расходов';
+$this->title = 'Список приходов';
 $this->params['breadcrumbs'][] = $this->title;
 AppAsset::register($this);
 ?>
-<div class="rasxod-index">
+<div class="prixod-index">
 
     <div class="row">
         <div class="col-6">
@@ -51,7 +52,7 @@ AppAsset::register($this);
                     return \yii\helpers\Html::a(
                         $data['number'],
                         \Yii::$app->getUrlManager()->createUrl(
-                            array('rasxod/goods-list', 'rasxod_id' => $data['id'])
+                            array('prixod/goods-list', 'prixod_id' => $data['id'])
                         ),
                         ['class' => 'clickLock']
                     );
@@ -78,12 +79,12 @@ AppAsset::register($this);
             [
                 'attribute' => 'type',
                 'value' => function ($model) {
-                    return Rasxod::TYPES[$model->type];
+                    return 'Возврат';
                 },
                 'filter' => Select2::widget([
                     'model' => $searchModel,
                     'attribute' => 'type',
-                    'data' => Rasxod::TYPES,
+                    'data' => [$searchModel::TYPE_RETURN => 'Возврат'],
                     'initValueText' => $searchModel->type,
                     'options' => ['placeholder' => 'Выберите тип ...'],
                     'pluginOptions' => [
@@ -128,8 +129,8 @@ AppAsset::register($this);
 
                     'delete' => function ($url, $model) {
 
-                        /** @var $model \app\models\Rasxod */
-                        if ($model->rasxodGoods) {
+                        /** @var $model Prixod */
+                        if ($model->prixodGoods) {
                             return Html::a('<span class="fas fa-trash"></span>',
                                 $url,
                                 [
@@ -164,6 +165,7 @@ AppAsset::register($this);
 // php o'zgaruvchilarni ham ishlatish mumkin.
 $script = <<< JS
     $(document).ready(function() {
+        // Akbar Bobojonov
         window.PJAX_ENABLED = false;
         
         // comboboxda qidirish

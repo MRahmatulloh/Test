@@ -57,9 +57,9 @@ AppAsset::register($this);
                 </div>
             </a>
             <ul>
-                <li><a href="/tolov">Касса</a></li>
-                <li><a href="mail_box.html">Список оплаты</a></li>
-                <li><a href="chat.html">Список расходов</a></li>
+                <li><a href="/cash-all">Касса</a></li>
+                <li><a href="/cash-in">Оплаты</a></li>
+                <li><a href="/cash-out">Расходы</a></li>
             </ul>
         </li>
         <li class="">
@@ -95,6 +95,36 @@ AppAsset::register($this);
         <li class="">
             <a class="has-arrow" href="#" aria-expanded="false">
                 <div class="nav_icon_small">
+                    <img src="/img/menu-icon/14.svg" alt="">
+                </div>
+                <div class="nav_title">
+                    <span>Возврат</span>
+                </div>
+            </a>
+            <ul>
+                <li><a href="/return/create">Добавить требование</a></li>
+                <li><a href="/return/index">Список возвратов</a></li>
+                <li><a href="/return/by-goods">Требования по товаром</a></li>
+            </ul>
+        </li>
+        <li class="">
+            <a class="has-arrow" href="#" aria-expanded="false">
+                <div class="nav_icon_small">
+                    <img src="/img/menu-icon/13.svg" alt="">
+                </div>
+                <div class="nav_title">
+                    <span>Перемещение</span>
+                </div>
+            </a>
+            <ul>
+                <li><a href="/movement/create">Добавить требование</a></li>
+                <li><a href="/movement/index">Список перемещение</a></li>
+                <li><a href="/movement/by-goods">Требования по товаром</a></li>
+            </ul>
+        </li>
+        <li class="">
+            <a class="has-arrow" href="#" aria-expanded="false">
+                <div class="nav_icon_small">
                     <img src="/img/menu-icon/20.svg" alt="">
                 </div>
                 <div class="nav_title">
@@ -110,7 +140,7 @@ AppAsset::register($this);
         <li class="">
             <a class="has-arrow" href="#" aria-expanded="false">
                 <div class="nav_icon_small">
-                    <img src="/img/menu-icon/8.svg" alt="">
+                    <img src="/img/menu-icon/12.svg" alt="">
                 </div>
                 <div class="nav_title">
                     <span>Справочник</span>
@@ -129,7 +159,7 @@ AppAsset::register($this);
         <li class="">
             <a class="has-arrow" href="#" aria-expanded="false">
                 <div class="nav_icon_small">
-                    <img src="/img/menu-icon/9.svg" alt="">
+                    <img src="/img/menu-icon/18.svg" alt="">
                 </div>
                 <div class="nav_title">
                     <span>RBAC</span>

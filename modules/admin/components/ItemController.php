@@ -76,7 +76,14 @@ class ItemController extends Controller
     {
         $model = new AuthItem(null);
         $model->type = $this->type;
-        if ($model->load(Yii::$app->getRequest()->post()) && $model->save()) {
+        if ($model->load(Yii::$app->getRequest()->post())) {
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно сохранены'));
+            } else {
+                Yii::$app->session->setFlash('error', Yii::t('app', 'Ошибка сохранения данных'));
+                return $this->redirect(Yii::$app->request->referrer);
+            }
+
             return $this->redirect(['view', 'id' => $model->name]);
         } else {
             return $this->render('create', ['model' => $model]);
@@ -92,7 +99,14 @@ class ItemController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        if ($model->load(Yii::$app->getRequest()->post()) && $model->save()) {
+        if ($model->load(Yii::$app->getRequest()->post())) {
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно сохранены'));
+            } else {
+                Yii::$app->session->setFlash('error', Yii::t('app', 'Ошибка сохранения данных'));
+                return $this->redirect(Yii::$app->request->referrer);
+            }
+
             return $this->redirect(['view', 'id' => $model->name]);
         }
 

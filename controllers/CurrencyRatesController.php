@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Currency;
 use app\models\CurrencyRates;
 use app\models\search\CurrencyRatesSearch;
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -71,7 +72,13 @@ class CurrencyRatesController extends Controller
         $model = new CurrencyRates(['date' => date('d.m.Y')]);
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
+            if ($model->load($this->request->post())) {
+                if ($model->save()) {
+                    Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно сохранены'));
+                } else {
+                    Yii::$app->session->setFlash('error', Yii::t('app', 'Ошибка сохранения данных'));
+                    return $this->redirect(Yii::$app->request->referrer);
+                }
                 return $this->redirect(['index']);
             }
         }
@@ -92,7 +99,13 @@ class CurrencyRatesController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно сохранены'));
+            } else {
+                Yii::$app->session->setFlash('error', Yii::t('app', 'Ошибка сохранения данных'));
+                return $this->redirect(Yii::$app->request->referrer);
+            }
             return $this->redirect(['index']);
         }
 
