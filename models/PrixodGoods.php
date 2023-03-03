@@ -23,9 +23,12 @@ use yii\behaviors\TimestampBehavior;
  * @property Goods $goods
  * @property Prixod $prixod
  * @property RasxodGoods $rasxodGoods
+ * @property RasxodGoods $rasxodedGoods
  */
 class PrixodGoods extends MyModel
 {
+    public $rasxod_id;
+    public $summa;
     /**
      * {@inheritdoc}
      */
@@ -51,7 +54,7 @@ class PrixodGoods extends MyModel
     {
         return [
             [['prixod_id', 'goods_id', 'currency_id', 'amount'], 'required'],
-            [['prixod_id', 'goods_id', 'currency_id', 'rasxod_goods_id'], 'integer'],
+            [['prixod_id', 'goods_id', 'currency_id', 'rasxod_id', 'rasxod_goods_id'], 'integer'],
             [['amount', 'cost', 'cost_usd', 'summa'], 'number'],
             [['currency_id'], 'exist', 'skipOnError' => true, 'targetClass' => Currency::class, 'targetAttribute' => ['currency_id' => 'id']],
             [['goods_id'], 'exist', 'skipOnError' => true, 'targetClass' => Goods::class, 'targetAttribute' => ['goods_id' => 'id']],
@@ -116,5 +119,17 @@ class PrixodGoods extends MyModel
     public function getRasxodGoods()
     {
         return $this->hasMany(RasxodGoods::class, ['id' => 'prixod_goods_id']);
+    }
+
+    public function getRasxodedGoods()
+    {
+        return $this->hasOne(RasxodGoods::class, ['id' => 'rasxod_goods_id']);
+    }
+
+    public static function getRasxodedAmount($rasxod_goods_id)
+    {
+        return self::find()
+            ->where(['rasxod_goods_id' => $rasxod_goods_id])
+            ->sum('amount');
     }
 }

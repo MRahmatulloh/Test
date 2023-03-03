@@ -20,6 +20,13 @@ class m230226_180933_create_currency_table extends Migration
             'created_at' => $this->integer()->notNull(),
             'updated_at' => $this->integer()->notNull(),
         ]);
+
+        $this->insert('{{%currency}}', [
+            'name' => 'USD',
+            'code' => 840,
+            'created_at' => time(),
+            'updated_at' => time(),
+        ]);
     }
 
     /**

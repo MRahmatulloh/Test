@@ -4,6 +4,7 @@ namespace app\models;
 
 use app\components\NumberGenerationTrait;
 use yii\behaviors\TimestampBehavior;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "rasxod".
@@ -123,5 +124,30 @@ class Rasxod extends MyModel
     public function getWarehouse()
     {
         return $this->hasOne(Warehouse::class, ['id' => 'warehouse_id']);
+    }
+
+    public static function selectListNonEmpty(int $warehouse_id, int $client_id)
+    {
+        return ArrayHelper::map(self::findBySql('
+            SELECT
+                r.id,
+                r.number
+            FROM rasxod_goods rg
+            LEFT JOIN rasxod r ON r.id = rg.rasxod_id
+            LEFT JOIN
+            (
+                SELECT 
+                    rasxod_goods_id AS id,
+                    SUM(amount) AS amount
+                FROM prixod_goods
+                GROUP BY 
+                    prixod_goods.rasxod_goods_id
+            ) used ON used.id = rg.id
+            
+            WHERE (rg.amount - IFNULL(used.amount, 0)) > 0 
+                    and r.warehouse_id = :warehouse_id
+                    and r.client_id = :client_id
+        ')->params([':warehouse_id' => $warehouse_id, ':client_id' => $client_id])
+            ->asArray()->all(), 'id', 'number');
     }
 }

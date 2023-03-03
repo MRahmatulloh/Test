@@ -1,6 +1,8 @@
 <?php
 
 use app\assets\AppAsset;
+use app\models\Prixod;
+use app\models\Rasxod;
 use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\grid\ActionColumn;
@@ -28,9 +30,18 @@ AppAsset::register($this);
         <?php $form = ActiveForm::begin(); ?>
 
         <div class="row">
-            <div class="col-md-3">
-                <?= $form->field($model, 'goods_id')->widget(\kartik\select2\Select2::className(),[
-                    'data' => \app\models\Goods::selectList(),
+            <div class="col-2">
+                <?= $form->field($model, 'rasxod_id')->widget(Select2::className(), [
+                    'data' => Rasxod::selectListNonEmpty($model->prixod->warehouse_id, $model->prixod->client_id),
+                    'options' => ['placeholder' => 'Выберите ...'],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ]) ?>
+            </div>
+            <div class="col-2">
+                <?= $form->field($model, 'rasxod_goods_id')->widget(Select2::className(), [
+                    'data' => [],
                     'options' => ['placeholder' => 'Выберите товар ...'],
                     'pluginOptions' => [
                         'allowClear' => true
@@ -43,8 +54,8 @@ AppAsset::register($this);
             <div class="col-2">
                 <?= $form->field($model, 'cost')->textInput(['maxlength' => true]) ?>
             </div>
-            <div class="col-md-3">
-                <?= $form->field($model, 'currency_id')->widget(\kartik\select2\Select2::className(),[
+            <div class="col-md-2">
+                <?= $form->field($model, 'currency_id')->widget(Select2::className(),[
                     'data' => \app\models\Currency::selectList(),
                     'options' => ['placeholder' => 'Выберите валюты ...'],
                     'pluginOptions' => [
@@ -195,6 +206,11 @@ AppAsset::register($this);
             ],
         ],
     ]); ?>
-
-
 </div>
+
+<?php
+ob_start();
+include "script.js";
+$script = ob_get_clean();
+$this->registerJs($script);
+?>
