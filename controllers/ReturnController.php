@@ -173,6 +173,18 @@ class ReturnController extends Controller
             if ($model->load($this->request->post())) {
                 $model->cost_usd = CurrencyRates::getSummaUsd($model->prixod->date, $model->currency_id, $model->cost);
 
+                if ($model->rasxod_goods_id) {
+//                    prd($model->attributes);
+                    $model->goods_id = $model->rasxodedGoods->goods_id;
+                    $used = PrixodGoods::getRasxodedAmount($model->rasxod_goods_id) ?? 0;
+                    $free = $model->rasxodedGoods->amount - $used;
+
+                    if (($free - $model->amount) < 0) {
+                        Yii::$app->session->setFlash('error', 'Не хвататет количество товара ' . $model->rasxodedGoods->goods->name . ', доступное количество: ' . $free);
+                        return $this->redirect(Yii::$app->request->referrer);
+                    }
+                }
+
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно сохранены'));
                 } else {

@@ -52,7 +52,7 @@ AppAsset::register($this);
                     return \yii\helpers\Html::a(
                         $data['number'],
                         \Yii::$app->getUrlManager()->createUrl(
-                            array('prixod/goods-list', 'prixod_id' => $data['id'])
+                            array('return/goods-list', 'prixod_id' => $data['id'])
                         ),
                         ['class' => 'clickLock']
                     );

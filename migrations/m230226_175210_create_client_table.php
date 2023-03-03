@@ -21,6 +21,13 @@ class m230226_175210_create_client_table extends Migration
             'created_at' => $this->integer()->notNull(),
             'updated_at' => $this->integer()->notNull(),
         ]);
+
+        $this->insert('{{%client}}', [
+            'name' => 'Client Test',
+            'address' => 'Client address',
+            'created_at' => time(),
+            'updated_at' => time(),
+        ]);
     }
 
     /**

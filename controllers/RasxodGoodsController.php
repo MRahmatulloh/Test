@@ -144,4 +144,34 @@ class RasxodGoodsController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    public function actionSelectGoodsAvailable(){
+
+        $post = Yii::$app->request->post();
+        $rasxod_id = $post['rasxod_id'];
+
+        $data = RasxodGoods::findBySql('
+            SELECT
+                rg.id AS id,
+                concat(g.code,"-",g.name) AS name
+            FROM rasxod_goods rg
+            LEFT JOIN goods g on g.id = rg.goods_id
+            LEFT JOIN
+            (
+                SELECT 
+                    rasxod_goods_id AS id,
+                    SUM(amount) AS amount
+                FROM prixod_goods
+                GROUP BY 
+                    prixod_goods.id
+            ) used ON used.id = rg.id
+            
+            WHERE (rg.amount - IFNULL(used.amount, 0)) > 0
+                and rg.rasxod_id = :rasxod_id
+            GROUP BY rg.id
+        ')->params([':rasxod_id' => $rasxod_id])->asArray()->all();
+
+        echo json_encode($data);
+        die();
+    }
 }

@@ -20,6 +20,13 @@ class m230226_180809_create_warehouse_table extends Migration
             'created_at' => $this->integer()->notNull(),
             'updated_at' => $this->integer()->notNull(),
         ]);
+
+        $this->insert('{{%warehouse}}', [
+            'name' => 'Warehouse Test',
+            'address' => 'Warehouse address',
+            'created_at' => time(),
+            'updated_at' => time(),
+        ]);
     }
 
     /**

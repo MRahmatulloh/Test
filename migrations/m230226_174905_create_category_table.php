@@ -21,7 +21,7 @@ class m230226_174905_create_category_table extends Migration
         ]);
 
         $this->insert('{{%category}}', [
-            'name' => 'Test category',
+            'name' => 'Category Test',
             'created_at' => time(),
             'updated_at' => time(),
         ]);
