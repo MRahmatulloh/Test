@@ -48,7 +48,8 @@ class ReturnController extends Controller
         $searchModel = new PrixodSearch([
             'type' => Prixod::TYPE_RETURN,
         ]);
-        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        $dataProvider = $searchModel->searchReturn($this->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,

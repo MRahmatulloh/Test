@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\CurrencyRates;
+use app\models\PrixodGoods;
 use app\models\RasxodGoods;
 use app\models\search\RasxodGoodsSearch;
 use Yii;
@@ -163,7 +164,7 @@ class RasxodGoodsController extends Controller
                     SUM(amount) AS amount
                 FROM prixod_goods
                 GROUP BY 
-                    prixod_goods.id
+                    rasxod_goods_id
             ) used ON used.id = rg.id
             
             WHERE (rg.amount - IFNULL(used.amount, 0)) > 0
@@ -179,7 +180,15 @@ class RasxodGoodsController extends Controller
         $post = Yii::$app->request->post();
         $rasxod_goods_id = $post['rasxod_goods_id'];
         $model = RasxodGoods::findOne($rasxod_goods_id); // проверка на существование
+        if (!$model)
+            return [];
 
-        return json_encode(['cost' => $model->cost, 'currency_id' => $model->currency_id, 'currency_name' => $model->currency->name]);
+        $used = PrixodGoods::find()
+            ->where(['rasxod_goods_id' => $model->id])
+            ->sum('amount') ?? 0;
+
+        $free = $model->amount - $used;
+
+        return json_encode(['cost' => $model->cost, 'amount' => $free, 'currency_id' => $model->currency_id, 'currency_name' => $model->currency->name]);
     }
 }
