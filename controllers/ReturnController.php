@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\CurrencyRates;
 use app\models\Prixod;
 use app\models\PrixodGoods;
+use app\models\RasxodGoods;
 use app\models\search\PrixodGoodsSearch;
 use app\models\search\PrixodSearch;
 use PhpOffice\PhpWord\TemplateProcessor;
@@ -165,22 +166,27 @@ class ReturnController extends Controller
 
     public function actionGoodsList($prixod_id)
     {
+        $this->findModel($prixod_id);
         $searchModel = new PrixodGoodsSearch(['prixod_id' => $prixod_id]);
         $model = new PrixodGoods(['prixod_id' => $prixod_id]);
+        $model->scenario = 'return';
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post())) {
-                $model->cost_usd = CurrencyRates::getSummaUsd($model->prixod->date, $model->currency_id, $model->cost);
-
                 if ($model->rasxod_goods_id) {
-//                    prd($model->attributes);
+                    $rasxod_goods = RasxodGoods::findOne($model->rasxod_goods_id);
+
+                    $model->cost = $rasxod_goods->cost;
+                    $model->currency_id = $rasxod_goods->currency_id;
+
+                    $model->cost_usd = CurrencyRates::getSummaUsd($model->prixod->date, $model->currency_id, $model->cost);
                     $model->goods_id = $model->rasxodedGoods->goods_id;
                     $used = PrixodGoods::getRasxodedAmount($model->rasxod_goods_id) ?? 0;
                     $free = $model->rasxodedGoods->amount - $used;
 
                     if (($free - $model->amount) < 0) {
-                        Yii::$app->session->setFlash('error', 'Не хвататет количество товара ' . $model->rasxodedGoods->goods->name . ', доступное количество: ' . $free);
+                        Yii::$app->session->setFlash('error', 'Превишен количество товара ' . $model->rasxodedGoods->goods->name . ' от расхода, доступное количество: ' . $free);
                         return $this->redirect(Yii::$app->request->referrer);
                     }
                 }

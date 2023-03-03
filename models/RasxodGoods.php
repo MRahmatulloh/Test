@@ -52,7 +52,7 @@ class RasxodGoods extends MyModel
     public function rules()
     {
         return [
-            [['rasxod_id', 'goods_id', 'currency_id', 'prixod_goods_id', 'amount'], 'required'],
+            [['rasxod_id', 'goods_id', 'currency_id', 'prixod_id','prixod_goods_id',  'cost', 'amount'], 'required'],
             [['rasxod_id', 'goods_id', 'currency_id', 'prixod_goods_id', 'prixod_id'], 'integer'],
             [['amount', 'cost', 'cost_usd', 'summa'], 'number'],
             [['currency_id'], 'exist', 'skipOnError' => true, 'targetClass' => Currency::class, 'targetAttribute' => ['currency_id' => 'id']],

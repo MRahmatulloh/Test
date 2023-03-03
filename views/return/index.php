@@ -14,7 +14,7 @@ use yii\helpers\Url;
 /** @var app\models\search\PrixodSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Список приходов';
+$this->title = 'Список возратов';
 $this->params['breadcrumbs'][] = $this->title;
 AppAsset::register($this);
 ?>

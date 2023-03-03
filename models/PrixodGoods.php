@@ -27,6 +27,9 @@ use yii\behaviors\TimestampBehavior;
  */
 class PrixodGoods extends MyModel
 {
+    const SCENARIO_CREATE = 'create';
+    const SCENARIO_RETURN = 'return';
+
     public $rasxod_id;
     public $summa;
     /**
@@ -53,9 +56,10 @@ class PrixodGoods extends MyModel
     public function rules()
     {
         return [
-            [['prixod_id', 'goods_id', 'currency_id', 'amount'], 'required'],
+            [['prixod_id', 'goods_id', 'currency_id', 'cost', 'amount'], 'required'],
             [['prixod_id', 'goods_id', 'currency_id', 'rasxod_id', 'rasxod_goods_id'], 'integer'],
             [['amount', 'cost', 'cost_usd', 'summa'], 'number'],
+            [['rasxod_id', 'rasxod_goods_id'], 'required', 'on' => self::SCENARIO_RETURN],
             [['currency_id'], 'exist', 'skipOnError' => true, 'targetClass' => Currency::class, 'targetAttribute' => ['currency_id' => 'id']],
             [['goods_id'], 'exist', 'skipOnError' => true, 'targetClass' => Goods::class, 'targetAttribute' => ['goods_id' => 'id']],
             [['prixod_id'], 'exist', 'skipOnError' => true, 'targetClass' => Prixod::class, 'targetAttribute' => ['prixod_id' => 'id']],
@@ -70,6 +74,8 @@ class PrixodGoods extends MyModel
         return [
             'id' => 'ID',
             'prixod_id' => 'Приход',
+            'rasxod_id' => 'Расход',
+            'rasxod_goods_id' => 'Товар',
             'currency_id' => 'Валюта',
             'goods_id' => 'Товар',
             'amount' => 'Количество',

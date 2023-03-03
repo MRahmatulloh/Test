@@ -162,6 +162,7 @@ class RasxodController extends Controller
 
     public function actionGoodsList($rasxod_id)
     {
+        $this->findModel($rasxod_id);
         $searchModel = new RasxodGoodsSearch(['rasxod_id' => $rasxod_id]);
         $model = new RasxodGoods(['rasxod_id' => $rasxod_id]);
         $dataProvider = $searchModel->search($this->request->queryParams);

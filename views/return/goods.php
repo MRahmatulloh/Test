@@ -15,7 +15,7 @@ use yii\widgets\ActiveForm;
 /** @var app\models\PrixodGoods $model */
 /** @var yii\widgets\ActiveForm $form */
 
-$this->title = 'Приход № ' . $searchModel->prixod->number . ' от ' . $searchModel->prixod->client->name;
+$this->title = 'Возврат № ' . $searchModel->prixod->number . ' от ' . $searchModel->prixod->client->name;
 $this->params['breadcrumbs'][] = $this->title;
 AppAsset::register($this);
 
