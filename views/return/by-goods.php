@@ -14,7 +14,7 @@ use yii\widgets\ActiveForm;
 /** @var app\models\search\Filter $searchModel */
 /** @var yii\widgets\ActiveForm $form */
 
-$this->title = 'Приход по товаром ';
+$this->title = 'Возврат по товаром ';
 $this->params['breadcrumbs'][] = $this->title;
 AppAsset::register($this);
 

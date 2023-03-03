@@ -94,7 +94,7 @@ class PrixodGoodsController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post())) {
-            $model->cost_usd = CurrencyRates::getSummaUsd($model->prixod->date, $model->cost, $model->currency_id);
+            $model->cost_usd = CurrencyRates::getSummaUsd($model->prixod->date, $model->currency_id, $model->cost);
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно сохранены'));
             } else {

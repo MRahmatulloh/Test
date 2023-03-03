@@ -162,6 +162,12 @@ class PrixodController extends Controller
 
     public function actionGoodsList($prixod_id)
     {
+        $prixod = $this->findModel($prixod_id);
+
+        if ($prixod->type == Prixod::TYPE_RETURN) {
+            return $this->redirect(['return/goods-list', 'prixod_id' => $prixod_id]);
+        }
+
         $searchModel = new PrixodGoodsSearch(['prixod_id' => $prixod_id]);
         $model = new PrixodGoods(['prixod_id' => $prixod_id]);
         $dataProvider = $searchModel->search($this->request->queryParams);

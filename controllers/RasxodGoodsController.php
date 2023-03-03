@@ -174,4 +174,12 @@ class RasxodGoodsController extends Controller
         echo json_encode($data);
         die();
     }
+
+    public function actionGetCostCurrency(){
+        $post = Yii::$app->request->post();
+        $rasxod_goods_id = $post['rasxod_goods_id'];
+        $model = RasxodGoods::findOne($rasxod_goods_id); // проверка на существование
+
+        return json_encode(['cost' => $model->cost, 'currency_id' => $model->currency_id, 'currency_name' => $model->currency->name]);
+    }
 }

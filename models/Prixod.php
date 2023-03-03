@@ -32,6 +32,12 @@ class Prixod extends MyModel
     use NumberGenerationTrait;
     const TYPES = [
         1 => 'Внутренний рынок',
+        2 => 'Импорт',
+        3 => 'Возврат',
+        4 => 'Перемещение'
+    ];
+    const TYPES_CREATE = [
+        1 => 'Внутренний рынок',
         2 => 'Импорт'
     ];
 

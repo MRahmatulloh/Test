@@ -47,14 +47,23 @@ AppAsset::register($this);
             [
                 'attribute' => 'number',
                 'format' => 'raw',
-                'value' => function ($data) {
+                'value' => function ($model) {
+                    $number = $model['number'];
 
-                    return \yii\helpers\Html::a(
-                        $data['number'],
+                    if ($model['type'] == Prixod::TYPE_RETURN) {
+                        return Html::a(
+                            $number,
+                            \Yii::$app->getUrlManager()->createUrl(
+                                array('return/goods-list', 'prixod_id' => $model['id'])
+                            ),
+                        );
+                    }
+
+                    return Html::a(
+                        $number,
                         \Yii::$app->getUrlManager()->createUrl(
-                            array('prixod/goods-list', 'prixod_id' => $data['id'])
+                            array('prixod/goods-list', 'prixod_id' => $model['id'])
                         ),
-                        ['class' => 'clickLock']
                     );
                 },
             ],
@@ -158,29 +167,3 @@ AppAsset::register($this);
 
 </div>
 
-<?php
-
-// quyidagi scriptni alohida fayl deb qarash mumkin.
-// ixtiyoriy '' va "" ishlatish mumkin.
-// php o'zgaruvchilarni ham ishlatish mumkin.
-$script = <<< JS
-    $(document).ready(function() {
-        // Akbar Bobojonov
-        window.PJAX_ENABLED = false;
-        
-        // comboboxda qidirish
-        // $('.select2').select2();
-        // $('.select2-clear').select2({
-        //     allowClear: true
-        // });
-        //
-        // $( ".datetimepicker-asdate" ).datetimepicker({
-        //     format: 'DD.MM.YYYY'
-        // });
-    });
-JS;
-// Satr oxiri belgisi hech qanday probel va tabulyatsiyasiz qo'yilishi shart
-
-$this->registerJs($script, yii\web\View::POS_READY);
-
-?>

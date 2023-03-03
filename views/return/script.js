@@ -1,32 +1,43 @@
 $(document).ready(function() {
 
-    let elPrixod = $("#prixodgoods-rasxod_id");
-    let elPrixodGoods = $('#prixodgoods-rasxod_goods_id');
+    let elRasxod = $("#prixodgoods-rasxod_id");
+    let elRasxodGoods = $('#prixodgoods-rasxod_goods_id');
+    let elCost = $('#prixodgoods-cost');
+    let elCurrency = $('#prixodgoods-currency_id');
 
-    elPrixod.change(function (e) {
-        var prixod_id = elPrixod.val();
-        changeGoods(prixod_id);
+    elCost.prop("disabled", true);
+    elCurrency.prop("disabled", true);
+
+
+    elRasxod.change(function (e) {
+        var rasxod_id = elRasxod.val();
+        changeGoods(rasxod_id);
     });
 
-    function changeGoods(prixod_id) {
+    elRasxodGoods.change(function (e) {
+        var rasxod_goods_id = elRasxodGoods.val();
+        changeCostCurrency(rasxod_goods_id);
+    });
+
+    function changeGoods(rasxod_id) {
         $.ajax({
             url: "<?=url(['rasxod-goods/select-goods-available'])?>",
             method: "POST",
-            data: {rasxod_id: prixod_id, _csrf: yii.getCsrfToken()},
+            data: {rasxod_id: rasxod_id, _csrf: yii.getCsrfToken()},
             dataType: "json",
             beforeSend: function () {
                 $('#select2-chosen').text("");
-                elPrixodGoods.empty().append('<option value="">Выберите</option>');
+                elRasxodGoods.empty().append('<option value="">Выберите</option>');
                 // clientni tanlay olmaydigan qilib turamiz
-                elPrixodGoods.prop("disabled", true);
+                elRasxodGoods.prop("disabled", true);
             },
 
             success: function (data) {
                 // console.log(data);
                 $.each(data, function (i) {
-                    elPrixodGoods.append('<option value="' + data[i].id + '">' + data[i].name + '</option>');
+                    elRasxodGoods.append('<option value="' + data[i].id + '">' + data[i].name + '</option>');
                 });
-                elPrixodGoods.prop("disabled", false);
+                elRasxodGoods.prop("disabled", false);
             },
 
             error: function () {
@@ -35,5 +46,20 @@ $(document).ready(function() {
         });
     }
 
-    elPrixod.trigger('change');
+    function changeCostCurrency(rasxod_goods_id) {
+        $.ajax({
+            url: "<?=url(['rasxod-goods/get-cost-currency'])?>",
+            method: "POST",
+            data: {rasxod_goods_id: rasxod_goods_id, _csrf: yii.getCsrfToken()},
+            dataType: "json",
+
+            success: function (data) {
+                elCost.val(data.cost);
+                elCurrency.val(data.currency_id);
+                elCurrency.empty().append('<option value="'+data.currency_id+'">'+data.currency_name+'</option>');
+            },
+        });
+    }
+
+    elRasxod.trigger('change');
 });
