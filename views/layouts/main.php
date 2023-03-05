@@ -290,7 +290,7 @@ AppAsset::register($this);
             <?php if (Yii::$app->session->hasFlash('error')): ?>
                 <div class="alert alert-danger alert-dismissable">
                     <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-                    <h5><i class="icon fa fa-check"></i>
+                    <h5><i class="icon fa fa-exclamation"></i>
                         <?= Yii::$app->session->getFlash('error') ?>
                     </h5>
                 </div>

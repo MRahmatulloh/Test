@@ -101,7 +101,7 @@ class PrixodGoodsController extends Controller
             } else {
                 Yii::$app->session->setFlash('error', Yii::t('app', 'Ошибка сохранения данных'));
             }
-            return $this->redirect(['prixod/goods-list', 'prixod_id' => $model->prixod_id]);
+            return $this->redirect(Yii::$app->request->referrer);
         }
 
         return $this->render('update', [
