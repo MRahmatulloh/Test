@@ -88,7 +88,7 @@ AppAsset::register($this);
                     return Html::a(
                         $data->rasxod->number,
                         \Yii::$app->getUrlManager()->createUrl(
-                            array('rasxod/goods-list', 'id' => $data->rasxod->id)
+                            array('rasxod/goods-list', 'rasxod_id' => $data->rasxod->id)
                         )
                     );
                 },
