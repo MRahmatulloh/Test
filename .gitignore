@@ -40,3 +40,10 @@ tests/_support/_generated
 
 #assets cache
 /web/assets/
+
+# for fixing .htaccess file for apache in serv
+/web/.htaccess
+.htaccess
+
+# command for removing htacces files from git
+# git rm --cached .htaccess
