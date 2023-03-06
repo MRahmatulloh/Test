@@ -130,6 +130,15 @@ AppAsset::register($this);
                     },
 
                     'update' => function ($url, $model) {
+                        if ($model['type'] == Prixod::TYPE_RETURN) {
+                            return Html::a(
+                                ' <span class="fas fa-edit"> </span> ',
+                                Yii::$app->getUrlManager()->createUrl(
+                                array('return/update', 'id' => $model['id'])
+                                ),
+                            );
+
+                        }
                         return Html::a(
                             ' <span class="fas fa-edit"> </span> ',
                             $url

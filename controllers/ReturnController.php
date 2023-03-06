@@ -48,7 +48,8 @@ class ReturnController extends Controller
         $searchModel = new PrixodSearch([
             'type' => Prixod::TYPE_RETURN,
         ]);
-        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        $dataProvider = $searchModel->searchReturn($this->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -215,7 +216,7 @@ class ReturnController extends Controller
         $searchModel->from = date('Y-01-01');
         $searchModel->to = date('Y-m-d');
 
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider = $searchModel->searchReturn($this->request->queryParams);
 
         $searchModel->from = dateView($searchModel->from);
         $searchModel->to = dateView($searchModel->to);

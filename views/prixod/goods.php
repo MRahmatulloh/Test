@@ -1,10 +1,15 @@
 <?php
 
 use app\assets\AppAsset;
+use app\models\Currency;
+use app\models\Goods;
+use app\models\Prixod;
+use app\models\PrixodGoods;
 use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
@@ -29,8 +34,8 @@ AppAsset::register($this);
 
         <div class="row">
             <div class="col-md-3">
-                <?= $form->field($model, 'goods_id')->widget(\kartik\select2\Select2::className(),[
-                    'data' => \app\models\Goods::selectList(),
+                <?= $form->field($model, 'goods_id')->widget(Select2::className(),[
+                    'data' => Goods::selectList(),
                     'options' => ['placeholder' => 'Выберите товар ...'],
                     'pluginOptions' => [
                         'allowClear' => true
@@ -44,8 +49,8 @@ AppAsset::register($this);
                 <?= $form->field($model, 'cost')->textInput(['maxlength' => true]) ?>
             </div>
             <div class="col-md-3">
-                <?= $form->field($model, 'currency_id')->widget(\kartik\select2\Select2::className(),[
-                    'data' => \app\models\Currency::selectList(),
+                <?= $form->field($model, 'currency_id')->widget(Select2::className(),[
+                    'data' => Currency::selectList(),
                     'options' => ['placeholder' => 'Выберите валюты ...'],
                     'pluginOptions' => [
                         'allowClear' => true
@@ -77,7 +82,7 @@ AppAsset::register($this);
                 'filter' => Select2::widget([
                     'model' => $searchModel,
                     'attribute' => 'goods_id',
-                    'data' => \app\models\Goods::selectList(),
+                    'data' => Goods::selectList(),
                     'initValueText' => $searchModel->goods_id,
                     'options' => ['placeholder' => 'Выберите товар ...'],
                     'pluginOptions' => [
@@ -126,7 +131,7 @@ AppAsset::register($this);
                 'format' => 'raw',
                 'value' => function ($data) {
 
-                    return \yii\helpers\Html::a(
+                    return Html::a(
                         '<i class="fas fa-check-circle"> Расходы</i>',
                         \Yii::$app->getUrlManager()->createUrl(
                             array('rasxod/by-goods', 'RasxodGoodsSearch[prixod_goods_id]' => $data['id'])
@@ -144,7 +149,7 @@ AppAsset::register($this);
                 'filter' => Select2::widget([
                     'model' => $searchModel,
                     'attribute' => 'currency_id',
-                    'data' => \app\models\Client::selectList(),
+                    'data' => Currency::selectList(),
                     'initValueText' => $searchModel->currency_id,
                     'options' => ['placeholder' => 'Выберите ...'],
                     'pluginOptions' => [
@@ -159,8 +164,11 @@ AppAsset::register($this);
                 'buttons' => [
 
                     'update' => function ($url, $model) {
-                        $url = \yii\helpers\Url::to(['/prixod-goods/update', 'id' => $model->id]);
-                        return \yii\helpers\Html::a(
+                        /** @var $model PrixodGoods*/
+                        $url = Url::to(['/prixod-goods/update', 'id' => $model->id]);
+                        if ($model->prixod->type = Prixod::TYPE_RETURN)
+                            $url = Url::to(['/prixod-goods/update-return', 'id' => $model->id]);
+                        return Html::a(
                             ' <span class="fas fa-edit"> </span> ',
                             $url
                         );
@@ -168,8 +176,8 @@ AppAsset::register($this);
 
                     'delete' => function ($url, $model) {
 
-                        /** @var $model \app\models\PrixodGoods */
-                        $url = \yii\helpers\Url::to(['/prixod-goods/delete', 'id' => $model->id]);
+                        /** @var $model PrixodGoods */
+                        $url = Url::to(['/prixod-goods/delete', 'id' => $model->id]);
                         if ($model->rasxodGoods) {
                             return Html::a('<span class="fas fa-trash"></span>',
                                 $url,

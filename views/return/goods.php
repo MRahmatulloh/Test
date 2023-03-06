@@ -1,12 +1,15 @@
 <?php
 
 use app\assets\AppAsset;
+use app\models\Currency;
 use app\models\Prixod;
+use app\models\PrixodGoods;
 use app\models\Rasxod;
 use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
@@ -56,7 +59,7 @@ AppAsset::register($this);
             </div>
             <div class="col-md-2">
                 <?= $form->field($model, 'currency_id')->widget(Select2::className(),[
-                    'data' => \app\models\Currency::selectList(),
+                    'data' => Currency::selectList(),
                     'options' => ['placeholder' => 'Выберите валюты ...'],
                     'pluginOptions' => [
                         'allowClear' => true
@@ -66,7 +69,7 @@ AppAsset::register($this);
             <div class="col-2">
                     <h6> </h6>
                     <?= Html::submitButton('Добавить', ['class' => 'btn btn-success']) ?>
-                    <?= Html::a("<i class='fas fa-arrow-up white_text'></i>", ['/prixod/index'], ['class' => 'btn btn-primary']) ?>
+                    <?= Html::a("<i class='fas fa-arrow-up white_text'></i>", ['/return/index'], ['class' => 'btn btn-primary']) ?>
             </div>
          </div>
 
@@ -170,8 +173,11 @@ AppAsset::register($this);
                 'buttons' => [
 
                     'update' => function ($url, $model) {
-                        $url = \yii\helpers\Url::to(['/prixod-goods/update', 'id' => $model->id]);
-                        return \yii\helpers\Html::a(
+                        /** @var $model PrixodGoods*/
+                        $url = Url::to(['/prixod-goods/update', 'id' => $model->id]);
+                        if ($model->prixod->type = Prixod::TYPE_RETURN)
+                            $url = Url::to(['/prixod-goods/update-return', 'id' => $model->id]);
+                        return Html::a(
                             ' <span class="fas fa-edit"> </span> ',
                             $url
                         );
@@ -180,7 +186,7 @@ AppAsset::register($this);
                     'delete' => function ($url, $model) {
 
                         /** @var $model \app\models\PrixodGoods */
-                        $url = \yii\helpers\Url::to(['/prixod-goods/delete', 'id' => $model->id]);
+                        $url = Url::to(['/prixod-goods/delete', 'id' => $model->id]);
                         if ($model->rasxodGoods) {
                             return Html::a('<span class="fas fa-trash"></span>',
                                 $url,

@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\CurrencyRates;
 use app\models\PrixodGoods;
+use app\models\RasxodGoods;
 use app\models\search\PrixodGoodsSearch;
 use Yii;
 use yii\web\Controller;
@@ -100,6 +101,38 @@ class PrixodGoodsController extends Controller
             } else {
                 Yii::$app->session->setFlash('error', Yii::t('app', 'Ошибка сохранения данных'));
             }
+            return $this->redirect(Yii::$app->request->referrer);
+        }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionUpdateReturn($id)
+    {
+        $model = $this->findModel($id);
+        $old_amount = $model->amount;
+
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            $model->cost_usd = CurrencyRates::getSummaUsd($model->prixod->date, $model->currency_id, $model->cost);
+            $all_amount = RasxodGoods::findOne($model->rasxod_goods_id)->amount;
+            $used = PrixodGoods::find()
+                ->where(['rasxod_goods_id' => $model->rasxod_goods_id])
+                ->sum('amount');
+            $curr_amount = $model->amount;
+            $free = $all_amount - $used;
+
+            if (($free + $old_amount ) < $curr_amount){
+                Yii::$app->session->setFlash('error', 'Превишен количество товара ' . $model->goods->name . ' от расхода, доступное количество: ' . $free);
+                return $this->redirect(Yii::$app->request->referrer);
+            }
+
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно сохранены'));
+            } else {
+                Yii::$app->session->setFlash('error', Yii::t('app', 'Ошибка сохранения данных'));
+            }
             return $this->redirect(['prixod/goods-list', 'prixod_id' => $model->prixod_id]);
         }
 
@@ -163,7 +196,7 @@ class PrixodGoodsController extends Controller
                     SUM(amount) AS amount
                 FROM rasxod_goods
                 GROUP BY 
-                    rasxod_goods.id
+                    prixod_goods_id
             ) used ON used.id = pg.id
             
             WHERE (pg.amount - IFNULL(used.amount, 0)) > 0

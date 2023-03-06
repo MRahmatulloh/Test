@@ -11,6 +11,7 @@ use yii\widgets\ActiveForm;
 /** @var yii\web\View $this */
 /** @var app\models\Prixod $model */
 /** @var yii\widgets\ActiveForm $form */
+/** @var $update */
 
 AppAsset::register($this);
 ?>
@@ -19,7 +20,7 @@ AppAsset::register($this);
     <br>
     <?php $form = ActiveForm::begin(); ?>
 
-    <div class="row d-block">
+    <div class="row">
         <div class="col-4">
             <?=  $form->field($model, 'date')->widget(DatePicker::classname(), [
                     'type' => 3,
@@ -32,7 +33,10 @@ AppAsset::register($this);
         <div class="col-4">
             <?= $form->field($model, 'client_id')->widget(Select2::className(),[
                 'data' => Client::selectList(),
-                'options' => ['placeholder' => 'Выберите клиент ...'],
+                'options' => [
+                        'placeholder' => 'Выберите клиент ...',
+                        'disabled' => (bool)$model->prixodGoods
+                    ],
                 'pluginOptions' => [
                     'allowClear' => true
                 ],

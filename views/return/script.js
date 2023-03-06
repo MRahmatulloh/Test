@@ -4,6 +4,7 @@ $(document).ready(function() {
     let elRasxodGoods = $('#prixodgoods-rasxod_goods_id');
     let elCost = $('#prixodgoods-cost');
     let elCurrency = $('#prixodgoods-currency_id');
+    let elAmount = $('#prixodgoods-amount');
 
     elCost.prop("disabled", true);
     elCurrency.prop("disabled", true);
@@ -11,6 +12,7 @@ $(document).ready(function() {
 
     elRasxod.change(function (e) {
         var rasxod_id = elRasxod.val();
+        elAmount.val(null);
         changeGoods(rasxod_id);
     });
 
@@ -56,6 +58,7 @@ $(document).ready(function() {
             success: function (data) {
                 elCost.val(data.cost);
                 elCurrency.val(data.currency_id);
+                elAmount.val(data.amount);
                 elCurrency.empty().append('<option value="'+data.currency_id+'">'+data.currency_name+'</option>');
             },
         });
