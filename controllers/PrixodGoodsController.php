@@ -98,10 +98,10 @@ class PrixodGoodsController extends Controller
             $model->cost_usd = CurrencyRates::getSummaUsd($model->prixod->date, $model->currency_id, $model->cost);
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно сохранены'));
+                return $this->redirect(Yii::$app->request->referrer);
             } else {
-                Yii::$app->session->setFlash('error', Yii::t('app', 'Ошибка сохранения данных'));
+                Yii::$app->session->setFlash('error', Yii::t('app', 'Произошла ошибка при сохранении данных'));
             }
-            return $this->redirect(Yii::$app->request->referrer);
         }
 
         return $this->render('update', [
@@ -131,7 +131,7 @@ class PrixodGoodsController extends Controller
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно сохранены'));
             } else {
-                Yii::$app->session->setFlash('error', Yii::t('app', 'Ошибка сохранения данных'));
+                Yii::$app->session->setFlash('error', Yii::t('app', 'Произошла ошибка при сохранении данных'));
             }
             return $this->redirect(['prixod/goods-list', 'prixod_id' => $model->prixod_id]);
         }

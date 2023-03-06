@@ -75,7 +75,7 @@ class RuleController extends Controller
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно сохранены'));
             } else {
-                Yii::$app->session->setFlash('error', Yii::t('app', 'Ошибка сохранения данных'));
+                Yii::$app->session->setFlash('error', Yii::t('app', 'Произошла ошибка при сохранении данных'));
                 return $this->redirect(Yii::$app->request->referrer);
             }
 
@@ -99,7 +99,7 @@ class RuleController extends Controller
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно сохранены'));
             } else {
-                Yii::$app->session->setFlash('error', Yii::t('app', 'Ошибка сохранения данных'));
+                Yii::$app->session->setFlash('error', Yii::t('app', 'Произошла ошибка при сохранении данных'));
                 return $this->redirect(Yii::$app->request->referrer);
             }
 

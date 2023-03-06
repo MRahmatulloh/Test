@@ -68,26 +68,20 @@ class MovementController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Movement();
+        $model = new Movement([
+            'date' => date('d.m.Y'),
+        ]);
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post())) {
                 $model->number = $model->getNumber('create', 'M');
 
-                if ($model->sender_id == $model->recipient_id){
-                    Yii::$app->session->setFlash('error', Yii::t('app', 'Ошибка сохранения данных' . '<br>' . 'Невозможно выполнить эту операцию между одним и тем же клиентом'));
-                    return $this->render('create', [
-                        'model' => $model,
-                    ]);
-                }
-
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно сохранены'));
+                    return $this->redirect(['index']);
                 } else {
-                    Yii::$app->session->setFlash('error', Yii::t('app', 'Ошибка сохранения данных'));
-                    return $this->redirect(Yii::$app->request->referrer);
+                    Yii::$app->session->setFlash('error', Yii::t('app', 'Произошла ошибка при сохранении данных'));
                 }
-                return $this->redirect(['index']);
             }
         }
 
@@ -107,8 +101,15 @@ class MovementController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            $model->number = $model->getNumber('create', 'M');
+
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно сохранены'));
+                return $this->redirect(['index']);
+            } else {
+                Yii::$app->session->setFlash('error', Yii::t('app', 'Произошла ошибка при сохранении данных'));
+            }
         }
 
         return $this->render('update', [

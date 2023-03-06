@@ -98,10 +98,10 @@ class RasxodGoodsController extends Controller
             $model->cost_usd = CurrencyRates::getSummaUsd($model->rasxod->date, $model->cost, $model->currency_id);
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно сохранены'));
+                return $this->redirect(Yii::$app->request->referrer);
             } else {
-                Yii::$app->session->setFlash('error', Yii::t('app', 'Ошибка сохранения данных'));
+                Yii::$app->session->setFlash('error', Yii::t('app', 'Произошла ошибка при сохранении данных'));
             }
-            return $this->redirect(['rasxod/goods-list', 'rasxod_id' => $model->rasxod_id]);
         }
 
         return $this->render('update', [
@@ -124,7 +124,7 @@ class RasxodGoodsController extends Controller
         if ($model->delete()) {
             Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно удалены'));
         } else {
-            Yii::$app->session->setFlash('error', Yii::t('app', 'Ошибка удаления данных'));
+            Yii::$app->session->setFlash('error', Yii::t('app', 'Произошла ошибка при удаления данных'));
         }
 
         return $this->redirect(['rasxod/goods-list', 'rasxod_id' => $rasxod_id]);

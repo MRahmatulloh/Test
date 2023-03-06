@@ -75,11 +75,10 @@ class CurrencyController extends Controller
             if ($model->load($this->request->post())) {
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно сохранены'));
+                    return $this->redirect(['index']);
                 } else {
-                    Yii::$app->session->setFlash('error', Yii::t('app', 'Ошибка сохранения данных'));
-                    return $this->redirect(Yii::$app->request->referrer);
+                    Yii::$app->session->setFlash('error', Yii::t('app', 'Произошла ошибка при сохранении данных'));
                 }
-                return $this->redirect(['index']);
             }
         }
 
@@ -100,13 +99,12 @@ class CurrencyController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post())) {
-            if ($model->save()) {
-                Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно сохранены'));
-            } else {
-                Yii::$app->session->setFlash('error', Yii::t('app', 'Ошибка сохранения данных'));
-                return $this->redirect(Yii::$app->request->referrer);
-            }
-            return $this->redirect(['index']);
+                if ($model->save()) {
+                    Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно сохранены'));
+                    return $this->redirect(['index']);
+                } else {
+                    Yii::$app->session->setFlash('error', Yii::t('app', 'Произошла ошибка при сохранении данных'));
+                }
         }
 
         return $this->render('update', [
