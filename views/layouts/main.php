@@ -260,11 +260,6 @@ AppAsset::register($this);
                                 <div class="profile_info_details">
                                     <a href="#">Мой профиль </a>
                                     <a href="/site/logout" data-method = 'post'>Выйти</a>
-                                    <?= Html::a('txt', "/site/logout", ['data-method' => 'post'])?>
-                                    <form method="post" action="/site/logout">
-                                        @csrf
-                                        <input type="hidden" name="name" value="value" />
-                                        <a onclick="this.parentNode.submit();">click here</a>
                                     </form>
                                 </div>
                             </div>
