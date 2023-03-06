@@ -74,12 +74,11 @@ class GoodsController extends Controller
         if ($this->request->isPost) {
             if ($model->load($this->request->post())) {
 
+                $model->file = UploadedFile::getInstance($model, 'file');
                 if ($model->file) {
-                    $last_id = (Goods::find()
+                    $last_id = ((Goods::find()
                             ->orderBy(['id' => SORT_DESC])
-                            ->one())->id ?? 0 + 1;
-
-                    $model->file = UploadedFile::getInstance($model, 'file');
+                            ->one())->id ?? 0) + 1;
                     $fileName = $last_id.'_'. time() . '.' . $model->file->extension;
                     $model->file->saveAs('img/goods/' . $fileName , false);
                     $model->img = $fileName;
@@ -112,12 +111,12 @@ class GoodsController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post())) {
-            if ($model->file) {
-                $last_id = (Goods::find()
-                        ->orderBy(['id' => SORT_DESC])
-                        ->one())->id ?? 0 + 1;
 
-                $model->file = UploadedFile::getInstance($model, 'file');
+            $model->file = UploadedFile::getInstance($model, 'file');
+            if ($model->file) {
+                $last_id = ((Goods::find()
+                        ->orderBy(['id' => SORT_DESC])
+                        ->one())->id ?? 0) + 1;
                 $fileName = $last_id.'_'. time() . '.' . $model->file->extension;
                 $model->file->saveAs('img/goods/' . $fileName , false);
                 $model->img = $fileName;
