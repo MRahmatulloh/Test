@@ -12,7 +12,6 @@ $this->params['breadcrumbs'][] = $this->title;
 /*  style="background-image: url()" */
 ?>
 <div class="site-login">
-    <h2><?//= Html::encode($this->title) ?></h2>
     <img src="<?= Yii::$app->request->baseUrl . '/img/logo1.png'; ?>" alt="" class=" w-100 text-center">
     <?php $form = ActiveForm::begin([
         'id' => 'login-form',

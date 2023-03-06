@@ -1,0 +1,72 @@
+[06-Mar-2023 10:42:06 UTC] PHP Warning:  require(/home/uznjuz/abc.uznj.uz/config/db.php): Failed to open stream: No such file or directory in /home/uznjuz/abc.uznj.uz/config/console.php on line 4
+[06-Mar-2023 10:42:06 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/uznjuz/abc.uznj.uz/config/db.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/uznjuz/abc.uznj.uz/config/console.php:4
+Stack trace:
+#0 /home/uznjuz/abc.uznj.uz/yii(17): require()
+#1 {main}
+  thrown in /home/uznjuz/abc.uznj.uz/config/console.php on line 4
+[06-Mar-2023 10:42:08 UTC] PHP Warning:  require(/home/uznjuz/abc.uznj.uz/config/db.php): Failed to open stream: No such file or directory in /home/uznjuz/abc.uznj.uz/config/console.php on line 4
+[06-Mar-2023 10:42:08 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/uznjuz/abc.uznj.uz/config/db.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/uznjuz/abc.uznj.uz/config/console.php:4
+Stack trace:
+#0 /home/uznjuz/abc.uznj.uz/yii(17): require()
+#1 {main}
+  thrown in /home/uznjuz/abc.uznj.uz/config/console.php on line 4
+[06-Mar-2023 10:42:11 UTC] PHP Warning:  require(/home/uznjuz/abc.uznj.uz/config/db.php): Failed to open stream: No such file or directory in /home/uznjuz/abc.uznj.uz/config/console.php on line 4
+[06-Mar-2023 10:42:11 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/uznjuz/abc.uznj.uz/config/db.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/uznjuz/abc.uznj.uz/config/console.php:4
+Stack trace:
+#0 /home/uznjuz/abc.uznj.uz/yii(17): require()
+#1 {main}
+  thrown in /home/uznjuz/abc.uznj.uz/config/console.php on line 4
+[06-Mar-2023 10:42:21 UTC] PHP Warning:  require(/home/uznjuz/abc.uznj.uz/config/db.php): Failed to open stream: No such file or directory in /home/uznjuz/abc.uznj.uz/config/console.php on line 4
+[06-Mar-2023 10:42:21 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/uznjuz/abc.uznj.uz/config/db.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/uznjuz/abc.uznj.uz/config/console.php:4
+Stack trace:
+#0 /home/uznjuz/abc.uznj.uz/yii(17): require()
+#1 {main}
+  thrown in /home/uznjuz/abc.uznj.uz/config/console.php on line 4
+[06-Mar-2023 10:42:22 UTC] PHP Warning:  require(/home/uznjuz/abc.uznj.uz/config/db.php): Failed to open stream: No such file or directory in /home/uznjuz/abc.uznj.uz/config/console.php on line 4
+[06-Mar-2023 10:42:22 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/uznjuz/abc.uznj.uz/config/db.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/uznjuz/abc.uznj.uz/config/console.php:4
+Stack trace:
+#0 /home/uznjuz/abc.uznj.uz/yii(17): require()
+#1 {main}
+  thrown in /home/uznjuz/abc.uznj.uz/config/console.php on line 4
+[06-Mar-2023 10:42:23 UTC] PHP Warning:  require(/home/uznjuz/abc.uznj.uz/config/db.php): Failed to open stream: No such file or directory in /home/uznjuz/abc.uznj.uz/config/console.php on line 4
+[06-Mar-2023 10:42:23 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/uznjuz/abc.uznj.uz/config/db.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/uznjuz/abc.uznj.uz/config/console.php:4
+Stack trace:
+#0 /home/uznjuz/abc.uznj.uz/yii(17): require()
+#1 {main}
+  thrown in /home/uznjuz/abc.uznj.uz/config/console.php on line 4
+[06-Mar-2023 10:42:32 UTC] PHP Warning:  require(/home/uznjuz/abc.uznj.uz/config/db.php): Failed to open stream: No such file or directory in /home/uznjuz/abc.uznj.uz/config/console.php on line 4
+[06-Mar-2023 10:42:32 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/uznjuz/abc.uznj.uz/config/db.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/uznjuz/abc.uznj.uz/config/console.php:4
+Stack trace:
+#0 /home/uznjuz/abc.uznj.uz/yii(17): require()
+#1 {main}
+  thrown in /home/uznjuz/abc.uznj.uz/config/console.php on line 4
+[06-Mar-2023 10:42:33 UTC] PHP Warning:  require(/home/uznjuz/abc.uznj.uz/config/db.php): Failed to open stream: No such file or directory in /home/uznjuz/abc.uznj.uz/config/console.php on line 4
+[06-Mar-2023 10:42:33 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/uznjuz/abc.uznj.uz/config/db.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/uznjuz/abc.uznj.uz/config/console.php:4
+Stack trace:
+#0 /home/uznjuz/abc.uznj.uz/yii(17): require()
+#1 {main}
+  thrown in /home/uznjuz/abc.uznj.uz/config/console.php on line 4
+[06-Mar-2023 10:42:33 UTC] PHP Warning:  require(/home/uznjuz/abc.uznj.uz/config/db.php): Failed to open stream: No such file or directory in /home/uznjuz/abc.uznj.uz/config/console.php on line 4
+[06-Mar-2023 10:42:33 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/uznjuz/abc.uznj.uz/config/db.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/uznjuz/abc.uznj.uz/config/console.php:4
+Stack trace:
+#0 /home/uznjuz/abc.uznj.uz/yii(17): require()
+#1 {main}
+  thrown in /home/uznjuz/abc.uznj.uz/config/console.php on line 4
+[06-Mar-2023 10:42:33 UTC] PHP Warning:  require(/home/uznjuz/abc.uznj.uz/config/db.php): Failed to open stream: No such file or directory in /home/uznjuz/abc.uznj.uz/config/console.php on line 4
+[06-Mar-2023 10:42:33 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/uznjuz/abc.uznj.uz/config/db.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/uznjuz/abc.uznj.uz/config/console.php:4
+Stack trace:
+#0 /home/uznjuz/abc.uznj.uz/yii(17): require()
+#1 {main}
+  thrown in /home/uznjuz/abc.uznj.uz/config/console.php on line 4
+[06-Mar-2023 10:42:34 UTC] PHP Warning:  require(/home/uznjuz/abc.uznj.uz/config/db.php): Failed to open stream: No such file or directory in /home/uznjuz/abc.uznj.uz/config/console.php on line 4
+[06-Mar-2023 10:42:34 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/uznjuz/abc.uznj.uz/config/db.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/uznjuz/abc.uznj.uz/config/console.php:4
+Stack trace:
+#0 /home/uznjuz/abc.uznj.uz/yii(17): require()
+#1 {main}
+  thrown in /home/uznjuz/abc.uznj.uz/config/console.php on line 4
+[06-Mar-2023 10:42:41 UTC] PHP Warning:  require(/home/uznjuz/abc.uznj.uz/config/db.php): Failed to open stream: No such file or directory in /home/uznjuz/abc.uznj.uz/config/console.php on line 4
+[06-Mar-2023 10:42:41 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/uznjuz/abc.uznj.uz/config/db.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/uznjuz/abc.uznj.uz/config/console.php:4
+Stack trace:
+#0 /home/uznjuz/abc.uznj.uz/yii(17): require()
+#1 {main}
+  thrown in /home/uznjuz/abc.uznj.uz/config/console.php on line 4
