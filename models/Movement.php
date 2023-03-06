@@ -61,11 +61,22 @@ class Movement extends ActiveRecord
             [['date'], 'safe'],
             [['sender_id', 'recipient_id', 'prixod_id', 'rasxod_id', 'status', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
             [['number', 'comment'], 'string', 'max' => 255],
+            ['recipient_id', 'checkSameClient'],
             [['prixod_id'], 'exist', 'skipOnError' => true, 'targetClass' => Prixod::class, 'targetAttribute' => ['prixod_id' => 'id']],
             [['rasxod_id'], 'exist', 'skipOnError' => true, 'targetClass' => Rasxod::class, 'targetAttribute' => ['rasxod_id' => 'id']],
             [['recipient_id'], 'exist', 'skipOnError' => true, 'targetClass' => Client::class, 'targetAttribute' => ['recipient_id' => 'id']],
             [['sender_id'], 'exist', 'skipOnError' => true, 'targetClass' => Client::class, 'targetAttribute' => ['sender_id' => 'id']],
         ];
+    }
+
+    public function checkSameClient()
+    {
+        if ($this->sender_id == $this->recipient_id) {
+            $this->addError('recipient_id', Yii::t('app', 'Невозможно выполнить эту операцию между одним и тем же клиентом'));
+
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -75,14 +86,14 @@ class Movement extends ActiveRecord
     {
         return [
             'id' => 'ID',
-            'date' => 'Date',
-            'number' => 'Number',
-            'sender_id' => 'Sender ID',
-            'recipient_id' => 'Recipient ID',
-            'prixod_id' => 'Prixod ID',
-            'rasxod_id' => 'Rasxod ID',
-            'status' => 'Status',
-            'comment' => 'Comment',
+            'date' => 'Дата',
+            'number' => 'Номер',
+            'sender_id' => 'Отправитель',
+            'recipient_id' => 'Получатель',
+            'prixod_id' => 'Приход',
+            'rasxod_id' => 'Расход',
+            'status' => 'Статус',
+            'comment' => 'Комментарий',
             'created_by' => 'Created By',
             'updated_by' => 'Updated By',
             'created_at' => 'Created At',
