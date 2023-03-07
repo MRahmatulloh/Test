@@ -4,14 +4,14 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /** @var yii\web\View $this */
-/** @var app\models\Movement $model */
+/** @var app\models\MovementGoods $model */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Перемещение', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Movement Goods', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="movement-view">
+<div class="movement-goods-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -30,16 +30,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'date',
-            'number',
-            'sender_id',
-            'recipient_id',
-            'prixod_id',
-            'rasxod_id',
+            'movement_id',
+            'goods_id',
+            'currency_id',
+            'rasxod_goods_id',
+            'amount',
+            'cost',
+            'cost_usd',
             'status',
-            'comment',
-            'created_by',
-            'updated_by',
             'created_at',
             'updated_at',
         ],

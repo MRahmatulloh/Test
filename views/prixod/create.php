@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /** @var app\models\Prixod $model */
 
 $this->title = 'Новое приходное требование';
-$this->params['breadcrumbs'][] = ['label' => 'Prixods', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Приход', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="prixod-create">

@@ -2,9 +2,16 @@
 
 namespace app\controllers;
 
+use app\models\CurrencyRates;
 use app\models\Movement;
+use app\models\MovementGoods;
+use app\models\PrixodGoods;
+use app\models\RasxodGoods;
+use app\models\search\MovementGoodsSearch;
 use app\models\search\MovementSearch;
+use app\models\search\PrixodGoodsSearch;
 use Yii;
+use yii\base\BaseObject;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -75,6 +82,7 @@ class MovementController extends Controller
         if ($this->request->isPost) {
             if ($model->load($this->request->post())) {
                 $model->number = $model->getNumber('create', 'M');
+                $model->created_by = Yii::$app->user->identity->getId();
 
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно сохранены'));
@@ -86,6 +94,48 @@ class MovementController extends Controller
         }
 
         return $this->render('create', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionGoodsList($id)
+    {
+        $this->findModel($id);
+        $searchModel = new MovementGoodsSearch(['movement_id' => $id]);
+        $model = new MovementGoods(['movement_id' => $id]);
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        if ($this->request->isPost) {
+            if ($model->load($this->request->post())) {
+                if ($model->rasxod_goods_id) {
+                    $rasxod_goods = RasxodGoods::findOne($model->rasxod_goods_id);
+
+                    $model->cost = $rasxod_goods->cost;
+                    $model->currency_id = $rasxod_goods->currency_id;
+
+                    $model->cost_usd = CurrencyRates::getSummaUsd($model->movement->date, $model->currency_id, $model->cost);
+                    $model->goods_id = $rasxod_goods->goods_id;
+                    $used = PrixodGoods::getRasxodedAmount($model->rasxod_goods_id) ?? 0;
+                    $free = $rasxod_goods->amount - $used;
+
+                    if (($free - $model->amount) < 0) {
+                        Yii::$app->session->setFlash('error', 'Превишен количество товара ' . $rasxod_goods->goods->name . ' от расхода, доступное количество: ' . $free);
+                        return $this->redirect(Yii::$app->request->referrer);
+                    }
+                }
+
+                if ($model->save()) {
+                    Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно сохранены'));
+                    return $this->redirect(Yii::$app->request->referrer);
+                } else {
+                    Yii::$app->session->setFlash('error', Yii::t('app', 'Произошла ошибка при сохранении данных'));
+                }
+            }
+        }
+
+        return $this->render('goods', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
             'model' => $model,
         ]);
     }
@@ -103,6 +153,7 @@ class MovementController extends Controller
 
         if ($this->request->isPost && $model->load($this->request->post())) {
             $model->number = $model->getNumber('create', 'M');
+            $model->updated_by = Yii::$app->user->identity->getId();
 
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно сохранены'));

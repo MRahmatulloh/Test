@@ -182,27 +182,10 @@ class RasxodController extends Controller
 
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно сохранены'));
+                    return $this->redirect(['goods-list', 'rasxod_id' => $model->rasxod_id]);
                 } else {
                     Yii::$app->session->setFlash('error', Yii::t('app', 'Произошла ошибка при сохранении данных'));
                 }
-
-                return $this->redirect(['goods-list', 'rasxod_id' => $model->rasxod_id]);
-            }
-        }
-
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post())) {
-                $model->cost_usd = CurrencyRates::getSummaUsd($model->rasxod->date, $model->currency_id, $model->cost);
-
-                if ($model->save()) {
-                    Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно сохранены'));
-                } else {
-                    Yii::$app->session->setFlash('error', Yii::t('app', 'Произошла ошибка при сохранении данных'));
-                }
-
-                prd($model->errors);
-
-                return $this->redirect(Yii::$app->request->referrer);
             }
         }
 

@@ -1,15 +1,16 @@
 <?php
 
 use yii\helpers\Html;
+use yii\web\YiiAsset;
 use yii\widgets\DetailView;
 
 /** @var yii\web\View $this */
 /** @var app\models\Prixod $model */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Prixods', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Приход', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-\yii\web\YiiAsset::register($this);
+YiiAsset::register($this);
 ?>
 <div class="prixod-view">
 
