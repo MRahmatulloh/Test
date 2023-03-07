@@ -109,17 +109,20 @@ class MovementController extends Controller
             if ($model->load($this->request->post())) {
                 if ($model->rasxod_goods_id) {
                     $rasxod_goods = RasxodGoods::findOne($model->rasxod_goods_id);
+                    $already_amount = MovementGoods::find()
+                        ->where(['rasxod_goods_id' => $model->rasxod_goods_id, 'movement_id' => $model->movement_id])
+                        ->sum('amount') ?? 0;
 
                     $model->cost = $rasxod_goods->cost;
                     $model->currency_id = $rasxod_goods->currency_id;
 
-                    $model->cost_usd = CurrencyRates::getSummaUsd($model->movement->date, $model->currency_id, $model->cost);
+                    $model->cost_return = $rasxod_goods->cost;
                     $model->goods_id = $rasxod_goods->goods_id;
                     $used = PrixodGoods::getRasxodedAmount($model->rasxod_goods_id) ?? 0;
-                    $free = $rasxod_goods->amount - $used;
+                    $free = $rasxod_goods->amount - $used - $already_amount;
 
                     if (($free - $model->amount) < 0) {
-                        Yii::$app->session->setFlash('error', 'Превишен количество товара ' . $rasxod_goods->goods->name . ' от расхода, доступное количество: ' . $free);
+                        Yii::$app->session->setFlash('error', 'Превишен количество товара ' . $rasxod_goods->goods->name . ' от расхода № ' . $rasxod_goods->rasxod->number . ', доступное количество: ' . $free);
                         return $this->redirect(Yii::$app->request->referrer);
                     }
                 }
@@ -166,6 +169,16 @@ class MovementController extends Controller
         return $this->render('update', [
             'model' => $model,
         ]);
+    }
+
+    public function actionAccept($id)
+    {
+        $model = $this->findModel($id);
+
+        $model->accept();
+        Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно сохранены'));
+
+        return $this->redirect(['index']);
     }
 
     /**

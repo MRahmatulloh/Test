@@ -6,6 +6,7 @@ use app\components\NumberGenerationTrait;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\db\Exception;
 
 /**
  * This is the model class for table "movement".
@@ -30,9 +31,20 @@ use yii\db\ActiveRecord;
  * @property Client $recipient
  * @property Client $sender
  */
-class Movement extends ActiveRecord
+class Movement extends MyModel
 {
     use NumberGenerationTrait;
+
+    public const STATUS_ALL = [
+        self::STATUS_NEW => 'Новый',
+        self::STATUS_ACCEPTED => 'Принят',
+        self::STATUS_REJECTED => 'Отклонен',
+    ];
+
+    const STATUS_NEW = 1;
+    const STATUS_ACCEPTED = 2;
+    const STATUS_REJECTED = 3;
+
     /**
      * {@inheritdoc}
      */
@@ -149,5 +161,97 @@ class Movement extends ActiveRecord
     public function getSender()
     {
         return $this->hasOne(Client::class, ['id' => 'sender_id']);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function accept()
+    {
+        $transaction = Yii::$app->db->beginTransaction();
+
+        try {
+            $movementGoods = $this->movementGoods;
+            if (empty($movementGoods)) {
+                throw new \Exception('Нет товаров для перемещения');
+            }
+
+            $prixod = new Prixod();
+            $prixod->date = date('Y-m-d');
+            $prixod->number = $prixod->getNumber('create', 'PM');
+            $prixod->client_id = $this->sender_id;
+            $prixod->comment = $this->comment;
+            $prixod->status = 1;
+            $prixod->type = 1;
+            $prixod->warehouse_id = 2;
+            $prixod->created_by = Yii::$app->user->identity->id;
+            $prixod->save();
+
+            if (!$prixod->save()) {
+                throw new \Exception('Ошибка при сохранении прихода' . implode('<br>', $prixod->errors));
+            }
+
+            $rasxod = new Rasxod();
+            $rasxod->date = date('Y-m-d');
+            $rasxod->number = $rasxod->getNumber('create', 'RM');
+            $rasxod->client_id = $this->recipient_id;
+            $rasxod->comment = $this->comment;
+            $rasxod->status = 1;
+            $rasxod->type = 1;
+            $rasxod->warehouse_id = 2;
+            $rasxod->created_by = Yii::$app->user->identity->id;
+            $rasxod->save();
+
+            if (!$rasxod->save()) {
+                throw new \Exception('Ошибка при сохранении расхода' . implode('<br>', $rasxod->errors));
+            }
+
+
+            foreach ($movementGoods as $movementGood) {
+                $rasxod_goods = $movementGood->rasxodGoods;
+                $used = PrixodGoods::getRasxodedAmount($movementGood->rasxod_goods_id) ?? 0;
+                $free = $rasxod_goods->amount - $used;
+
+                if (($free - $movementGood->amount) < 0) {
+                    throw new \Exception('Недостаточно товара на складе: ' . $movementGood->goods->name);
+                }
+
+                $prixodGoods = new PrixodGoods();
+                $prixodGoods->prixod_id = $prixod->id;
+                $prixodGoods->goods_id = $movementGood->goods_id;
+                $prixodGoods->amount = $movementGood->amount;
+                $prixodGoods->cost = $movementGood->cost_return;
+                $prixodGoods->currency_id = $rasxod_goods->currency_id;
+                $prixodGoods->rasxod_goods_id = $movementGood->rasxod_goods_id;
+
+                if (!$prixodGoods->save()) {
+                    throw new \Exception('Ошибка при сохранении товара прихода:  ' . $movementGood->goods->name . implode('<br>', $prixodGoods->errors));
+                }
+
+                $rasxodGoods = new RasxodGoods();
+                $rasxodGoods->rasxod_id = $rasxod->id;
+                $rasxodGoods->prixod_id = $prixod->id;
+                $rasxodGoods->goods_id = $movementGood->goods_id;
+                $rasxodGoods->amount = $movementGood->amount;
+                $rasxodGoods->cost = $movementGood->cost;
+                $rasxodGoods->currency_id = $movementGood->currency_id;
+                $rasxodGoods->prixod_goods_id = $prixodGoods->id;
+
+                if (!$rasxodGoods->save()) {
+                    throw new \Exception('Ошибка при сохранении товара расхода:  ' . $movementGood->goods->name . implode('<br>', $rasxodGoods->errors));
+                }
+            }
+
+            $this->status = self::STATUS_ACCEPTED;
+            $this->prixod_id = $prixod->id;
+            $this->rasxod_id = $rasxod->id;
+            $this->updated_by = Yii::$app->user->identity->id;
+            $this->save();
+
+            $transaction->commit();
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
     }
 }

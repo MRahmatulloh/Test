@@ -24,7 +24,7 @@ use Yii;
  * @property Client $client
  * @property Currency $currency
  */
-class Payment extends \yii\db\ActiveRecord
+class Payment extends MyModel
 {
     /**
      * {@inheritdoc}

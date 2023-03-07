@@ -40,7 +40,8 @@ class MovementSearch extends Movement
      */
     public function search($params)
     {
-        $query = Movement::find();
+        $query = Movement::find()
+            ->orderBy(['date' => SORT_DESC, 'id' => SORT_DESC]);
 
         // add conditions that should always apply here
 

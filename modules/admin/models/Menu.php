@@ -22,7 +22,7 @@ use yii\db\Query;
  * @author Misbahul D Munir <misbahuldmunir@gmail.com>
  * @since 1.0
  */
-class Menu extends \yii\db\ActiveRecord
+class Menu extends MyModel
 {
     public $parent_name;
 

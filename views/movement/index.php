@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'attribute' => 'date',
-                'value' => function($model){
+                'value' => function ($model) {
                     return dateView($model->date);
                 }
             ],
@@ -56,33 +56,59 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'attribute' => 'sender_id',
-                'value' => function($model){
+                'value' => function ($model) {
                     return $model->sender->name;
                 }
             ],
 
             [
                 'attribute' => 'recipient_id',
-                'value' => function($model){
+                'value' => function ($model) {
                     return $model->recipient->name;
                 }
             ],
 
             [
                 'attribute' => 'prixod_id',
-                'value' => function($model){
-                    return $model->prixod->name ?? '';
-                }
+                'format' => 'raw',
+                'value' => function ($model) {
+                    /** @var Movement $model */
+                    $number = $model->prixod->number ?? '';
+                    if ($number)
+                        return Html::a(
+                            $number,
+                            \Yii::$app->getUrlManager()->createUrl(
+                                array('prixod/goods-list', 'prixod_id' => $model->prixod->id)
+                            ),
+                        );
+                    return '';
+                },
             ],
 
             [
                 'attribute' => 'rasxod_id',
-                'value' => function($model){
-                    return $model->rasxod->name ?? '';
+                'format' => 'raw',
+                'value' => function ($model) {
+                    /** @var Movement $model */
+                    $number = $model->rasxod->number ?? '';
+                    if ($number)
+                        return Html::a(
+                            $number,
+                            \Yii::$app->getUrlManager()->createUrl(
+                                array('rasxod/goods-list', 'rasxod_id' => $model->rasxod->id)
+                            ),
+                        );
+                    return '';
+                },
+            ],
+
+            [
+                'attribute' => 'status',
+                'value' => function ($model) {
+                    return $model::STATUS_ALL[$model->status] ?? '';
                 }
             ],
 
-            'status',
             'comment',
             //'created_by',
             //'updated_by',
@@ -90,9 +116,47 @@ $this->params['breadcrumbs'][] = $this->title;
             //'updated_at',
             [
                 'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Movement $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                'template' => '{accept} {update} {delete}',
+                'buttons' => [
+                    'accept' => function ($url, $model) {
+                        if ($model->status == Movement::STATUS_NEW) {
+                            return Html::a('<span class="fas fa-check"></span>', Url::to(['movement/accept', 'id' => $model->id]), [
+                                'title' => 'Подтвердить',
+                                'class' => 'btn btn-sm btn-success',
+                                'data' => [
+                                    'confirm' => 'Вы уверены, что хотите подтвердить этот элемент?',
+                                    'method' => 'post',
+                                ],
+                            ]);
+                        }
+                    },
+                    'update' => function ($url, $model) {
+                        return Html::a('<span class="fas fa-pencil-alt"></span>', Url::to(['movement/update', 'id' => $model->id]), [
+                            'title' => 'Редактировать',
+                            'class' => 'btn btn-sm btn-primary',
+                        ]);
+                    },
+                    'delete' => function ($url, $model) {
+                        /** @var $model \app\models\Movement */
+                        if ($model->movementGoods) {
+                            return Html::a('<span class="fas fa-trash"></span>',
+                                $url,
+                                [
+                                    'title' => 'Удалить',
+                                    'class' => 'btn btn-sm btn-danger',
+                                    'onclick' => 'alert("Эта запись используется и её нельзя удалить!"); return false;'
+                                ]);
+                        }
+                        return Html::a('<span class="fas fa-trash-alt"></span>', Url::to(['movement/delete', 'id' => $model->id]), [
+                            'title' => 'Удалить',
+                            'class' => 'btn btn-sm btn-danger',
+                            'data' => [
+                                'confirm' => 'Вы уверены, что хотите удалить этот элемент?',
+                                'method' => 'post',
+                            ],
+                        ]);
+                    },
+                ],
             ],
         ],
     ]); ?>

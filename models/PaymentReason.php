@@ -15,7 +15,7 @@ use Yii;
  * @property int $created_at
  * @property int $updated_at
  */
-class PaymentReason extends \yii\db\ActiveRecord
+class PaymentReason extends MyModel
 {
     /**
      * {@inheritdoc}

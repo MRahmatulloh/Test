@@ -185,7 +185,7 @@ class ReturnController extends Controller
                     $free = $model->rasxodedGoods->amount - $used;
 
                     if (($free - $model->amount) < 0) {
-                        Yii::$app->session->setFlash('error', 'Превишен количество товара ' . $model->rasxodedGoods->goods->name . ' от расхода, доступное количество: ' . $free);
+                        Yii::$app->session->setFlash('error', 'Превишен количество товара ' . $model->rasxodedGoods->goods->name . ' от расхода № '. $rasxod_goods->rasxod->number .', доступное количество: ' . $free);
                         return $this->redirect(Yii::$app->request->referrer);
                     }
                 }

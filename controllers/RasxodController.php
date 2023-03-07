@@ -175,7 +175,7 @@ class RasxodController extends Controller
                     $free = $model->prixodGoods->amount - $used;
 
                     if (($free - $model->amount) < 0) {
-                        Yii::$app->session->setFlash('error', 'Не хвататет количество товара ' . $model->prixodGoods->goods->name . ', доступное количество: ' . $free);
+                        Yii::$app->session->setFlash('error', 'Не хвататет количество товара ' . $model->prixodGoods->goods->name . ' от прихода № '. $model->prixodGoods->prixod->number .', доступное количество: ' . $free);
                         return $this->redirect(['rasxod/goods-list', 'rasxod_id' => $model->rasxod_id]);
                     }
                 }

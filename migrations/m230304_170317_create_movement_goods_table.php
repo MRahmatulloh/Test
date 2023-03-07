@@ -20,7 +20,7 @@ class m230304_170317_create_movement_goods_table extends Migration
             'rasxod_goods_id' => $this->integer()->notNull(),
             'amount' => $this->double(4)->notNull(),
             'cost' => $this->double(4),
-            'cost_usd' => $this->double(4),
+            'cost_return' => $this->double(4),
             'status' => $this->integer()->defaultValue(1),
             'created_at' => $this->integer()->notNull(),
             'updated_at' => $this->integer()->notNull(),
