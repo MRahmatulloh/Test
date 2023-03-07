@@ -176,11 +176,10 @@ class PrixodController extends Controller
 
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно сохранены'));
+                    return $this->redirect(Yii::$app->request->referrer);
                 } else {
                     Yii::$app->session->setFlash('error', Yii::t('app', 'Произошла ошибка при сохранении данных'));
                 }
-
-                return $this->redirect(Yii::$app->request->referrer);
             }
         }
 

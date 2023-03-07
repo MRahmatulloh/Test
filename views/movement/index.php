@@ -10,18 +10,21 @@ use yii\grid\GridView;
 /** @var app\models\search\MovementSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Movements';
+$this->title = 'Перемещение';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="movement-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Create Movement', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <div class="row">
+        <div class="col-6">
+            <h2><?= Html::encode($this->title) ?></h2>
+        </div>
+        <div class="col-6">
+            <p class="text-right">
+                <?= Html::a("<i class='fas fa-plus white_text'></i> " . ' Новое', ['create'], ['class' => 'btn btn-success']) ?>
+            </p>
+        </div>
+    </div>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -29,15 +32,58 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'date',
-            'number',
-            'sender_id',
-            'recipient_id',
-            //'prixod_id',
-            //'rasxod_id',
-            //'status',
-            //'comment',
+            [
+                'attribute' => 'date',
+                'value' => function($model){
+                    return dateView($model->date);
+                }
+            ],
+
+            [
+                'attribute' => 'number',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    $number = $model['number'];
+
+                    return Html::a(
+                        $number,
+                        \Yii::$app->getUrlManager()->createUrl(
+                            array('movement/goods-list', 'id' => $model['id'])
+                        ),
+                    );
+                },
+            ],
+
+            [
+                'attribute' => 'sender_id',
+                'value' => function($model){
+                    return $model->sender->name;
+                }
+            ],
+
+            [
+                'attribute' => 'recipient_id',
+                'value' => function($model){
+                    return $model->recipient->name;
+                }
+            ],
+
+            [
+                'attribute' => 'prixod_id',
+                'value' => function($model){
+                    return $model->prixod->name ?? '';
+                }
+            ],
+
+            [
+                'attribute' => 'rasxod_id',
+                'value' => function($model){
+                    return $model->rasxod->name ?? '';
+                }
+            ],
+
+            'status',
+            'comment',
             //'created_by',
             //'updated_by',
             //'created_at',

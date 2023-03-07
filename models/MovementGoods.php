@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "movement_goods".
@@ -34,13 +35,24 @@ class MovementGoods extends \yii\db\ActiveRecord
         return 'movement_goods';
     }
 
+
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['movement_id', 'goods_id', 'currency_id', 'rasxod_goods_id', 'amount', 'created_at', 'updated_at'], 'required'],
+            [['movement_id', 'goods_id', 'currency_id', 'rasxod_goods_id', 'amount'], 'required'],
             [['movement_id', 'goods_id', 'currency_id', 'rasxod_goods_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['amount', 'cost', 'cost_usd'], 'number'],
             [['currency_id'], 'exist', 'skipOnError' => true, 'targetClass' => Currency::class, 'targetAttribute' => ['currency_id' => 'id']],
@@ -58,12 +70,12 @@ class MovementGoods extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'movement_id' => 'Movement ID',
-            'goods_id' => 'Goods ID',
-            'currency_id' => 'Currency ID',
-            'rasxod_goods_id' => 'Rasxod Goods ID',
-            'amount' => 'Amount',
-            'cost' => 'Cost',
-            'cost_usd' => 'Cost Usd',
+            'rasxod_goods_id' => 'Товар',
+            'currency_id' => 'Валюта',
+            'goods_id' => 'Товар',
+            'amount' => 'Количество',
+            'cost' => 'Цена',
+            'cost_usd' => 'Цена (Usd)',
             'status' => 'Status',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

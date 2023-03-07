@@ -126,9 +126,10 @@ class Rasxod extends MyModel
         return $this->hasOne(Warehouse::class, ['id' => 'warehouse_id']);
     }
 
-    public static function selectListNonEmpty(int $warehouse_id, int $client_id)
+    public static function selectListNonEmpty(int $warehouse_id = null, int $client_id)
     {
-        return ArrayHelper::map(self::findBySql('
+        $params = [];
+        $sql = '
             SELECT
                 r.id,
                 r.number
@@ -144,10 +145,23 @@ class Rasxod extends MyModel
                     prixod_goods.rasxod_goods_id
             ) used ON used.id = rg.id
             
-            WHERE (rg.amount - IFNULL(used.amount, 0)) > 0 
-                    and r.warehouse_id = :warehouse_id
-                    and r.client_id = :client_id
-        ')->params([':warehouse_id' => $warehouse_id, ':client_id' => $client_id])
+            WHERE (rg.amount - IFNULL(used.amount, 0)) > 0 ';
+
+        if ($warehouse_id){
+            $sql .= ' and r.warehouse_id = :warehouse_id ';
+            $params = array_merge($params, [':warehouse_id' => $warehouse_id]);
+        }
+
+        $sql .= '
+                    and r.client_id = :client_id         
+        ';
+
+        if ($client_id){
+            $params = array_merge($params, [':client_id' => $client_id]);
+
+        }
+
+        return ArrayHelper::map(self::findBySql($sql)->params($params)
             ->asArray()->all(), 'id', 'number');
     }
 }

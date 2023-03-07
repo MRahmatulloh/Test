@@ -3,23 +3,21 @@
 use app\assets\AppAsset;
 use app\models\Client;
 use app\models\Currency;
-use app\models\Prixod;
-use app\models\PrixodGoods;
+use app\models\Goods;
 use app\models\Rasxod;
 use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
-use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var app\models\search\PrixodGoodsSearch $searchModel */
+/** @var app\models\search\MovementGoodsSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
-/** @var app\models\PrixodGoods $model */
+/** @var app\models\MovementGoods $model */
 /** @var yii\widgets\ActiveForm $form */
 
-$this->title = 'Возврат № ' . $searchModel->prixod->number . ' от ' . $searchModel->prixod->client->name;
+$this->title = 'Перемещение № ' . $searchModel->movement->number . ' от ' . $searchModel->movement->sender->name;
 $this->params['breadcrumbs'][] = $this->title;
 AppAsset::register($this);
 
@@ -35,8 +33,8 @@ AppAsset::register($this);
 
         <div class="row">
             <div class="col-2">
-                <?= $form->field($model, 'rasxod_id')->widget(Select2::className(), [
-                    'data' => Rasxod::selectListNonEmpty($model->prixod->warehouse_id, $model->prixod->client_id),
+                <?= $form->field($model->movement, 'rasxod_id')->widget(Select2::className(), [
+                    'data' => Rasxod::selectListNonEmpty(null, $model->movement->sender_id),
                     'options' => ['placeholder' => 'Выберите ...'],
                     'pluginOptions' => [
                         'allowClear' => true
@@ -92,7 +90,7 @@ AppAsset::register($this);
                 'filter' => Select2::widget([
                     'model' => $searchModel,
                     'attribute' => 'goods_id',
-                    'data' => \app\models\Goods::selectList(),
+                    'data' => Goods::selectList(),
                     'initValueText' => $searchModel->goods_id,
                     'options' => ['placeholder' => 'Выберите товар ...'],
                     'pluginOptions' => [
@@ -173,42 +171,42 @@ AppAsset::register($this);
                 'template' => '{update} {delete}',
                 'buttons' => [
 
-                    'update' => function ($url, $model) {
-                        /** @var $model PrixodGoods*/
-                        $url = Url::to(['/prixod-goods/update', 'id' => $model->id]);
-                        if ($model->prixod->type = Prixod::TYPE_RETURN)
-                            $url = Url::to(['/prixod-goods/update-return', 'id' => $model->id]);
-                        return Html::a(
-                            ' <span class="fas fa-edit"> </span> ',
-                            $url
-                        );
-                    },
-
-                    'delete' => function ($url, $model) {
-
-                        /** @var $model \app\models\PrixodGoods */
-                        $url = Url::to(['/prixod-goods/delete', 'id' => $model->id]);
-                        if ($model->rasxodGoods) {
-                            return Html::a('<span class="fas fa-trash"></span>',
-                                $url,
-                                [
-                                    'title' => Yii::t('yii', 'Delete'),
-                                    'onclick' => 'alert("Эта запись используется и её нельзя удалить!"); return false;'
-                                ]);
-                        }
-
-                        return Html::a(
-                            '<span class="fas fa-trash"></span>',
-                            $url,
-                            [
-                                'title' => Yii::t('yii', 'Delete'),
-                                'aria-label' => Yii::t('yii', 'Delete'),
-                                'data-confirm' => Yii::t('yii', 'Вы уверены, что хотите удалить этот элемент?'),
-                                'data-method' => 'post',
-                                'data-pjax' => '0',
-                            ]
-                        );
-                    },
+//                    'update' => function ($url, $model) {
+//                        /** @var $model PrixodGoods*/
+//                        $url = Url::to(['/prixod-goods/update', 'id' => $model->id]);
+//                        if ($model->prixod->type = Prixod::TYPE_RETURN)
+//                            $url = Url::to(['/prixod-goods/update-return', 'id' => $model->id]);
+//                        return Html::a(
+//                            ' <span class="fas fa-edit"> </span> ',
+//                            $url
+//                        );
+//                    },
+//
+//                    'delete' => function ($url, $model) {
+//
+//                        /** @var $model \app\models\PrixodGoods */
+//                        $url = Url::to(['/prixod-goods/delete', 'id' => $model->id]);
+//                        if ($model->rasxodGoods) {
+//                            return Html::a('<span class="fas fa-trash"></span>',
+//                                $url,
+//                                [
+//                                    'title' => Yii::t('yii', 'Delete'),
+//                                    'onclick' => 'alert("Эта запись используется и её нельзя удалить!"); return false;'
+//                                ]);
+//                        }
+//
+//                        return Html::a(
+//                            '<span class="fas fa-trash"></span>',
+//                            $url,
+//                            [
+//                                'title' => Yii::t('yii', 'Delete'),
+//                                'aria-label' => Yii::t('yii', 'Delete'),
+//                                'data-confirm' => Yii::t('yii', 'Вы уверены, что хотите удалить этот элемент?'),
+//                                'data-method' => 'post',
+//                                'data-pjax' => '0',
+//                            ]
+//                        );
+//                    },
                 ],
             ],
         ],
