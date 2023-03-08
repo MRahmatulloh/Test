@@ -3,8 +3,12 @@ $(document).ready(function() {
     let elRasxod = $("#movement-rasxod_id");
     let elRasxodGoods = $('#movementgoods-rasxod_goods_id');
     let elCost = $('#movementgoods-cost');
+    let elCostReturn = $('#movementgoods-cost_return');
     let elCurrency = $('#movementgoods-currency_id');
     let elAmount = $('#movementgoods-amount');
+    let movement_id = $('#movement_id').val();
+
+    elCostReturn.prop("disabled", true);
 
     elRasxod.change(function (e) {
         var rasxod_id = elRasxod.val();
@@ -19,9 +23,9 @@ $(document).ready(function() {
 
     function changeGoods(rasxod_id) {
         $.ajax({
-            url: "<?=url(['rasxod-goods/select-goods-available'])?>",
+            url: "<?=url(['rasxod-goods/select-goods-available-movement'])?>",
             method: "POST",
-            data: {rasxod_id: rasxod_id, _csrf: yii.getCsrfToken()},
+            data: {rasxod_id: rasxod_id, movement_id: movement_id, _csrf: yii.getCsrfToken()},
             dataType: "json",
             beforeSend: function () {
                 $('#select2-chosen').text("");
@@ -46,13 +50,14 @@ $(document).ready(function() {
 
     function changeCostCurrency(rasxod_goods_id) {
         $.ajax({
-            url: "<?=url(['rasxod-goods/get-cost-currency'])?>",
+            url: "<?=url(['rasxod-goods/get-cost-currency-movement'])?>",
             method: "POST",
-            data: {rasxod_goods_id: rasxod_goods_id, _csrf: yii.getCsrfToken()},
+            data: {rasxod_goods_id: rasxod_goods_id, movement_id: movement_id, _csrf: yii.getCsrfToken()},
             dataType: "json",
 
             success: function (data) {
                 elCost.val(data.cost);
+                elCostReturn.val(data.cost);
                 elCurrency.val(data.currency_id);
                 elAmount.val(data.amount);
                 elCurrency.empty().append('<option value="'+data.currency_id+'">'+data.currency_name+'</option>');

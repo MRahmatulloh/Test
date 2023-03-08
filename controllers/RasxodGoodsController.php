@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\CurrencyRates;
+use app\models\MovementGoods;
 use app\models\PrixodGoods;
 use app\models\RasxodGoods;
 use app\models\search\RasxodGoodsSearch;
@@ -93,17 +94,31 @@ class RasxodGoodsController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $old_amount = $model->amount;
 
         if ($this->request->isPost && $model->load($this->request->post())) {
-            $model->cost_usd = CurrencyRates::getSummaUsd($model->rasxod->date, $model->cost, $model->currency_id);
+            $model->cost_usd = CurrencyRates::getSummaUsd($model->rasxod->date, $model->currency_id, $model->cost);
+
+            if ($model->prixod_goods_id) {
+                $model->goods_id = $model->prixodGoods->goods_id;
+                $model->prixod_id = $model->prixodGoods->prixod_id;
+                $used = RasxodGoods::getPrixodedAmount($model->prixod_goods_id) ?? 0;
+                $free = $model->prixodGoods->amount - $used;
+
+                if (($free - $model->amount) < 0) {
+                    Yii::$app->session->setFlash('error', 'Не хвататет количество товара ' . $model->prixodGoods->goods->name . ' от прихода № '. $model->prixodGoods->prixod->number .', доступное количество: ' . ($free + $old_amount));
+                    return $this->redirect(Yii::$app->request->referrer);
+                }
+            }
+
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно сохранены'));
-                return $this->redirect(Yii::$app->request->referrer);
+                return $this->redirect(['rasxod/goods-list', 'rasxod_id' => $model->rasxod_id]);
             } else {
                 Yii::$app->session->setFlash('error', Yii::t('app', 'Произошла ошибка при сохранении данных'));
             }
         }
-
+//        prd($model->errors);
         return $this->render('update', [
             'model' => $model,
         ]);
@@ -176,6 +191,54 @@ class RasxodGoodsController extends Controller
         die();
     }
 
+    public function actionSelectGoodsAvailableMovement(){
+
+        $post = Yii::$app->request->post();
+        $rasxod_id = $post['rasxod_id'];
+        $movement_id = $post['movement_id'];
+
+        $data = RasxodGoods::findBySql('
+            SELECT
+                rg.id AS id,
+                concat(g.code,"-",g.name) AS name
+            FROM rasxod_goods rg
+            LEFT JOIN goods g on g.id = rg.goods_id
+            LEFT JOIN
+            (
+                select 
+                    t.id,
+                    sum(t.amount) as amount
+                from
+                    (
+                        SELECT 
+                            rasxod_goods_id AS id,
+                            SUM(amount) AS amount
+                        FROM prixod_goods
+                        GROUP BY 
+                            rasxod_goods_id
+                        
+                        union all    
+                        
+                        SELECT 
+                            rasxod_goods_id AS id,
+                            SUM(amount) AS amount
+                        FROM movement_goods
+                        where movement_id = :movement_id
+                        GROUP BY 
+                            rasxod_goods_id 
+                    ) t
+                group by t.id
+            ) used ON used.id = rg.id
+            
+            WHERE (rg.amount - IFNULL(used.amount, 0)) > 0
+                and rg.rasxod_id = :rasxod_id
+            GROUP BY rg.id
+        ')->params([':rasxod_id' => $rasxod_id, ':movement_id' => $movement_id])->asArray()->all();
+
+        echo json_encode($data);
+        die();
+    }
+
     public function actionGetCostCurrency(){
         $post = Yii::$app->request->post();
         $rasxod_goods_id = $post['rasxod_goods_id'];
@@ -188,6 +251,29 @@ class RasxodGoodsController extends Controller
             ->sum('amount') ?? 0;
 
         $free = $model->amount - $used;
+
+        return json_encode(['cost' => $model->cost, 'amount' => $free, 'currency_id' => $model->currency_id, 'currency_name' => $model->currency->name]);
+    }
+
+    public function actionGetCostCurrencyMovement(){
+        $post = Yii::$app->request->post();
+        $rasxod_goods_id = $post['rasxod_goods_id'];
+        $movement_id = $post['movement_id'];
+
+        $model = RasxodGoods::findOne($rasxod_goods_id); // проверка на существование
+        if (!$model)
+            return [];
+
+        $used = PrixodGoods::find()
+            ->where(['rasxod_goods_id' => $model->id])
+            ->sum('amount') ?? 0;
+
+        $used_movement = MovementGoods::find()
+            ->where(['rasxod_goods_id' => $model->id, 'movement_id' => $movement_id])
+            ->sum('amount') ?? 0;
+
+
+        $free = $model->amount - $used - $used_movement;
 
         return json_encode(['cost' => $model->cost, 'amount' => $free, 'currency_id' => $model->currency_id, 'currency_name' => $model->currency->name]);
     }

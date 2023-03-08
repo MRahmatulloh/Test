@@ -15,7 +15,7 @@ use yii\behaviors\TimestampBehavior;
  * @property int $rasxod_goods_id
  * @property float $amount
  * @property float|null $cost
- * @property float|null $cost_usd
+ * @property float|null $cost_return
  * @property int|null $status
  * @property int $created_at
  * @property int $updated_at
@@ -25,7 +25,7 @@ use yii\behaviors\TimestampBehavior;
  * @property Movement $movement
  * @property RasxodGoods $rasxodGoods
  */
-class MovementGoods extends \yii\db\ActiveRecord
+class MovementGoods extends MyModel
 {
     /**
      * {@inheritdoc}
@@ -54,7 +54,7 @@ class MovementGoods extends \yii\db\ActiveRecord
         return [
             [['movement_id', 'goods_id', 'currency_id', 'rasxod_goods_id', 'amount'], 'required'],
             [['movement_id', 'goods_id', 'currency_id', 'rasxod_goods_id', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['amount', 'cost', 'cost_usd'], 'number'],
+            [['amount', 'cost', 'cost_return'], 'number'],
             [['currency_id'], 'exist', 'skipOnError' => true, 'targetClass' => Currency::class, 'targetAttribute' => ['currency_id' => 'id']],
             [['goods_id'], 'exist', 'skipOnError' => true, 'targetClass' => Goods::class, 'targetAttribute' => ['goods_id' => 'id']],
             [['movement_id'], 'exist', 'skipOnError' => true, 'targetClass' => Movement::class, 'targetAttribute' => ['movement_id' => 'id']],
@@ -69,13 +69,13 @@ class MovementGoods extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'movement_id' => 'Movement ID',
+            'movement_id' => 'Перемещение',
             'rasxod_goods_id' => 'Товар',
             'currency_id' => 'Валюта',
             'goods_id' => 'Товар',
             'amount' => 'Количество',
-            'cost' => 'Цена',
-            'cost_usd' => 'Цена (Usd)',
+            'cost' => 'Продажная цена',
+            'cost_return' => 'Обр. цена',
             'status' => 'Status',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

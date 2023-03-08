@@ -98,7 +98,7 @@ class PrixodGoodsController extends Controller
             $model->cost_usd = CurrencyRates::getSummaUsd($model->prixod->date, $model->currency_id, $model->cost);
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно сохранены'));
-                return $this->redirect(Yii::$app->request->referrer);
+                return $this->redirect(['prixod/goods-list', 'prixod_id' => $model->prixod_id]);
             } else {
                 Yii::$app->session->setFlash('error', Yii::t('app', 'Произошла ошибка при сохранении данных'));
             }
@@ -124,7 +124,7 @@ class PrixodGoodsController extends Controller
             $free = $all_amount - $used;
 
             if (($free + $old_amount ) < $curr_amount){
-                Yii::$app->session->setFlash('error', 'Превишен количество товара ' . $model->goods->name . ' от расхода, доступное количество: ' . $free);
+                Yii::$app->session->setFlash('error', 'Превишен количество товара ' . $model->goods->name  . ' от расхода № '. $model->rasxodGoods->rasxod->number .', доступное количество: ' . ($free + $old_amount));
                 return $this->redirect(Yii::$app->request->referrer);
             }
 
@@ -206,5 +206,21 @@ class PrixodGoodsController extends Controller
 
         echo json_encode($data);
         die();
+    }
+
+    public function actionGetCostCurrency(){
+        $post = Yii::$app->request->post();
+        $rasxod_goods_id = $post['rasxod_goods_id'];
+        $model = PrixodGoods::findOne($rasxod_goods_id); // проверка на существование
+        if (!$model)
+            return [];
+
+        $used = RasxodGoods::find()
+            ->where(['prixod_goods_id' => $model->id])
+            ->sum('amount') ?? 0;
+
+        $free = $model->amount - $used;
+
+        return json_encode(['cost' => $model->cost, 'amount' => $free, 'currency_id' => $model->currency_id, 'currency_name' => $model->currency->name]);
     }
 }

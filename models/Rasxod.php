@@ -126,7 +126,7 @@ class Rasxod extends MyModel
         return $this->hasOne(Warehouse::class, ['id' => 'warehouse_id']);
     }
 
-    public static function selectListNonEmpty(int $warehouse_id = null, int $client_id)
+    public static function selectListNonEmpty(int $warehouse_id = null, int $client_id, $other = null)
     {
         $params = [];
         $sql = '

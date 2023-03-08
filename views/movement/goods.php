@@ -4,11 +4,13 @@ use app\assets\AppAsset;
 use app\models\Client;
 use app\models\Currency;
 use app\models\Goods;
+use app\models\MovementGoods;
 use app\models\Rasxod;
 use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
@@ -17,7 +19,7 @@ use yii\widgets\ActiveForm;
 /** @var app\models\MovementGoods $model */
 /** @var yii\widgets\ActiveForm $form */
 
-$this->title = 'Перемещение № ' . $searchModel->movement->number . ' от ' . $searchModel->movement->sender->name;
+$this->title = 'Перемещение № ' . $searchModel->movement->number . ' от ' . $searchModel->movement->sender->name . ' к ' . $searchModel->movement->recipient->name;
 $this->params['breadcrumbs'][] = $this->title;
 AppAsset::register($this);
 
@@ -40,6 +42,7 @@ AppAsset::register($this);
                         'allowClear' => true
                     ],
                 ]) ?>
+                <input type="hidden" id="movement_id" class="d-none" value="<?= $model->movement_id ?>">
             </div>
             <div class="col-2">
                 <?= $form->field($model, 'rasxod_goods_id')->widget(Select2::className(), [
@@ -50,8 +53,11 @@ AppAsset::register($this);
                     ],
                 ]) ?>
             </div>
-            <div class="col-2">
+            <div class="col-1">
                 <?= $form->field($model, 'amount')->textInput(['maxlength' => true]) ?>
+            </div>
+            <div class="col-1">
+                <?= $form->field($model, 'cost_return')->textInput(['maxlength' => true]) ?>
             </div>
             <div class="col-2">
                 <?= $form->field($model, 'cost')->textInput(['maxlength' => true]) ?>
@@ -68,7 +74,7 @@ AppAsset::register($this);
             <div class="col-2">
                     <h6> </h6>
                     <?= Html::submitButton('Добавить', ['class' => 'btn btn-success']) ?>
-                    <?= Html::a("<i class='fas fa-arrow-up white_text'></i>", ['/return/index'], ['class' => 'btn btn-primary']) ?>
+                    <?= Html::a("<i class='fas fa-arrow-up white_text'></i>", ['index'], ['class' => 'btn btn-primary']) ?>
             </div>
          </div>
 
@@ -135,23 +141,6 @@ AppAsset::register($this);
             ],
 
             [
-                'label' => 'Расходное к-во',
-                'format' => 'raw',
-                'value' => function ($data) {
-
-                    return \yii\helpers\Html::a(
-                        '<i class="fas fa-check-circle"> Расходы</i>',
-                        \Yii::$app->getUrlManager()->createUrl(
-                            array('rasxod/by-goods', 'RasxodGoodsSearch[prixod_goods_id]' => $data['id'])
-                        ),
-                        ['class' => 'clickLock']
-                    );
-                },
-                'contentOptions' => ['class' => 'text-center'],
-
-            ],
-
-            [
                 'attribute' => 'currency_id',
                 'value' => 'currency.name',
                 'filter' => Select2::widget([
@@ -171,42 +160,30 @@ AppAsset::register($this);
                 'template' => '{update} {delete}',
                 'buttons' => [
 
-//                    'update' => function ($url, $model) {
-//                        /** @var $model PrixodGoods*/
-//                        $url = Url::to(['/prixod-goods/update', 'id' => $model->id]);
-//                        if ($model->prixod->type = Prixod::TYPE_RETURN)
-//                            $url = Url::to(['/prixod-goods/update-return', 'id' => $model->id]);
-//                        return Html::a(
-//                            ' <span class="fas fa-edit"> </span> ',
-//                            $url
-//                        );
-//                    },
-//
-//                    'delete' => function ($url, $model) {
-//
-//                        /** @var $model \app\models\PrixodGoods */
-//                        $url = Url::to(['/prixod-goods/delete', 'id' => $model->id]);
-//                        if ($model->rasxodGoods) {
-//                            return Html::a('<span class="fas fa-trash"></span>',
-//                                $url,
-//                                [
-//                                    'title' => Yii::t('yii', 'Delete'),
-//                                    'onclick' => 'alert("Эта запись используется и её нельзя удалить!"); return false;'
-//                                ]);
-//                        }
-//
-//                        return Html::a(
-//                            '<span class="fas fa-trash"></span>',
-//                            $url,
-//                            [
-//                                'title' => Yii::t('yii', 'Delete'),
-//                                'aria-label' => Yii::t('yii', 'Delete'),
-//                                'data-confirm' => Yii::t('yii', 'Вы уверены, что хотите удалить этот элемент?'),
-//                                'data-method' => 'post',
-//                                'data-pjax' => '0',
-//                            ]
-//                        );
-//                    },
+                    'update' => function ($url, $model) {
+                        /** @var $model MovementGoods*/
+                        $url = Url::to(['/movement-goods/update', 'id' => $model->id]);
+                        return Html::a(
+                            ' <span class="fas fa-edit"> </span> ',
+                            $url
+                        );
+                    },
+
+                    'delete' => function ($url, $model) {
+                        /** @var $model MovementGoods*/
+                        $url = Url::to(['/movement-goods/delete', 'id' => $model->id]);
+                        return Html::a(
+                            ' <span class="fas fa-trash"> </span> ',
+                            $url,
+                            [
+                                'title' => Yii::t('yii', 'Delete'),
+                                'aria-label' => Yii::t('yii', 'Delete'),
+                                'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
+                                'data-method' => 'post',
+                                'data-pjax' => '0',
+                            ]
+                        );
+                    },
                 ],
             ],
         ],

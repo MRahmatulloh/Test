@@ -18,7 +18,7 @@ class MovementGoodsSearch extends MovementGoods
     {
         return [
             [['id', 'movement_id', 'goods_id', 'currency_id', 'rasxod_goods_id', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['amount', 'cost', 'cost_usd'], 'number'],
+            [['amount', 'cost', 'cost_return'], 'number'],
         ];
     }
 
@@ -65,7 +65,7 @@ class MovementGoodsSearch extends MovementGoods
             'rasxod_goods_id' => $this->rasxod_goods_id,
             'amount' => $this->amount,
             'cost' => $this->cost,
-            'cost_usd' => $this->cost_usd,
+            'cost_return' => $this->cost_return,
             'status' => $this->status,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
