@@ -78,12 +78,12 @@ AppAsset::register($this);
             [
                 'attribute' => 'type',
                 'value' => function ($model) {
-                    return Rasxod::TYPES[$model->type];
+                    return Rasxod::TYPES_ALL[$model->type];
                 },
                 'filter' => Select2::widget([
                     'model' => $searchModel,
                     'attribute' => 'type',
-                    'data' => Rasxod::TYPES,
+                    'data' => Rasxod::TYPES_ALL,
                     'initValueText' => $searchModel->type,
                     'options' => ['placeholder' => 'Выберите тип ...'],
                     'pluginOptions' => [

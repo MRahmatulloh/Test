@@ -172,6 +172,7 @@ class RasxodGoodsController extends Controller
                 concat(g.code,"-",g.name) AS name
             FROM rasxod_goods rg
             LEFT JOIN goods g on g.id = rg.goods_id
+            left join rasxod r on r.id = rg.rasxod_id
             LEFT JOIN
             (
                 SELECT 
@@ -184,6 +185,7 @@ class RasxodGoodsController extends Controller
             
             WHERE (rg.amount - IFNULL(used.amount, 0)) > 0
                 and rg.rasxod_id = :rasxod_id
+                and r.type <> 4
             GROUP BY rg.id
         ')->params([':rasxod_id' => $rasxod_id])->asArray()->all();
 

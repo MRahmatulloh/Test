@@ -8,12 +8,11 @@ trait NumberGenerationTrait
     /**
      * @return string
      */
-    public function getNumber($case = 'create', $prefix = 'P')
+    public function getNumber($case = 'create', $prefix = 'PS')
     {
-
         $last_number = (self::find()->where(['date' => dateBase($this->date)])->orderBy(['id' => SORT_DESC])->one())->number ?? null;
-        prd(self::find()->where(['date' => dateBase($this->date)])->orderBy(['id' => SORT_DESC])->one());
-        $count = (int)substr($last_number, 1, 2);
+
+        $count = (int)substr($last_number, 2, 2);
         $count++;
 
         if ($case == 'update') {

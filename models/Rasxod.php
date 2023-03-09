@@ -36,6 +36,13 @@ class Rasxod extends MyModel
         3 => 'Рассрочка',
     ];
 
+    const TYPES_ALL = [
+        1 => '100% тўлов',
+        2 => 'Предоплата',
+        3 => 'Рассрочка',
+        4 => 'Перемещение',
+    ];
+
     public const TYPE_FULL_PAYMENT = 1;
     public const TYPE_PREPAYMENT = 2;
     public const TYPE_CREDIT = 3;
@@ -126,7 +133,7 @@ class Rasxod extends MyModel
         return $this->hasOne(Warehouse::class, ['id' => 'warehouse_id']);
     }
 
-    public static function selectListNonEmpty(int $warehouse_id = null, int $client_id, $other = null)
+    public static function selectListNonEmpty(int $warehouse_id = null, int $client_id)
     {
         $params = [];
         $sql = '
@@ -145,7 +152,7 @@ class Rasxod extends MyModel
                     prixod_goods.rasxod_goods_id
             ) used ON used.id = rg.id
             
-            WHERE (rg.amount - IFNULL(used.amount, 0)) > 0 ';
+            WHERE (rg.amount - IFNULL(used.amount, 0)) > 0 and r.type <> 4 ';
 
         if ($warehouse_id){
             $sql .= ' and r.warehouse_id = :warehouse_id ';

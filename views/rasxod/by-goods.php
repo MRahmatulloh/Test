@@ -74,6 +74,7 @@ AppAsset::register($this);
             ],
 
             [
+                'label' => 'Клиент',
                 'attribute' => 'client_name',
                 'value' => function ($data) {
                     return $data->rasxod->client->name;
@@ -151,6 +152,13 @@ AppAsset::register($this);
                         'allowClear' => true
                     ],
                 ]),
+            ],
+
+            [
+                'label' => 'Склад',
+                'value' => function ($data) {
+                    return $data->rasxod->warehouse->name;
+                },
             ],
         ],
     ]); ?>

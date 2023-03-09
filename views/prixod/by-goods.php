@@ -152,6 +152,13 @@ AppAsset::register($this);
                     ],
                 ]),
             ],
+
+            [
+                'label' => 'Склад',
+                'value' => function ($data) {
+                    return $data->prixod->warehouse->name;
+                },
+            ],
         ],
     ]); ?>
 

@@ -20,7 +20,7 @@ AppAsset::register($this);
     <br>
     <?php $form = ActiveForm::begin(); ?>
 
-    <div class="row">
+    <div class="row d-block">
         <div class="col-4">
             <?=  $form->field($model, 'date')->widget(DatePicker::classname(), [
                     'type' => 3,
@@ -39,15 +39,6 @@ AppAsset::register($this);
                     ],
                 'pluginOptions' => [
                     'allowClear' => true
-                ],
-            ]) ?>
-        </div>
-        <div class="col-4">
-            <?= $form->field($model, 'type')->widget(Select2::className(),[
-                'data' => [$model::TYPE_RETURN => 'Возврат'],
-                'options' => ['placeholder' => 'Выберите ...'],
-                'pluginOptions' => [
-                    'allowClear' => false
                 ],
             ]) ?>
         </div>
