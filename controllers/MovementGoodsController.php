@@ -2,11 +2,9 @@
 
 namespace app\controllers;
 
-use app\models\CurrencyRates;
 use app\models\MovementGoods;
 use app\models\PrixodGoods;
 use app\models\RasxodGoods;
-use app\models\search\MovementGoodsSearch;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -40,16 +38,16 @@ class MovementGoodsController extends Controller
      *
      * @return string
      */
-    public function actionIndex()
-    {
-        $searchModel = new MovementGoodsSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
+//    public function actionIndex()
+//    {
+//        $searchModel = new MovementGoodsSearch();
+//        $dataProvider = $searchModel->search($this->request->queryParams);
+//
+//        return $this->render('index', [
+//            'searchModel' => $searchModel,
+//            'dataProvider' => $dataProvider,
+//        ]);
+//    }
 
     /**
      * Displays a single MovementGoods model.
@@ -155,9 +153,16 @@ class MovementGoodsController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $movement_id = $model->movement_id;
 
-        return $this->redirect(['index']);
+        if ($model->delete()) {
+            Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно удалены'));
+        } else {
+            Yii::$app->session->setFlash('error', Yii::t('app', 'Ошибка удаления данных'));
+        }
+
+        return $this->redirect(['movement/goods-list', 'prixod_id' => $movement_id]);
     }
 
     /**

@@ -3,6 +3,7 @@
 use app\assets\AppAsset;
 use app\models\Client;
 use app\models\Currency;
+use app\models\Goods;
 use app\models\Prixod;
 use app\models\PrixodGoods;
 use app\models\Rasxod;
@@ -85,23 +86,6 @@ AppAsset::register($this);
             ['class' => 'yii\grid\SerialColumn'],
 
             [
-                'attribute' => 'goods_id',
-                'value' => function($data){
-                    return $data->goods->code .'-'.$data->goods->name;
-                },
-                'filter' => Select2::widget([
-                    'model' => $searchModel,
-                    'attribute' => 'goods_id',
-                    'data' => \app\models\Goods::selectList(),
-                    'initValueText' => $searchModel->goods_id,
-                    'options' => ['placeholder' => 'Выберите товар ...'],
-                    'pluginOptions' => [
-                        'allowClear' => true
-                    ],
-                ]),
-            ],
-            
-            [
                 'label' => 'Фото товара',
                 'format' => 'raw',
                 'value' => function($model){
@@ -110,9 +94,26 @@ AppAsset::register($this);
             ],
 
             [
+                'attribute' => 'goods_id',
+                'value' => function($model){
+                    return $model->goods->code .'-'.$model->goods->name;
+                },
+                'filter' => Select2::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'goods_id',
+                    'data' => Goods::selectList(),
+                    'initValueText' => $searchModel->goods_id,
+                    'options' => ['placeholder' => 'Выберите товар ...'],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ]),
+            ],
+
+            [
                 'attribute' => 'amount',
-                'value' => function($data){
-                    return pul2($data->amount,2);
+                'value' => function($model){
+                    return pul2($model->amount,2);
                 },
                 'contentOptions' => ['class' => 'text-right'],
                 'filter' => ''
@@ -120,8 +121,8 @@ AppAsset::register($this);
 
             [
                 'attribute' => 'cost',
-                'value' => function($data){
-                    return pul2($data->cost,2);
+                'value' => function($model){
+                    return pul2($model->cost,2);
                 },
                 'contentOptions' => ['class' => 'text-right'],
                 'filter' => ''
@@ -139,12 +140,12 @@ AppAsset::register($this);
             [
                 'label' => 'Расходное к-во',
                 'format' => 'raw',
-                'value' => function ($data) {
+                'value' => function ($model) {
 
-                    return \yii\helpers\Html::a(
+                    return Html::a(
                         '<i class="fas fa-check-circle"> Расходы</i>',
                         \Yii::$app->getUrlManager()->createUrl(
-                            array('rasxod/by-goods', 'RasxodGoodsSearch[prixod_goods_id]' => $data['id'])
+                            array('rasxod/by-goods', 'RasxodGoodsSearch[prixod_goods_id]' => $model['id'])
                         ),
                         ['class' => 'clickLock']
                     );
@@ -186,7 +187,7 @@ AppAsset::register($this);
 
                     'delete' => function ($url, $model) {
 
-                        /** @var $model \app\models\PrixodGoods */
+                        /** @var $model PrixodGoods */
                         $url = Url::to(['/prixod-goods/delete', 'id' => $model->id]);
                         if ($model->rasxodGoods) {
                             return Html::a('<span class="fas fa-trash"></span>',

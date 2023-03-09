@@ -138,6 +138,15 @@ AppAsset::register($this);
                             );
 
                         }
+                        /** @var $model Prixod */
+                        if($model->type == Prixod::TYPE_MOVEMENT){
+                            return Html::a('<span class="fas fa-edit"></span>',
+                                $url,
+                                [
+                                    'title' => Yii::t('yii', 'Update'),
+                                    'onclick' => 'alert("Это приход связано с перемещением и её нельзя редактивировать!"); return false;'
+                                ]);
+                        }
                         return Html::a(
                             ' <span class="fas fa-edit"> </span> ',
                             $url

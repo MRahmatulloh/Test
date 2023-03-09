@@ -38,6 +38,14 @@ AppAsset::register($this);
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
+            [
+                'label' => 'Фото',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return Html::img('@web' . '/img/goods/' . $model->img, ['class' => 'img-fluid', 'width' => '80px']);
+                }
+            ],
+
             'code',
             'name',
 
@@ -45,14 +53,6 @@ AppAsset::register($this);
                 'label' => 'C артикулом',
                 'value' => function ($model) {
                     return $model->code . '-' . $model->name;
-                }
-            ],
-
-            [
-                'label' => 'Фото',
-                'format' => 'raw',
-                'value' => function ($model) {
-                    return Html::img('@web' . '/img/goods/' . $model->img, ['class' => 'img-fluid', 'width' => '80px']);;
                 }
             ],
 

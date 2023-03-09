@@ -101,6 +101,15 @@ AppAsset::register($this);
             ],
 
             [
+                'label' => 'Фото товара',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    /** @var $model RasxodGoods */
+                    return Html::img('@web' . '/img/goods/' . $model->goods->img, ['class' => 'img-fluid', 'width' => '80px']);
+                }
+            ],
+
+            [
                 'attribute' => 'goods_id',
                 'value' => function ($data) {
                     return $data->goods->code . '-' . $data->goods->name;
@@ -115,15 +124,6 @@ AppAsset::register($this);
                         'allowClear' => true
                     ],
                 ]),
-            ],
-
-            [
-                'label' => 'Фото товара',
-                'format' => 'raw',
-                'value' => function ($model) {
-                    /** @var $model RasxodGoods */
-                    return Html::img('@web' . '/img/goods/' . $model->goods->img, ['class' => 'img-fluid', 'width' => '80px']);
-                }
             ],
 
             [

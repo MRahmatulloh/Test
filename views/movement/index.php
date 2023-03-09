@@ -129,10 +129,7 @@ AppAsset::register($this);
             ],
 
             'comment',
-            //'created_by',
-            //'updated_by',
-            //'created_at',
-            //'updated_at',
+
             [
                 'class' => ActionColumn::className(),
                 'template' => '{accept} {update} {delete}',
@@ -168,7 +165,7 @@ AppAsset::register($this);
                                 [
                                     'title' => 'Редактировать',
                                     'class' => 'btn btn-sm btn-primary',
-                                    'onclick' => 'alert("Перемещение уже потвержвено и её нельзя изменить!"); return false;'
+                                    'onclick' => 'alert("Перемещение потверждено и её нельзя изменить!"); return false;'
                                 ]);
                         }
 
@@ -189,6 +186,7 @@ AppAsset::register($this);
                         ]);
                     },
                 ],
+                'contentOptions' => ['style' => 'min-width:130px;'],
             ],
         ],
     ]); ?>

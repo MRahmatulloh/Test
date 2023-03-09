@@ -9,20 +9,20 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var app\models\search\PrixodGoodsSearch $searchModel */
+/** @var app\models\search\MovementGoodsSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 /** @var yii\widgets\ActiveForm $form */
 
-$this->title = 'Приход по товаром ';
+$this->title = 'Перемещение по товаром ';
 $this->params['breadcrumbs'][] = $this->title;
 AppAsset::register($this);
 
 ?>
-<div class="prixod-goods-index">
+<div class="movement-goods-index">
 
     <h2><?= Html::encode($this->title) ?></h2>
 
-    <div class="prixod-goods-form">
+    <div class="movement-goods-form">
 
         <?php $form = ActiveForm::begin(['method' => 'get']); ?>
 
@@ -66,28 +66,28 @@ AppAsset::register($this);
             [
                 'label' => 'Дата',
                 'value' => function ($data) {
-                    return dateView($data->prixod->date);
+                    return dateView($data->movement->date);
                 },
                 'filter' => ''
             ],
 
-            [
-                'label' => 'Клиент',
-                'attribute' => 'client_name',
-                'value' => function ($data) {
-                    return $data->prixod->client->name;
-                },
-            ],
+//            [
+//                'label' => 'Клиент',
+//                'attribute' => 'client_name',
+//                'value' => function ($data) {
+//                    return $data->movement->client->name;
+//                },
+//            ],
 
             [
-                'label' => 'Приход',
+                'label' => 'Перемещение',
                 'format' => 'raw',
                 'value' => function ($data) {
 
                     return Html::a(
-                        $data->prixod->number,
+                        $data->movement->number,
                         \Yii::$app->getUrlManager()->createUrl(
-                            array('prixod/goods-list', 'prixod_id' => $data->prixod->id)
+                            array('movement/goods-list', 'id' => $data->movement->id)
                         )
                     );
                 },
@@ -155,7 +155,7 @@ AppAsset::register($this);
             [
                 'label' => 'Склад',
                 'value' => function ($data) {
-                    return $data->prixod->warehouse->name;
+                    return $data->movement->warehouse->name;
                 },
             ],
         ],

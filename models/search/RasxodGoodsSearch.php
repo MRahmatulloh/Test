@@ -58,7 +58,8 @@ class RasxodGoodsSearch extends RasxodGoods
     public function search($params)
     {
         $query = RasxodGoods::find()
-            ->joinWith(['rasxod r', 'rasxod.client c']);
+            ->joinWith(['rasxod r', 'rasxod.client c'])
+            ->orderBy(['r.date' => SORT_DESC, 'r.id' => SORT_DESC]);
 
         // add conditions that should always apply here
 
