@@ -124,7 +124,7 @@ class PrixodGoods extends MyModel
      */
     public function getRasxodGoods()
     {
-        return $this->hasMany(RasxodGoods::class, ['id' => 'prixod_goods_id']);
+        return $this->hasMany(RasxodGoods::class, ['prixod_goods_id' => 'id']);
     }
 
     public function getRasxodedGoods()
