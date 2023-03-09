@@ -1,6 +1,9 @@
 <?php
 
+use app\assets\AppAsset;
 use app\models\Movement;
+use app\models\Warehouse;
+use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
@@ -12,6 +15,7 @@ use yii\grid\GridView;
 
 $this->title = 'Перемещение';
 $this->params['breadcrumbs'][] = $this->title;
+AppAsset::register($this);
 ?>
 <div class="movement-index">
 
@@ -109,6 +113,21 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
 
+            [
+                'attribute' => 'warehouse_id',
+                'value' => 'warehouse.name',
+                'filter' => Select2::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'warehouse_id',
+                    'data' => Warehouse::selectList(),
+                    'initValueText' => $searchModel->warehouse_id,
+                    'options' => ['placeholder' => 'Выберите ...'],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ]),
+            ],
+
             'comment',
             //'created_by',
             //'updated_by',
@@ -119,18 +138,40 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{accept} {update} {delete}',
                 'buttons' => [
                     'accept' => function ($url, $model) {
+                        /** @var $model \app\models\Movement */
+                        if (empty($model->movementGoods)) {
+                            return Html::a('<span class="fas fa-check"></span>',
+                                $url,
+                                [
+                                    'title' => 'Подтвердить',
+                                    'class' => 'btn btn-sm btn-success',
+                                    'onclick' => 'alert("У этого перемещения нет товаров!"); return false;'
+                                ]);
+                        }
+
                         if ($model->status == Movement::STATUS_NEW) {
                             return Html::a('<span class="fas fa-check"></span>', Url::to(['movement/accept', 'id' => $model->id]), [
                                 'title' => 'Подтвердить',
                                 'class' => 'btn btn-sm btn-success',
                                 'data' => [
-                                    'confirm' => 'Вы уверены, что хотите подтвердить этот элемент?',
+                                    'confirm' => 'Вы уверены, что хотите подтвердить?',
                                     'method' => 'post',
                                 ],
                             ]);
                         }
                     },
                     'update' => function ($url, $model) {
+                        /** @var $model \app\models\Movement */
+                        if ($model->status == Movement::STATUS_ACCEPTED) {
+                            return Html::a('<span class="fas fa-pencil-alt"></span>',
+                                $url,
+                                [
+                                    'title' => 'Редактировать',
+                                    'class' => 'btn btn-sm btn-primary',
+                                    'onclick' => 'alert("Перемещение уже потвержвено и её нельзя изменить!"); return false;'
+                                ]);
+                        }
+
                         return Html::a('<span class="fas fa-pencil-alt"></span>', Url::to(['movement/update', 'id' => $model->id]), [
                             'title' => 'Редактировать',
                             'class' => 'btn btn-sm btn-primary',
@@ -138,15 +179,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'delete' => function ($url, $model) {
                         /** @var $model \app\models\Movement */
-                        if ($model->movementGoods) {
-                            return Html::a('<span class="fas fa-trash"></span>',
-                                $url,
-                                [
-                                    'title' => 'Удалить',
-                                    'class' => 'btn btn-sm btn-danger',
-                                    'onclick' => 'alert("Эта запись используется и её нельзя удалить!"); return false;'
-                                ]);
-                        }
                         return Html::a('<span class="fas fa-trash-alt"></span>', Url::to(['movement/delete', 'id' => $model->id]), [
                             'title' => 'Удалить',
                             'class' => 'btn btn-sm btn-danger',

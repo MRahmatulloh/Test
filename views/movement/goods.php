@@ -4,6 +4,7 @@ use app\assets\AppAsset;
 use app\models\Client;
 use app\models\Currency;
 use app\models\Goods;
+use app\models\Movement;
 use app\models\MovementGoods;
 use app\models\Rasxod;
 use kartik\select2\Select2;
@@ -163,6 +164,7 @@ AppAsset::register($this);
                     'update' => function ($url, $model) {
                         /** @var $model MovementGoods*/
                         $url = Url::to(['/movement-goods/update', 'id' => $model->id]);
+                        if ($model->movement->status == Movement::STATUS_NEW)
                         return Html::a(
                             ' <span class="fas fa-edit"> </span> ',
                             $url
@@ -172,6 +174,7 @@ AppAsset::register($this);
                     'delete' => function ($url, $model) {
                         /** @var $model MovementGoods*/
                         $url = Url::to(['/movement-goods/delete', 'id' => $model->id]);
+                        if ($model->movement->status == Movement::STATUS_NEW)
                         return Html::a(
                             ' <span class="fas fa-trash"> </span> ',
                             $url,

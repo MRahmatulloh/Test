@@ -161,6 +161,7 @@ class PrixodController extends Controller
     public function actionGoodsList($prixod_id)
     {
         $prixod = $this->findModel($prixod_id);
+        $view = 'goods';
 
         if ($prixod->type == Prixod::TYPE_RETURN) {
             return $this->redirect(['return/goods-list', 'prixod_id' => $prixod_id]);
@@ -183,7 +184,11 @@ class PrixodController extends Controller
             }
         }
 
-        return $this->render('goods', [
+        if ($prixod->type == $prixod::TYPE_MOVEMENT){
+            $view = 'goodslist_without_form';
+        }
+
+        return $this->render($view, [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'model' => $model,

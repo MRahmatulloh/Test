@@ -21,6 +21,7 @@ class m230302_115512_create_movement_table extends Migration
             'prixod_id' => $this->integer()->null(),
             'rasxod_id' => $this->integer()->null(),
             'status' => $this->integer()->defaultValue(1),
+            'warehouse_id' => $this->integer()->notNull(),
             'comment' => $this->string(255),
             'created_by' => $this->integer(),
             'updated_by' => $this->integer(),
@@ -47,6 +48,11 @@ class m230302_115512_create_movement_table extends Migration
             'rasxod', 'id');
 
         $this->createIndex('movement-rasxod_idx', 'movement', 'rasxod_id');
+
+        $this->addForeignKey('FK_movement_warehouse', 'movement', 'warehouse_id',
+            'warehouse', 'id');
+
+        $this->createIndex('movement-warehouse_idx', 'movement', 'warehouse_id');
     }
 
     /**

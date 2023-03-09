@@ -20,6 +20,7 @@ use yii\db\Exception;
  * @property int|null $rasxod_id
  * @property int|null $status
  * @property string|null $comment
+ * @property int $warehouse_id
  * @property int|null $created_by
  * @property int|null $updated_by
  * @property int $created_at
@@ -30,6 +31,7 @@ use yii\db\Exception;
  * @property Rasxod $rasxod
  * @property Client $recipient
  * @property Client $sender
+ * @property Warehouse $warehouse
  */
 class Movement extends MyModel
 {
@@ -69,15 +71,17 @@ class Movement extends MyModel
     public function rules()
     {
         return [
-            [['date', 'number', 'sender_id', 'recipient_id'], 'required'],
+            [['date', 'number', 'sender_id', 'recipient_id', 'warehouse_id'], 'required'],
             [['date'], 'safe'],
-            [['sender_id', 'recipient_id', 'prixod_id', 'rasxod_id', 'status', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
+            [['sender_id', 'recipient_id', 'prixod_id', 'rasxod_id', 'status', 'created_by',
+                'updated_by', 'created_at', 'updated_at', 'warehouse_id'], 'integer'],
             [['number', 'comment'], 'string', 'max' => 255],
             ['recipient_id', 'checkSameClient'],
             [['prixod_id'], 'exist', 'skipOnError' => true, 'targetClass' => Prixod::class, 'targetAttribute' => ['prixod_id' => 'id']],
             [['rasxod_id'], 'exist', 'skipOnError' => true, 'targetClass' => Rasxod::class, 'targetAttribute' => ['rasxod_id' => 'id']],
             [['recipient_id'], 'exist', 'skipOnError' => true, 'targetClass' => Client::class, 'targetAttribute' => ['recipient_id' => 'id']],
             [['sender_id'], 'exist', 'skipOnError' => true, 'targetClass' => Client::class, 'targetAttribute' => ['sender_id' => 'id']],
+            [['warehouse_id'], 'exist', 'skipOnError' => true, 'targetClass' => Warehouse::class, 'targetAttribute' => ['warehouse_id' => 'id']],
         ];
     }
 
@@ -106,6 +110,7 @@ class Movement extends MyModel
             'rasxod_id' => 'Расход',
             'status' => 'Статус',
             'comment' => 'Комментарий',
+            'warehouse_id' => 'Склад',
             'created_by' => 'Created By',
             'updated_by' => 'Updated By',
             'created_at' => 'Created At',
@@ -164,6 +169,16 @@ class Movement extends MyModel
     }
 
     /**
+     * Gets query for [[Warehouse]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getWarehouse()
+    {
+        return $this->hasOne(Warehouse::class, ['id' => 'warehouse_id']);
+    }
+
+    /**
      * @throws Exception
      */
     public function accept()
@@ -182,8 +197,8 @@ class Movement extends MyModel
             $prixod->client_id = $this->sender_id;
             $prixod->comment = $this->comment;
             $prixod->status = 1;
-            $prixod->type = 1;
-            $prixod->warehouse_id = 2;
+            $prixod->type = Prixod::TYPE_MOVEMENT;
+            $prixod->warehouse_id = $this->warehouse_id;
             $prixod->created_by = Yii::$app->user->identity->id;
             $prixod->save();
 
@@ -197,8 +212,8 @@ class Movement extends MyModel
             $rasxod->client_id = $this->recipient_id;
             $rasxod->comment = $this->comment;
             $rasxod->status = 1;
-            $rasxod->type = 1;
-            $rasxod->warehouse_id = 2;
+            $rasxod->type = Rasxod::TYPE_MOVEMENT;
+            $rasxod->warehouse_id = $this->warehouse_id;
             $rasxod->created_by = Yii::$app->user->identity->id;
             $rasxod->save();
 
@@ -249,6 +264,54 @@ class Movement extends MyModel
             $this->save();
 
             $transaction->commit();
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function delete()
+    {
+        $transaction = Yii::$app->db->beginTransaction();
+
+        try {
+            $rasxod = $this->rasxod_id;
+            $this->rasxod_id = null;
+            $this->save(false);
+
+            if ($rasxod && !RasxodGoods::deleteAll(['rasxod_id' => $rasxod])) {
+                throw new \Exception('Ошибка при удалении товаров расхода');
+            }
+
+            if ($rasxod && !Rasxod::deleteAll(['id' => $rasxod])) {
+                throw new \Exception('Ошибка при удалении расхода');
+            }
+
+            $prixod = $this->prixod_id;
+            $this->prixod_id = null;
+            $this->save(false);
+
+            if ($prixod && !PrixodGoods::deleteAll(['prixod_id' => $prixod])) {
+                throw new \Exception('Ошибка при удалении товаров прихода');
+            }
+
+            if ($prixod && !Prixod::deleteAll(['id' => $prixod])) {
+                throw new \Exception('Ошибка при удалении прихода');
+            }
+
+            if (!MovementGoods::deleteAll(['movement_id' => $this->id])) {
+                throw new \Exception('Ошибка при удалении товаров перемещения');
+            }
+
+            if (!parent::delete()) {
+                throw new \Exception('Ошибка при удалении перемещения');
+            }
+
+            $transaction->commit();
+            return true;
         } catch (\Exception $e) {
             $transaction->rollBack();
             throw $e;

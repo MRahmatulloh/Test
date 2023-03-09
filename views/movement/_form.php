@@ -2,6 +2,7 @@
 
 use app\assets\AppAsset;
 use app\models\Client;
+use app\models\Warehouse;
 use kartik\date\DatePicker;
 use kartik\select2\Select2;
 use yii\helpers\Html;
@@ -49,6 +50,15 @@ AppAsset::register($this);
         </div>
         <div class="col-4">
             <?= $form->field($model, 'comment')->textarea(['maxlength' => true, 'rows' => 2]) ?>
+        </div>
+        <div class="col-4">
+            <?= $form->field($model, 'warehouse_id')->widget(Select2::className(),[
+                'data' => Warehouse::selectList(),
+                'options' => ['placeholder' => 'Выберите склад ...'],
+                'pluginOptions' => [
+                    'allowClear' => true
+                ],
+            ]) ?>
         </div>
     </div>
 

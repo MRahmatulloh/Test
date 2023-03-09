@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\models\Prixod $model */
 
-$this->title = 'Новое приходное требование';
+$this->title = 'Новое возратное требование';
 $this->params['breadcrumbs'][] = ['label' => 'Prixods', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

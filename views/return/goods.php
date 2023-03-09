@@ -36,7 +36,7 @@ AppAsset::register($this);
         <div class="row">
             <div class="col-2">
                 <?= $form->field($model, 'rasxod_id')->widget(Select2::className(), [
-                    'data' => Rasxod::selectListNonEmpty($model->prixod->warehouse_id, $model->prixod->client_id),
+                    'data' => Rasxod::selectListNonEmpty(client_id:$model->prixod->client_id),
                     'options' => ['placeholder' => 'Выберите ...'],
                     'pluginOptions' => [
                         'allowClear' => true

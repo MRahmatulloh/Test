@@ -3,10 +3,8 @@
 namespace app\controllers;
 
 use app\models\CurrencyRates;
-use app\models\PrixodGoods;
 use app\models\Rasxod;
 use app\models\RasxodGoods;
-use app\models\search\PrixodGoodsSearch;
 use app\models\search\RasxodGoodsSearch;
 use app\models\search\RasxodSearch;
 use PhpOffice\PhpWord\TemplateProcessor;
@@ -81,7 +79,7 @@ class RasxodController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post())) {
-                $model->number = $model->getNumber('create', 'R');
+                $model->number = $model->getNumber('create', 'RS');
                 $model->created_by = Yii::$app->user->identity->getId();
 
                 if ($model->save()) {
@@ -111,7 +109,7 @@ class RasxodController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post())) {
-                $model->number = $model->getNumber('update', 'R');
+                $model->number = $model->getNumber('update', 'RS');
                 $model->updated_by = Yii::$app->user->identity->getId();
 
                 if ($model->save()) {
@@ -160,10 +158,11 @@ class RasxodController extends Controller
 
     public function actionGoodsList($rasxod_id)
     {
-        $this->findModel($rasxod_id);
+        $rasxod = $this->findModel($rasxod_id);
         $searchModel = new RasxodGoodsSearch(['rasxod_id' => $rasxod_id]);
         $model = new RasxodGoods(['rasxod_id' => $rasxod_id]);
         $dataProvider = $searchModel->search($this->request->queryParams);
+        $view = 'goods';
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post())) {
@@ -189,7 +188,11 @@ class RasxodController extends Controller
             }
         }
 
-        return $this->render('goods', [
+        if ($rasxod->type == $rasxod::TYPE_MOVEMENT){
+            $view = 'goodslist_without_form';
+        }
+
+        return $this->render($view, [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'model' => $model,

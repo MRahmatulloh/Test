@@ -2,6 +2,7 @@
 
 use app\assets\AppAsset;
 use app\models\Currency;
+use app\models\Goods;
 use kartik\date\DatePicker;
 use kartik\select2\Select2;
 use yii\grid\GridView;
@@ -102,7 +103,7 @@ AppAsset::register($this);
                 'filter' => Select2::widget([
                     'model' => $searchModel,
                     'attribute' => 'goods_id',
-                    'data' => \app\models\Goods::selectList(),
+                    'data' => Goods::selectList(),
                     'initValueText' => $searchModel->goods_id,
                     'options' => ['placeholder' => 'Выберите товар ...'],
                     'pluginOptions' => [
@@ -151,6 +152,13 @@ AppAsset::register($this);
                         'allowClear' => true
                     ],
                 ]),
+            ],
+
+            [
+                'label' => 'Склад',
+                'value' => function ($data) {
+                    return $data->prixod->warehouse->name;
+                },
             ],
         ],
     ]); ?>
