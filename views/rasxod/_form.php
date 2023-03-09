@@ -1,7 +1,10 @@
 <?php
 
 use app\assets\AppAsset;
+use app\models\Client;
+use app\models\Warehouse;
 use kartik\date\DatePicker;
+use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -27,16 +30,17 @@ AppAsset::register($this);
             ]); ?>
         </div>
         <div class="col-4">
-            <?= $form->field($model, 'client_id')->widget(\kartik\select2\Select2::className(),[
-                'data' => \app\models\Client::selectList(),
+            <?= $form->field($model, 'client_id')->widget(Select2::className(),[
+                'data' => Client::selectList(),
                 'options' => ['placeholder' => 'Выберите клиент ...'],
                 'pluginOptions' => [
-                    'allowClear' => true
+                    'allowClear' => true,
+                    'disabled' => (bool)$model->rasxodGoods
                 ],
             ]) ?>
         </div>
         <div class="col-4">
-            <?= $form->field($model, 'type')->widget(\kartik\select2\Select2::className(),[
+            <?= $form->field($model, 'type')->widget(Select2::className(),[
                 'data' => $model::TYPES,
                 'options' => ['placeholder' => 'Выберите ...'],
                 'pluginOptions' => [
@@ -48,8 +52,8 @@ AppAsset::register($this);
             <?= $form->field($model, 'comment')->textarea(['maxlength' => true, 'rows' => 1]) ?>
         </div>
         <div class="col-4">
-            <?= $form->field($model, 'warehouse_id')->widget(\kartik\select2\Select2::className(),[
-                'data' => \app\models\Warehouse::selectList(),
+            <?= $form->field($model, 'warehouse_id')->widget(Select2::className(),[
+                'data' => Warehouse::selectList(),
                 'options' => ['placeholder' => 'Выберите склад ...'],
                 'pluginOptions' => [
                     'allowClear' => true

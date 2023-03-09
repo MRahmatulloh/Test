@@ -29,6 +29,7 @@ class BalanceController extends Controller
             select g.name                                               as goods_name,
                    g.code                                               as goods_code,
                    g.id                                                 as goods_id,
+                   g.img                                                as goods_img,
                    ifnull(income.amount, 0)                             as in_amount,
                    ifnull(outcome.amount, 0)                            as out_amount,
                    ifnull(income.amount, 0) - ifnull(outcome.amount, 0) as ostatok,

@@ -120,6 +120,15 @@ AppAsset::register($this);
                     },
 
                     'update' => function ($url, $model) {
+                        /** @var $model Rasxod */
+                        if($model->type == Rasxod::TYPE_MOVEMENT){
+                            return Html::a('<span class="fas fa-edit"></span>',
+                                $url,
+                                [
+                                    'title' => Yii::t('yii', 'Update'),
+                                    'onclick' => 'alert("Это расход связано с перемещением и её нельзя редактивировать!"); return false;'
+                                ]);
+                        }
                         return Html::a(
                             ' <span class="fas fa-edit"> </span> ',
                             $url
@@ -127,8 +136,7 @@ AppAsset::register($this);
                     },
 
                     'delete' => function ($url, $model) {
-
-                        /** @var $model \app\models\Rasxod */
+                        /** @var $model Rasxod */
                         if ($model->rasxodGoods) {
                             return Html::a('<span class="fas fa-trash"></span>',
                                 $url,

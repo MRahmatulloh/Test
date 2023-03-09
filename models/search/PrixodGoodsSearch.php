@@ -69,7 +69,8 @@ class PrixodGoodsSearch extends PrixodGoods
     public function search($params)
     {
         $query = PrixodGoods::find()
-            ->joinWith(['prixod p', 'prixod.client c']);
+            ->joinWith(['prixod p', 'prixod.client c'])
+            ->orderBy(['p.date' => SORT_DESC, 'p.id' => SORT_DESC]);
 
         // add conditions that should always apply here
 

@@ -195,7 +195,7 @@ class Movement extends MyModel
             $prixod->date = date('Y-m-d');
             $prixod->number = $prixod->getNumber('create', 'PM');
             $prixod->client_id = $this->sender_id;
-            $prixod->comment = $this->comment;
+            $prixod->comment = 'Перемещение № ' . $this->number . ' от ' . $this->sender->name . ' к ' . $this->recipient->name;
             $prixod->status = 1;
             $prixod->type = Prixod::TYPE_MOVEMENT;
             $prixod->warehouse_id = $this->warehouse_id;
@@ -210,7 +210,7 @@ class Movement extends MyModel
             $rasxod->date = date('Y-m-d');
             $rasxod->number = $rasxod->getNumber('create', 'RM');
             $rasxod->client_id = $this->recipient_id;
-            $rasxod->comment = $this->comment;
+            $rasxod->comment = 'Перемещение № ' . $this->number . ' от ' . $this->sender->name . ' к ' . $this->recipient->name;
             $rasxod->status = 1;
             $rasxod->type = Rasxod::TYPE_MOVEMENT;
             $rasxod->warehouse_id = $this->warehouse_id;
@@ -302,7 +302,7 @@ class Movement extends MyModel
                 throw new \Exception('Ошибка при удалении прихода');
             }
 
-            if (!MovementGoods::deleteAll(['movement_id' => $this->id])) {
+            if ($this->movementGoods && !MovementGoods::deleteAll(['movement_id' => $this->id])) {
                 throw new \Exception('Ошибка при удалении товаров перемещения');
             }
 

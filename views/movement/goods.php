@@ -90,9 +90,17 @@ AppAsset::register($this);
             ['class' => 'yii\grid\SerialColumn'],
 
             [
+                'label' => 'Фото товара',
+                'format' => 'raw',
+                'value' => function($model){
+                    return Html::img('@web'.'/img/goods/' . $model->goods->img, ['class' => 'img-fluid', 'width' => '80px']);
+                }
+            ],
+
+            [
                 'attribute' => 'goods_id',
-                'value' => function($data){
-                    return $data->goods->code .'-'.$data->goods->name;
+                'value' => function($model){
+                    return $model->goods->code .'-'.$model->goods->name;
                 },
                 'filter' => Select2::widget([
                     'model' => $searchModel,
@@ -105,19 +113,11 @@ AppAsset::register($this);
                     ],
                 ]),
             ],
-            
-            [
-                'label' => 'Фото товара',
-                'format' => 'raw',
-                'value' => function($model){
-                    return Html::img('@web'.'/img/goods/' . $model->goods->img, ['class' => 'img-fluid', 'width' => '80px']);
-                }
-            ],
 
             [
                 'attribute' => 'amount',
-                'value' => function($data){
-                    return pul2($data->amount,2);
+                'value' => function($model){
+                    return pul2($model->amount,2);
                 },
                 'contentOptions' => ['class' => 'text-right'],
                 'filter' => ''
@@ -125,8 +125,8 @@ AppAsset::register($this);
 
             [
                 'attribute' => 'cost',
-                'value' => function($data){
-                    return pul2($data->cost,2);
+                'value' => function($model){
+                    return pul2($model->cost,2);
                 },
                 'contentOptions' => ['class' => 'text-right'],
                 'filter' => ''

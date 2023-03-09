@@ -107,6 +107,10 @@ class RasxodController extends Controller
     {
         $model = $this->findModel($id);
 
+        if ($model->type == $model::TYPE_MOVEMENT){
+            $this->redirect(['index']);
+        }
+
         if ($this->request->isPost) {
             if ($model->load($this->request->post())) {
                 $model->number = $model->getNumber('update', 'RS');

@@ -35,6 +35,14 @@ AppAsset::register($this);
             ['class' => 'yii\grid\SerialColumn'],
 
             [
+                'label' => 'Фото товара',
+                'format' => 'raw',
+                'value' => function($data){
+                    return Html::img('@web'.'/img/goods/' . $data['goods_img'], ['class' => 'img-fluid', 'width' => '80px']);
+                }
+            ],
+
+            [
                 'label' => 'Товар',
                 'attribute' => 'goods_id',
                 'value' => function ($data) {

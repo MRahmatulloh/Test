@@ -2,16 +2,13 @@
 
 namespace app\controllers;
 
-use app\models\CurrencyRates;
 use app\models\Movement;
 use app\models\MovementGoods;
 use app\models\PrixodGoods;
 use app\models\RasxodGoods;
 use app\models\search\MovementGoodsSearch;
 use app\models\search\MovementSearch;
-use app\models\search\PrixodGoodsSearch;
 use Yii;
-use yii\base\BaseObject;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -113,11 +110,10 @@ class MovementController extends Controller
                         ->where(['rasxod_goods_id' => $model->rasxod_goods_id, 'movement_id' => $model->movement_id])
                         ->sum('amount') ?? 0;
 
-                    $model->cost = $rasxod_goods->cost;
                     $model->currency_id = $rasxod_goods->currency_id;
-
                     $model->cost_return = $rasxod_goods->cost;
                     $model->goods_id = $rasxod_goods->goods_id;
+
                     $used = PrixodGoods::getRasxodedAmount($model->rasxod_goods_id) ?? 0;
                     $free = $rasxod_goods->amount - $used - $already_amount;
 
@@ -143,6 +139,23 @@ class MovementController extends Controller
         ]);
     }
 
+    public function actionByGoods()
+    {
+        $searchModel = new MovementGoodsSearch();
+
+        $searchModel->from = date('Y-01-01');
+        $searchModel->to = date('Y-m-d');
+
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        $searchModel->from = dateView($searchModel->from);
+        $searchModel->to = dateView($searchModel->to);
+        return $this->render('by-goods', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+    }
+
     /**
      * Updates an existing Movement model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -155,7 +168,7 @@ class MovementController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post())) {
-            $model->number = $model->getNumber('create', 'M');
+            $model->number = $model->getNumber('update', 'M');
             $model->updated_by = Yii::$app->user->identity->getId();
 
             if ($model->save()) {

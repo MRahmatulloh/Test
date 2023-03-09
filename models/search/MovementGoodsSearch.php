@@ -11,6 +11,12 @@ use app\models\MovementGoods;
  */
 class MovementGoodsSearch extends MovementGoods
 {
+    public $from;
+    public $to;
+    public $warehouse_id;
+    public $client_name;
+    public $client_id;
+
     /**
      * {@inheritdoc}
      */
@@ -19,6 +25,16 @@ class MovementGoodsSearch extends MovementGoods
         return [
             [['id', 'movement_id', 'goods_id', 'currency_id', 'rasxod_goods_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['amount', 'cost', 'cost_return'], 'number'],
+            [['client_name'], 'string'],
+            [['from', 'to'], 'safe']
+        ];
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'from' => 'Дата с',
+            'to' => 'По',
         ];
     }
 
@@ -40,7 +56,9 @@ class MovementGoodsSearch extends MovementGoods
      */
     public function search($params)
     {
-        $query = MovementGoods::find();
+        $query = MovementGoods::find()
+            ->joinWith(['movement m'])
+            ->orderBy(['m.date' => SORT_DESC, 'm.id' => SORT_DESC]);
 
         // add conditions that should always apply here
 
@@ -50,11 +68,20 @@ class MovementGoodsSearch extends MovementGoods
 
         $this->load($params);
 
+        if (!$this->to)
+            $this->to = date('Y-m-d');
+        if (!$this->from)
+            $this->from = date('Y-m-01');
+
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
             return $dataProvider;
         }
+
+        // grid filtering conditions
+        $query->andWhere(['>=', 'm.date', dateBase($this->from)])
+            ->andWhere(['<=', 'm.date', dateBase($this->to)]);
 
         // grid filtering conditions
         $query->andFilterWhere([
