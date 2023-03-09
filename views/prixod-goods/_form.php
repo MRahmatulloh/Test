@@ -1,6 +1,9 @@
 <?php
 
 use app\assets\AppAsset;
+use app\models\Currency;
+use app\models\Goods;
+use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -16,11 +19,12 @@ AppAsset::register($this);
 
     <div class="row d-block">
         <div class="col-4">
-            <?= $form->field($model, 'goods_id')->widget(\kartik\select2\Select2::className(),[
-                'data' => \app\models\Goods::selectList(),
+            <?= $form->field($model, 'goods_id')->widget(Select2::className(),[
+                'data' => Goods::selectList(),
                 'options' => ['placeholder' => 'Выберите товар ...'],
                 'pluginOptions' => [
-                    'allowClear' => true
+                    'allowClear' => true,
+                    'disabled' => (bool)$model->rasxodGoods
                 ],
             ]) ?>
         </div>
@@ -31,8 +35,8 @@ AppAsset::register($this);
             <?= $form->field($model, 'cost')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-4">
-            <?= $form->field($model, 'currency_id')->widget(\kartik\select2\Select2::className(),[
-                'data' => \app\models\Currency::selectList(),
+            <?= $form->field($model, 'currency_id')->widget(Select2::className(),[
+                'data' => Currency::selectList(),
                 'options' => ['placeholder' => 'Выберите валюты ...'],
                 'pluginOptions' => [
                     'allowClear' => true

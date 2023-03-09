@@ -96,6 +96,14 @@ class PrixodGoodsController extends Controller
 
         if ($this->request->isPost && $model->load($this->request->post())) {
             $model->cost_usd = CurrencyRates::getSummaUsd($model->prixod->date, $model->currency_id, $model->cost);
+            $used = RasxodGoods::getPrixodedAmount($model->id);
+            $curr_amount = $model->amount;
+
+            if ($curr_amount < $used){
+                Yii::$app->session->setFlash('error', 'Уменьшился количество товара, минимальная количество которую можно уменьшить: ' . $used);
+                return $this->redirect(Yii::$app->request->referrer);
+            }
+
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно сохранены'));
                 return $this->redirect(['prixod/goods-list', 'prixod_id' => $model->prixod_id]);
@@ -116,7 +124,7 @@ class PrixodGoodsController extends Controller
 
         if ($this->request->isPost && $model->load($this->request->post())) {
             $model->cost_usd = CurrencyRates::getSummaUsd($model->prixod->date, $model->currency_id, $model->cost);
-            $all_amount = RasxodGoods::findOne($model->rasxod_goods_id)->amount;
+            $all_amount = RasxodGoods::findOne($model->rasxod_goods_id)->amount ?? 0;
             $used = PrixodGoods::find()
                 ->where(['rasxod_goods_id' => $model->rasxod_goods_id])
                 ->sum('amount');

@@ -166,7 +166,7 @@ AppAsset::register($this);
                     'update' => function ($url, $model) {
                         /** @var $model PrixodGoods*/
                         $url = Url::to(['/prixod-goods/update', 'id' => $model->id]);
-                        if ($model->prixod->type = Prixod::TYPE_RETURN)
+                        if ($model->prixod->type == Prixod::TYPE_RETURN)
                             $url = Url::to(['/prixod-goods/update-return', 'id' => $model->id]);
                         return Html::a(
                             ' <span class="fas fa-edit"> </span> ',
