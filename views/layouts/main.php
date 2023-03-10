@@ -259,7 +259,9 @@ AppAsset::register($this);
                                 </div>
                                 <div class="profile_info_details">
                                     <a href="#">Мой профиль </a>
-                                    <a href="/site/logout" data-method = 'post'>Выйти</a>
+                                    <form action="/site/logout" method="post">
+                                        <input type="hidden" name="_csrf" value="<?=Yii::$app->request->getCsrfToken()?>" />
+                                        <input type="submit" class="btn btn-danger w-100" value="Выйти" />
                                     </form>
                                 </div>
                             </div>

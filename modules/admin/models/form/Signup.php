@@ -13,6 +13,7 @@ use yii\helpers\ArrayHelper;
 class Signup extends Model
 {
     public $username;
+    public $fio;
     public $email;
     public $password;
     public $retypePassword;
@@ -24,10 +25,10 @@ class Signup extends Model
     {
         $class = Yii::$app->getUser()->identityClass ? : 'mdm\admin\models\User';
         return [
-            ['username', 'filter', 'filter' => 'trim'],
-            ['username', 'required'],
+            [['username', 'fio'], 'filter', 'filter' => 'trim'],
+            [['username', 'fio'], 'required'],
             ['username', 'unique', 'targetClass' => $class, 'message' => 'This username has already been taken.'],
-            ['username', 'string', 'min' => 2, 'max' => 255],
+            [['username', 'fio'], 'string', 'min' => 2, 'max' => 255],
 
             ['email', 'filter', 'filter' => 'trim'],
             ['email', 'required'],
@@ -53,6 +54,7 @@ class Signup extends Model
             $class = Yii::$app->getUser()->identityClass ? : 'mdm\admin\models\User';
             $user = new $class();
             $user->username = $this->username;
+            $user->fio = $this->fio;
             $user->email = $this->email;
             $user->status = ArrayHelper::getValue(Yii::$app->params, 'user.defaultStatus', UserStatus::ACTIVE);
             $user->setPassword($this->password);
