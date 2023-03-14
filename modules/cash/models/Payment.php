@@ -4,9 +4,8 @@ namespace app\modules\cash\models;
 
 use app\models\Client;
 use app\models\Currency;
-use Yii;
+use app\models\MyModel;
 use yii\behaviors\TimestampBehavior;
-use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "payment".
@@ -29,12 +28,12 @@ use yii\db\ActiveRecord;
  * @property Currency $currency
  * @property PaymentReason $reason
  */
-class Payment extends ActiveRecord
+class Payment extends MyModel
 {
     public const PAYMENT_TYPES = [
         1 => 'Наличные',
-        2 => 'Безналичный расчет',
-        3 => 'Кредит',
+        2 => 'Перечисление',
+        3 => 'Пластик',
     ];
     /**
      * {@inheritdoc}
@@ -60,8 +59,8 @@ class Payment extends ActiveRecord
     public function rules()
     {
         return [
-            [['date', 'summa', 'currency_id', 'client_id', 'payment_type_id', 'reason_id', 'created_at', 'updated_at'], 'required'],
-            [['date'], 'safe'],
+            [['date', 'summa', 'currency_id', 'client_id', 'payment_type_id', 'reason_id'], 'required'],
+            [['date', 'myPageSize'], 'safe'],
             [['summa', 'summa_usd'], 'number'],
             [['currency_id', 'client_id', 'payment_type_id', 'reason_id', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
             [['comment'], 'string', 'max' => 255],

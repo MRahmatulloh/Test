@@ -71,7 +71,7 @@ class Prixod extends MyModel
     {
         return [
             [['date', 'number', 'client_id', 'warehouse_id', 'type'], 'required'],
-            [['date'], 'safe'],
+            [['date', 'myPageSize'], 'safe'],
             [['client_id', 'warehouse_id', 'type', 'status', 'created_by', 'updated_by'], 'integer'],
             [['number', 'comment'], 'string', 'max' => 255],
             [['client_id'], 'exist', 'skipOnError' => true, 'targetClass' => Client::class, 'targetAttribute' => ['client_id' => 'id']],

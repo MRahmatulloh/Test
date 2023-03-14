@@ -9,25 +9,55 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var app\models\search\PrixodGoodsSearch $searchModel */
+/** @var app\modules\cash\models\search\CashSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 /** @var yii\widgets\ActiveForm $form */
+/** @var Array $stats */
 
-$this->title = 'Приход по товаром ';
+$this->title = 'Касса';
 $this->params['breadcrumbs'][] = $this->title;
 AppAsset::register($this);
-
 ?>
-<div class="prixod-goods-index">
+<div class="cash-index">
 
-    <h2><?= Html::encode($this->title) ?></h2>
+    <div class="row">
+        <div class="col-12">
+        </div>
+        <div class="col-6">
+            <h2><?= Html::encode($this->title) ?></h2>
+        </div>
+        <div class="col-6">
+            <table class="table">
+                <tbody>
+                <tr>
+                    <th>Валюта</th>
+                    <th>Приход</th>
+                    <th>Расход</th>
+                    <th>Итог</th>
+                </tr>
+                <tr>
+                    <td>СУМ</td>
+                    <td><?= pul2($stats['prixod']['sum'] ?? 0, 2) ?></td>
+                    <td><?= pul2($stats['rasxod']['sum'] ?? 0, 2) ?></td>
+                    <td><?= pul2(($stats['prixod']['sum'] ?? 0) - ($stats['rasxod']['sum'] ?? 0), 2) ?></td>
+                </tr>
+                <tr>
+                    <td>USD</td>
+                    <td><?= pul2($stats['prixod']['usd'] ?? 0, 2) ?></td>
+                    <td><?= pul2($stats['rasxod']['usd'] ?? 0, 2) ?></td>
+                    <td><?= pul2(($stats['prixod']['usd'] ?? 0) - ($stats['rasxod']['usd'] ?? 0), 2) ?></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-    <div class="prixod-goods-form">
+    <div class="cash-form">
 
         <?php $form = ActiveForm::begin(['method' => 'get']); ?>
 
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <?= $form->field($searchModel, 'from')->widget(DatePicker::classname(), [
                     'type' => 3,
                     'pluginOptions' => [
@@ -36,7 +66,7 @@ AppAsset::register($this);
                     ]
                 ]); ?>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <?= $form->field($searchModel, 'to')->widget(DatePicker::classname(), [
                     'type' => 3,
                     'pluginOptions' => [
@@ -57,6 +87,7 @@ AppAsset::register($this);
     </div>
     <br>
 
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'layout' => '{summary}' . Html::activeDropDownList($searchModel, 'myPageSize', [20 => 20, 50 => 50, 100 => 100, 300 => 300, 500 => 500], ['id' => 'myPageSize']) . "{items}<br/>{pager}",
@@ -68,7 +99,7 @@ AppAsset::register($this);
             [
                 'label' => 'Дата',
                 'value' => function ($data) {
-                    return dateView($data->prixod->date);
+                    return dateView($data['date']);
                 },
                 'filter' => ''
             ],
@@ -77,63 +108,29 @@ AppAsset::register($this);
                 'label' => 'Клиент',
                 'attribute' => 'client_name',
                 'value' => function ($data) {
-                    return $data->prixod->client->name;
+                    return $data['client_name'];
                 },
             ],
 
             [
-                'label' => 'Приход',
-                'format' => 'raw',
+                'attribute' => 'Приход',
                 'value' => function ($data) {
+                    if ($data['type'] == 'payment')
+                        return pul2($data['summa'], 2);
 
-                    return Html::a(
-                        $data->prixod->number,
-                        \Yii::$app->getUrlManager()->createUrl(
-                            array('prixod/goods-list', 'prixod_id' => $data->prixod->id)
-                        )
-                    );
-                },
-            ],
-
-            [
-                'attribute' => 'goods_id',
-                'value' => function ($data) {
-                    return $data->goods->code . '-' . $data->goods->name;
-                },
-                'filter' => Select2::widget([
-                    'model' => $searchModel,
-                    'attribute' => 'goods_id',
-                    'data' => \app\models\Goods::selectList(),
-                    'initValueText' => $searchModel->goods_id,
-                    'options' => ['placeholder' => 'Выберите товар ...'],
-                    'pluginOptions' => [
-                        'allowClear' => true
-                    ],
-                ]),
-            ],
-
-            [
-                'attribute' => 'amount',
-                'value' => function ($data) {
-                    return pul2($data->amount, 2);
+                    return '';
                 },
                 'contentOptions' => ['class' => 'text-right'],
                 'filter' => ''
             ],
 
             [
-                'attribute' => 'cost',
+                'attribute' => 'Расход',
                 'value' => function ($data) {
-                    return pul2($data->cost, 2);
-                },
-                'contentOptions' => ['class' => 'text-right'],
-                'filter' => ''
-            ],
+                    if ($data['type'] == 'expense')
+                        return pul2($data['summa'], 2);
 
-            [
-                'attribute' => 'summa',
-                'value' => function ($searchModel) {
-                    return pul2($searchModel->cost * $searchModel->amount, 2);
+                    return '';
                 },
                 'contentOptions' => ['class' => 'text-right'],
                 'filter' => ''
@@ -141,7 +138,9 @@ AppAsset::register($this);
 
             [
                 'attribute' => 'currency_id',
-                'value' => 'currency.name',
+                'value' => function ($data) {
+                    return $data['currency_name'];
+                },
                 'filter' => Select2::widget([
                     'model' => $searchModel,
                     'attribute' => 'currency_id',
@@ -152,13 +151,6 @@ AppAsset::register($this);
                         'allowClear' => true
                     ],
                 ]),
-            ],
-
-            [
-                'label' => 'Склад',
-                'value' => function ($data) {
-                    return $data->prixod->warehouse->name;
-                },
             ],
         ],
     ]); ?>

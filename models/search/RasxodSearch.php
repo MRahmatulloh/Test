@@ -18,7 +18,7 @@ class RasxodSearch extends Rasxod
     {
         return [
             [['id', 'client_id', 'warehouse_id', 'type', 'status', 'created_by', 'updated_by'], 'integer'],
-            [['date', 'number', 'comment'], 'safe'],
+            [['date', 'number', 'comment', 'myPageSize'], 'safe'],
         ];
     }
 
@@ -74,6 +74,7 @@ class RasxodSearch extends Rasxod
         $query->andFilterWhere(['like', 'number', $this->number])
             ->andFilterWhere(['like', 'comment', $this->comment]);
 
+        $dataProvider->pagination->pageSize = $this->myPageSize ?? 20;
         return $dataProvider;
     }
 }

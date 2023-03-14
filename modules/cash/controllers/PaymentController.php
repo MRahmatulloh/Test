@@ -2,8 +2,10 @@
 
 namespace app\modules\cash\controllers;
 
+use app\models\CurrencyRates;
 use app\modules\cash\models\Payment;
 use app\modules\cash\models\search\PaymentSearch;
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -53,12 +55,12 @@ class PaymentController extends Controller
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
+//    public function actionView($id)
+//    {
+//        return $this->render('view', [
+//            'model' => $this->findModel($id),
+//        ]);
+//    }
 
     /**
      * Creates a new Payment model.
@@ -67,14 +69,22 @@ class PaymentController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Payment();
+        $model = new Payment([
+            'date' => date('d.m.Y'),
+        ]);
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load($this->request->post())) {
+                $model->created_by = Yii::$app->user->identity->id;
+                $model->summa_usd = CurrencyRates::getSummaUsd($model->date, $model->currency_id, $model->summa);
+
+                if ($model->save()){
+                    Yii::$app->session->setFlash('success', 'Данные успешно сохранены');
+                    return $this->redirect(['index']);
+                } else {
+                    Yii::$app->session->setFlash('error', 'Ошибка сохранения данных');
+                }
             }
-        } else {
-            $model->loadDefaultValues();
         }
 
         return $this->render('create', [
@@ -93,8 +103,16 @@ class PaymentController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            $model->updated_by = Yii::$app->user->identity->id;
+            $model->summa_usd = CurrencyRates::getSummaUsd($model->date, $model->currency_id, $model->summa);
+
+            if ($model->save()){
+                Yii::$app->session->setFlash('success', 'Данные успешно сохранены');
+                return $this->redirect(['index']);
+            } else {
+                Yii::$app->session->setFlash('error', 'Ошибка сохранения данных');
+            }
         }
 
         return $this->render('update', [
@@ -111,7 +129,13 @@ class PaymentController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+
+        if ($model->delete()) {
+            Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно удалены'));
+        } else {
+            Yii::$app->session->setFlash('error', Yii::t('app', 'Произошла ошибка при удаления данных'));
+        }
 
         return $this->redirect(['index']);
     }

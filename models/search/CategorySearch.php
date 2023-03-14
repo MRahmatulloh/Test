@@ -18,7 +18,7 @@ class CategorySearch extends Category
     {
         return [
             [['id', 'status'], 'integer'],
-            [['name'], 'safe'],
+            [['name', 'myPageSize'], 'safe'],
         ];
     }
 
@@ -67,6 +67,7 @@ class CategorySearch extends Category
 
         $query->andFilterWhere(['like', 'name', $this->name]);
 
+        $dataProvider->pagination->pageSize = $this->myPageSize ?? 20;
         return $dataProvider;
     }
 }

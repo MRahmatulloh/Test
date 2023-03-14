@@ -18,7 +18,7 @@ class ExpenseSearch extends Expense
     {
         return [
             [['id', 'currency_id', 'client_id', 'payment_type_id', 'reason_id', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
-            [['date', 'comment'], 'safe'],
+            [['date', 'comment', 'myPageSize'], 'safe'],
             [['summa', 'summa_usd'], 'number'],
         ];
     }
@@ -75,6 +75,7 @@ class ExpenseSearch extends Expense
 
         $query->andFilterWhere(['like', 'comment', $this->comment]);
 
+        $dataProvider->pagination->pageSize = $this->myPageSize ?? 20;
         return $dataProvider;
     }
 }

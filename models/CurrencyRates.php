@@ -44,10 +44,10 @@ class CurrencyRates extends MyModel
     public function rules()
     {
         return [
-            [['code', 'rate', 'date', 'created_at', 'updated_at'], 'required'],
+            [['code', 'rate', 'date'], 'required'],
             [['code', 'created_at', 'updated_at'], 'integer'],
             [['rate'], 'number'],
-            [['date'], 'safe'],
+            [['date', 'myPageSize'], 'safe'],
         ];
     }
 

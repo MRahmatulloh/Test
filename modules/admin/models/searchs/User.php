@@ -23,7 +23,7 @@ class User extends Model
     {
         return [
             [['id', 'status',], 'integer'],
-            [['username', 'email'], 'safe'],
+            [['username', 'email', 'myPageSize'], 'safe'],
         ];
     }
 

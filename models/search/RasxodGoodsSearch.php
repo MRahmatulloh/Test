@@ -26,7 +26,7 @@ class RasxodGoodsSearch extends RasxodGoods
             [['id', 'rasxod_id', 'goods_id', 'currency_id', 'prixod_goods_id'], 'integer'],
             [['amount', 'cost', 'cost_usd'], 'number'],
             [['client_name'], 'string'],
-            [['from', 'to'], 'safe']
+            [['from', 'to', 'myPageSize'], 'safe']
         ];
     }
 
@@ -90,6 +90,7 @@ class RasxodGoodsSearch extends RasxodGoods
 
         $query->andFilterWhere(['like', 'c.name', $this->client_name]);
 
+        $dataProvider->pagination->pageSize = $this->myPageSize ?? 20;
         return $dataProvider;
     }
     
@@ -138,6 +139,7 @@ class RasxodGoodsSearch extends RasxodGoods
 
         $query->andFilterWhere(['like', 'c.name', $this->client_name]);
 
+        $dataProvider->pagination->pageSize = $this->myPageSize ?? 20;
         return $dataProvider;
     }
 }

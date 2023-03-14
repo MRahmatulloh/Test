@@ -3,9 +3,8 @@
 namespace app\modules\cash\models;
 
 use app\components\ItemsTrait;
-use Yii;
+use app\models\MyModel;
 use yii\behaviors\TimestampBehavior;
-use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "payment_reason".
@@ -21,7 +20,7 @@ use yii\db\ActiveRecord;
  * @property Expense[] $expenses
  * @property Payment[] $payments
  */
-class PaymentReason extends ActiveRecord
+class PaymentReason extends MyModel
 {
     use ItemsTrait;
 

@@ -1,6 +1,7 @@
 <?php
 
 use app\assets\AppAsset;
+use app\models\Category;
 use app\models\Goods;
 use kartik\select2\Select2;
 use yii\helpers\Html;
@@ -34,14 +35,16 @@ AppAsset::register($this);
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'layout' => '{summary}' . Html::activeDropDownList($searchModel, 'myPageSize', [20 => 20, 50 => 50, 100 => 100, 300 => 300, 500 => 500], ['id' => 'myPageSize', 'class' => 'dropdown-menu']) . "{items}<br/>{pager}",
         'filterModel' => $searchModel,
+        'filterSelector' => '#myPageSize',
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
             [
                 'label' => 'Фото',
                 'format' => 'raw',
-                'value' => function ($model) {
+                'value' => function (Goods $model) {
                     return Html::img('@web' . '/img/goods/' . $model->img, ['class' => 'img-fluid', 'width' => '80px']);
                 }
             ],
@@ -51,7 +54,7 @@ AppAsset::register($this);
 
             [
                 'label' => 'C артикулом',
-                'value' => function ($model) {
+                'value' => function (Goods $model) {
                     return $model->code . '-' . $model->name;
                 }
             ],
@@ -62,7 +65,7 @@ AppAsset::register($this);
                 'filter' => Select2::widget([
                     'model' => $searchModel,
                     'attribute' => 'category_id',
-                    'data' => \app\models\Category::selectList(),
+                    'data' => Category::selectList(),
                     'initValueText' => $searchModel->category_id,
                     'options' => ['placeholder' => 'Выберите ...'],
                     'pluginOptions' => [
@@ -76,15 +79,14 @@ AppAsset::register($this);
                 'buttons' => [
 
                     'update' => function ($url, $model) {
-                        return \yii\helpers\Html::a(
+                        return Html::a(
                             ' <span class="fas fa-edit"> </span> ',
                             $url
                         );
                     },
 
-                    'delete' => function ($url, $model) {
+                    'delete' => function ($url, Goods $model) {
 
-                        /** @var $model Goods */
                         if ($model->prixodGoods or $model->rasxodGoods) {
                             return Html::a('<span class="fas fa-trash"></span>',
                                 $url,

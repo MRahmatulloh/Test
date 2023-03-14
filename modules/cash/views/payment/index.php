@@ -31,7 +31,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'layout' => '{summary}' . Html::activeDropDownList($searchModel, 'myPageSize', [20 => 20, 50 => 50, 100 => 100, 300 => 300, 500 => 500], ['id' => 'myPageSize']) . "{items}<br/>{pager}",
         'filterModel' => $searchModel,
+        'filterSelector' => '#myPageSize',
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -44,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'attribute' => 'summa',
-                'value' => function($model){
+                'value' => function ($model) {
                     return pul2($model->summa, 2);
                 },
                 'contentOptions' => ['class' => 'text-right'],
@@ -52,64 +54,60 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
             [
+                'attribute' => 'currency_id',
+                'value' => function (Payment $model) {
+                    return $model->currency->name;
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'currency_id', Currency::selectList(), ['class' => 'form-control', 'prompt' => 'Все']),
+            ],
+
+            [
                 'attribute' => 'summa_usd',
-                'value' => function($model){
+                'value' => function ($model) {
                     return pul2($model->summa_usd, 2);
                 },
                 'contentOptions' => ['class' => 'text-right'],
                 'filter' => ''
             ],
 
-                [
-                    'attribute' => 'currency_id',
-                    'value' => function (Payment $model) {
-                        return $model->currency->name;
-                    },
-                    'filter' => Html::activeDropDownList($searchModel, 'currency_id', Currency::selectList(), ['class' => 'form-control', 'prompt' => 'Все']),
-                ],
+            [
+                'attribute' => 'client_id',
+                'value' => function (Payment $model) {
+                    return $model->client->name;
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'client_id', Client::selectList(), ['class' => 'form-control', 'prompt' => 'Все']),
+            ],
 
-                [
-                    'attribute' => 'client_id',
-                    'value' => function (Payment $model) {
-                        return $model->client->name;
-                    },
-                    'filter' => Html::activeDropDownList($searchModel, 'client_id', Client::selectList(), ['class' => 'form-control', 'prompt' => 'Все']),
-                ],
+            [
+                'attribute' => 'payment_type_id',
+                'value' => function (Payment $model) {
+                    return $model::PAYMENT_TYPES[$model->payment_type_id] ?? null;
+                },
+                'filter' => Payment::PAYMENT_TYPES,
+            ],
 
-                [
-                    'attribute' => 'payment_type_id',
-                    'value' => function (Payment $model) {
-                        return $model::PAYMENT_TYPES[$model->payment_type_id] ?? null;
-                    },
-                    'filter' => [],
-                ],
+            [
+                'attribute' => 'reason_id',
+                'value' => function (Payment $model) {
+                    return $model->reason->name;
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'reason_id', PaymentReason::selectList(['type_id' => PaymentReason::TYPE_INCOME]), ['class' => 'form-control', 'prompt' => 'Все']),
+            ],
 
-                [
-                    'attribute' => 'reason_id',
-                    'value' => function (Payment $model) {
-                        return $model->reason->name;
-                    },
-                    'filter' => Html::activeDropDownList($searchModel, 'reason_id', PaymentReason::selectList(['type_id' => PaymentReason::TYPE_INCOME]), ['class' => 'form-control', 'prompt' => 'Все']),
-                ],
+            [
+                'attribute' => 'comment',
+                'value' => function (Payment $model) {
+                    return $model->comment;
+                },
+                'filter' => ''
+            ],
 
-                [
-                    'attribute' => 'comment',
-                    'value' => function (Payment $model) {
-                        return $model->comment;
-                    },
-                    'filter' => ''
-                ],
-
-//            'currency_id',
-            //'client_id',
-            //'payment_type_id',
-            //'reason_id',
-            //'comment',
             [
                 'class' => ActionColumn::className(),
+                'template' => '{update} {delete}',
                 'urlCreator' => function ($action, Payment $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                }
             ],
         ],
     ]); ?>

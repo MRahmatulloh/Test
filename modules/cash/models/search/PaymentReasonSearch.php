@@ -18,7 +18,7 @@ class PaymentReasonSearch extends PaymentReason
     {
         return [
             [['id', 'type_id', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
-            [['name'], 'safe'],
+            [['name', 'myPageSize'], 'safe'],
         ];
     }
 
@@ -68,6 +68,7 @@ class PaymentReasonSearch extends PaymentReason
 
         $query->andFilterWhere(['like', 'name', $this->name]);
 
+        $dataProvider->pagination->pageSize = $this->myPageSize ?? 20;
         return $dataProvider;
     }
 }

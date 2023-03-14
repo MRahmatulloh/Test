@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\modules\cash\models\Payment $model */
 
-$this->title = 'Create Payment';
+$this->title = 'Принимать платежи';
 $this->params['breadcrumbs'][] = ['label' => 'Платежи', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

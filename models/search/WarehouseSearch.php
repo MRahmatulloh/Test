@@ -18,7 +18,7 @@ class WarehouseSearch extends Warehouse
     {
         return [
             [['id', 'status'], 'integer'],
-            [['name', 'address'], 'safe'],
+            [['name', 'address', 'myPageSize'], 'safe'],
         ];
     }
 
@@ -68,6 +68,7 @@ class WarehouseSearch extends Warehouse
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'address', $this->address]);
 
+        $dataProvider->pagination->pageSize = $this->myPageSize ?? 20;
         return $dataProvider;
     }
 }

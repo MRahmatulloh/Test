@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\CurrencyRates;
+use app\models\Movement;
 use app\models\Prixod;
 use app\models\PrixodGoods;
 use app\models\search\Filter;
@@ -141,7 +142,23 @@ class PrixodController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+
+        if (Movement::findOne(['prixod_id' => $id])){
+            Yii::$app->session->setFlash('error', Yii::t('app', 'Невозможно удалить приход, т.к. он связан с перемещением'));
+            return $this->redirect(['index']);
+        }
+
+        if($model->prixodGoods){
+            Yii::$app->session->setFlash('error', Yii::t('app', 'Невозможно удалить приход, так как в нем есть товары'));
+            return $this->redirect(['index']);
+        }
+
+        if ($model->delete()) {
+            Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно удалены'));
+        } else {
+            Yii::$app->session->setFlash('error', Yii::t('app', 'Произошла ошибка при удаления данных'));
+        }
 
         return $this->redirect(['index']);
     }

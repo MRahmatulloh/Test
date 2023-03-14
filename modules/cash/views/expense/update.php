@@ -5,8 +5,8 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\modules\cash\models\Expense $model */
 
-$this->title = 'Update Expense: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Expenses', 'url' => ['index']];
+$this->title = 'Обновление записи расхода ID: ' . $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Расходы', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>

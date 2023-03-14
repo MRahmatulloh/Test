@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\CurrencyRates;
+use app\models\Movement;
 use app\models\Rasxod;
 use app\models\RasxodGoods;
 use app\models\search\RasxodGoodsSearch;
@@ -139,7 +140,23 @@ class RasxodController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+
+        if (Movement::findOne(['rasxod_id' => $id])){
+            Yii::$app->session->setFlash('error', Yii::t('app', 'Невозможно удалить расход, т.к. он связан с перемещением'));
+            return $this->redirect(['index']);
+        }
+
+        if ($model->rasxodGoods){
+            Yii::$app->session->setFlash('error', Yii::t('app', 'Невозможно удалить расход, т.к. в нем есть товары'));
+            $this->redirect(['index']);
+        }
+
+        if ($model->delete()) {
+            Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно удалены'));
+        } else {
+            Yii::$app->session->setFlash('error', Yii::t('app', 'Произошла ошибка при удаления данных'));
+        }
 
         return $this->redirect(['index']);
     }

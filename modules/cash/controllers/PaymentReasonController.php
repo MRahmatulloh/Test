@@ -111,7 +111,14 @@ class PaymentReasonController extends Controller
      */
     public function actionDelete($id)
     {
-        if($this->findModel($id)->delete()){
+        $model = $this->findModel($id);
+
+        if ($model->expenses or $model->payments) {
+            Yii::$app->session->setFlash('error', Yii::t('app', 'Невозможно удалить данный элемент, т.к. он используется в других объектах'));
+            return $this->redirect(['index']);
+        }
+
+        if($model->delete()){
             Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно удалены'));
         } else {
             Yii::$app->session->setFlash('error', Yii::t('app', 'Произошла ошибка при удалении данных'));

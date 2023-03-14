@@ -23,7 +23,7 @@ class Menu extends MenuModel
     {
         return [
             [['id', 'parent', 'order'], 'integer'],
-            [['name', 'route', 'parent_name'], 'safe'],
+            [['name', 'route', 'parent_name', 'myPageSize'], 'safe'],
         ];
     }
 

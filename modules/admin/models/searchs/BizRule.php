@@ -25,7 +25,7 @@ class BizRule extends Model
     public function rules()
     {
         return [
-            [['name'], 'safe']
+            [['name', 'myPageSize'], 'safe']
         ];
     }
 

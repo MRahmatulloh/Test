@@ -23,7 +23,7 @@ class Assignment extends Model
     public function rules()
     {
         return [
-            [['id', 'username'], 'safe'],
+            [['id', 'username', 'myPageSize'], 'safe'],
         ];
     }
 

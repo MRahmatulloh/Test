@@ -1,5 +1,10 @@
 <?php
 
+use app\models\Client;
+use app\models\Currency;
+use app\modules\cash\models\PaymentReason;
+use kartik\date\DatePicker;
+use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -12,32 +17,63 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'date')->textInput() ?>
+    <div class="row d-block">
+        <div class="col-4">
+            <?=  $form->field($model, 'date')->widget(DatePicker::classname(), [
+                'type' => 3,
+                'pluginOptions' => [
+                    'autoclose' => true,
+                    'format' => 'dd.mm.yyyy',
+                ]
+            ]); ?>
+        </div>
+        <div class="col-4">
+            <?= $form->field($model, 'client_id')->widget(Select2::className(),[
+                'data' => Client::selectList(),
+                'options' => ['placeholder' => 'Выберите клиент ...'],
+                'pluginOptions' => [
+                    'allowClear' => true,
+                ],
+            ]) ?>
+        </div>
+        <div class="col-4">
+            <?= $form->field($model, 'summa')->textInput(['maxlength' => true]) ?>
+        </div>
+        <div class="col-4">
+            <?= $form->field($model, 'currency_id')->widget(Select2::className(),[
+                'data' => Currency::selectList(),
+                'options' => ['placeholder' => 'Выберите валюты ...'],
+                'pluginOptions' => [
+                    'allowClear' => true
+                ],
+            ]) ?>
+        </div>
+        <div class="col-4">
+            <?= $form->field($model, 'payment_type_id')->widget(Select2::className(),[
+                'data' => $model::PAYMENT_TYPES,
+                'options' => ['placeholder' => 'Выберите ...'],
+                'pluginOptions' => [
+                    'allowClear' => true
+                ],
+            ]) ?>
+        </div>
+        <div class="col-4">
+            <?= $form->field($model, 'reason_id')->widget(Select2::className(),[
+                'data' => PaymentReason::selectList(['type_id' => PaymentReason::TYPE_INCOME]),
+                'options' => ['placeholder' => 'Выберите ...'],
+                'pluginOptions' => [
+                    'allowClear' => true
+                ],
+            ]) ?>
+        </div>
+        <div class="col-4">
+            <?= $form->field($model, 'comment')->textarea(['maxlength' => true, 'rows' => 2]) ?>
+        </div>
 
-    <?= $form->field($model, 'summa')->textInput() ?>
-
-    <?= $form->field($model, 'summa_usd')->textInput() ?>
-
-    <?= $form->field($model, 'currency_id')->textInput() ?>
-
-    <?= $form->field($model, 'client_id')->textInput() ?>
-
-    <?= $form->field($model, 'payment_type_id')->textInput() ?>
-
-    <?= $form->field($model, 'reason_id')->textInput() ?>
-
-    <?= $form->field($model, 'comment')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'created_by')->textInput() ?>
-
-    <?= $form->field($model, 'updated_by')->textInput() ?>
-
-    <?= $form->field($model, 'created_at')->textInput() ?>
-
-    <?= $form->field($model, 'updated_at')->textInput() ?>
+    </div>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
