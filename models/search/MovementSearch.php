@@ -18,7 +18,7 @@ class MovementSearch extends Movement
     {
         return [
             [['id', 'sender_id', 'recipient_id', 'prixod_id', 'rasxod_id', 'status', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
-            [['date', 'number', 'comment'], 'safe'],
+            [['date', 'number', 'comment', 'myPageSize'], 'safe'],
         ];
     }
 
@@ -75,6 +75,7 @@ class MovementSearch extends Movement
         $query->andFilterWhere(['like', 'number', $this->number])
             ->andFilterWhere(['like', 'comment', $this->comment]);
 
+        $dataProvider->pagination->pageSize = $this->myPageSize ?? 20;
         return $dataProvider;
     }
 }

@@ -18,7 +18,7 @@ class GoodsSearch extends Goods
     {
         return [
             [['id', 'category_id', 'status'], 'integer'],
-            [['name', 'code', 'img'], 'safe'],
+            [['name', 'code', 'img', 'myPageSize'], 'safe'],
         ];
     }
 
@@ -70,6 +70,7 @@ class GoodsSearch extends Goods
             ->andFilterWhere(['like', 'code', $this->code])
             ->andFilterWhere(['like', 'img', $this->img]);
 
+        $dataProvider->pagination->pageSize = $this->myPageSize ?? 20;
         return $dataProvider;
     }
 }

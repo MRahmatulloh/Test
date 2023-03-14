@@ -18,7 +18,7 @@ class CurrencySearch extends Currency
     {
         return [
             [['id', 'status'], 'integer'],
-            [['name', 'code'], 'safe'],
+            [['name', 'code', 'myPageSize'], 'safe'],
         ];
     }
 
@@ -68,6 +68,7 @@ class CurrencySearch extends Currency
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'code', $this->code]);
 
+        $dataProvider->pagination->pageSize = $this->myPageSize ?? 20;
         return $dataProvider;
     }
 }

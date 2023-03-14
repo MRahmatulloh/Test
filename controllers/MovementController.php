@@ -205,6 +205,11 @@ class MovementController extends Controller
     {
         $model = $this->findModel($id);
 
+        if($model->movementGoods){
+            Yii::$app->session->setFlash('error', Yii::t('app', 'Невозможно удалить перемещение, так как в нем есть товары'));
+            return $this->redirect(['index']);
+        }
+
         if ($model->delete()) {
             Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно удалены'));
         } else {

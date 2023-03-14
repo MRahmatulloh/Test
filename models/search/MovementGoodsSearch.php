@@ -26,7 +26,7 @@ class MovementGoodsSearch extends MovementGoods
             [['id', 'movement_id', 'goods_id', 'currency_id', 'rasxod_goods_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['amount', 'cost', 'cost_return'], 'number'],
             [['client_name'], 'string'],
-            [['from', 'to'], 'safe']
+            [['from', 'to', 'myPageSize'], 'safe']
         ];
     }
 
@@ -98,6 +98,7 @@ class MovementGoodsSearch extends MovementGoods
             'updated_at' => $this->updated_at,
         ]);
 
+        $dataProvider->pagination->pageSize = $this->myPageSize ?? 20;
         return $dataProvider;
     }
 }

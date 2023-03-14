@@ -41,7 +41,7 @@ class AppAsset extends AssetBundle
         "css/colors/default.css"
     ];
     public $js = [
-        "js/jquery1-3.4.1.min.js",
+//        "js/jquery1-3.4.1.min.js",
         "js/popper1.min.js",
         "js/bootstrap1.min.js",
         "js/metisMenu.js",
@@ -79,11 +79,11 @@ class AppAsset extends AssetBundle
         "vendors/chart_am/animated.js",
         "vendors/chart_am/kelly.js",
         "vendors/chart_am/chart-custom.js",
-        "js/dashboard_init.js",
+//        "js/dashboard_init.js",
         "js/custom.js",
     ];
     public $depends = [
-//        'yii\web\YiiAsset',
-//        'yii\bootstrap5\BootstrapAsset',
+        'yii\web\YiiAsset',
+        'yii\bootstrap5\BootstrapAsset',
     ];
 }

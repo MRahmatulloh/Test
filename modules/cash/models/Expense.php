@@ -1,8 +1,11 @@
 <?php
 
-namespace app\models;
+namespace app\modules\cash\models;
 
-use Yii;
+use app\models\Client;
+use app\models\Currency;
+use app\models\MyModel;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "expense".
@@ -14,7 +17,7 @@ use Yii;
  * @property int $currency_id
  * @property int $client_id
  * @property int $payment_type_id
- * @property int $type_id
+ * @property int $reason_id
  * @property string|null $comment
  * @property int|null $created_by
  * @property int|null $updated_by
@@ -23,9 +26,16 @@ use Yii;
  *
  * @property Client $client
  * @property Currency $currency
+ * @property PaymentReason $reason
  */
 class Expense extends MyModel
 {
+    public const PAYMENT_TYPES = [
+        1 => 'Наличные',
+        2 => 'Перечисление',
+        3 => 'Пластик',
+    ];
+
     /**
      * {@inheritdoc}
      */
@@ -35,18 +45,29 @@ class Expense extends MyModel
     }
 
     /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['date', 'summa', 'currency_id', 'client_id', 'payment_type_id', 'type_id', 'created_at', 'updated_at'], 'required'],
-            [['date'], 'safe'],
+            [['date', 'summa', 'currency_id', 'client_id', 'payment_type_id', 'reason_id'], 'required'],
+            [['date', 'myPageSize'], 'safe'],
             [['summa', 'summa_usd'], 'number'],
-            [['currency_id', 'client_id', 'payment_type_id', 'type_id', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
+            [['currency_id', 'client_id', 'payment_type_id', 'reason_id', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
             [['comment'], 'string', 'max' => 255],
             [['client_id'], 'exist', 'skipOnError' => true, 'targetClass' => Client::class, 'targetAttribute' => ['client_id' => 'id']],
             [['currency_id'], 'exist', 'skipOnError' => true, 'targetClass' => Currency::class, 'targetAttribute' => ['currency_id' => 'id']],
+            [['reason_id'], 'exist', 'skipOnError' => true, 'targetClass' => PaymentReason::class, 'targetAttribute' => ['reason_id' => 'id']],
         ];
     }
 
@@ -57,14 +78,14 @@ class Expense extends MyModel
     {
         return [
             'id' => 'ID',
-            'date' => 'Date',
-            'summa' => 'Summa',
-            'summa_usd' => 'Summa Usd',
-            'currency_id' => 'Currency ID',
-            'client_id' => 'Client ID',
-            'payment_type_id' => 'Payment Type ID',
-            'type_id' => 'Type ID',
-            'comment' => 'Comment',
+            'date' => 'Дата',
+            'summa' => 'Сумма',
+            'summa_usd' => 'Сумма в USD',
+            'currency_id' => 'Валюта',
+            'client_id' => 'Клиент',
+            'payment_type_id' => 'Тип платежа',
+            'reason_id' => 'Причина',
+            'comment' => 'Комментарий',
             'created_by' => 'Created By',
             'updated_by' => 'Updated By',
             'created_at' => 'Created At',
@@ -90,5 +111,15 @@ class Expense extends MyModel
     public function getCurrency()
     {
         return $this->hasOne(Currency::class, ['id' => 'currency_id']);
+    }
+
+    /**
+     * Gets query for [[Reason]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getReason()
+    {
+        return $this->hasOne(PaymentReason::class, ['id' => 'reason_id']);
     }
 }

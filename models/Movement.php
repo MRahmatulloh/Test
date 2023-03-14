@@ -72,7 +72,7 @@ class Movement extends MyModel
     {
         return [
             [['date', 'number', 'sender_id', 'recipient_id', 'warehouse_id'], 'required'],
-            [['date'], 'safe'],
+            [['date', 'myPageSize'], 'safe'],
             [['sender_id', 'recipient_id', 'prixod_id', 'rasxod_id', 'status', 'created_by',
                 'updated_by', 'created_at', 'updated_at', 'warehouse_id'], 'integer'],
             [['number', 'comment'], 'string', 'max' => 255],

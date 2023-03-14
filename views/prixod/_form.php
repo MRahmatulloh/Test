@@ -35,7 +35,6 @@ AppAsset::register($this);
                 'options' => ['placeholder' => 'Выберите клиент ...'],
                 'pluginOptions' => [
                     'allowClear' => true,
-                    'disabled' => (bool)$model->prixodGoods
                 ],
             ]) ?>
         </div>

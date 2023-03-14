@@ -1,5 +1,7 @@
 <?php
 
+use yii\symfonymailer\Mailer;
+
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
@@ -16,7 +18,10 @@ $config = [
         'admin' => [
             'class' => 'mdm\admin\Module',
 //            'layout' => 'left-menu',
-        ]
+        ],
+        'cash' => [
+            'class' => 'app\modules\cash\Module',
+        ],
     ],
     'components' => [
         'request' => [
@@ -38,7 +43,7 @@ $config = [
             'errorAction' => 'site/error',
         ],
         'mailer' => [
-            'class' => \yii\symfonymailer\Mailer::class,
+            'class' => Mailer::class,
             'viewPath' => '@app/mail',
             // send all mails to a file by default.
             'useFileTransport' => true,

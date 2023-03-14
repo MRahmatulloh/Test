@@ -4,9 +4,11 @@ namespace app\models;
 
 use Yii;
 use yii\base\InvalidConfigException;
+use yii\db\ActiveRecord;
 
-class MyModel extends \yii\db\ActiveRecord
+class MyModel extends ActiveRecord
 {
+    public $myPageSize;
     /**
      * @throws InvalidConfigException
      */

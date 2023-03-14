@@ -19,7 +19,7 @@ class CurrencyRatesSearch extends CurrencyRates
         return [
             [['id', 'code', 'created_at', 'updated_at'], 'integer'],
             [['rate'], 'number'],
-            [['date'], 'safe'],
+            [['date', 'myPageSize'], 'safe'],
         ];
     }
 
@@ -69,6 +69,7 @@ class CurrencyRatesSearch extends CurrencyRates
             'updated_at' => $this->updated_at,
         ]);
 
+        $dataProvider->pagination->pageSize = $this->myPageSize ?? 20;
         return $dataProvider;
     }
 }

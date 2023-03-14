@@ -132,7 +132,7 @@ class PrixodGoodsController extends Controller
             $free = $all_amount - $used;
 
             if (($free + $old_amount ) < $curr_amount){
-                Yii::$app->session->setFlash('error', 'Превишен количество товара ' . $model->goods->name  . ' от расхода № '. $model->rasxodGoods->rasxod->number .', доступное количество: ' . ($free + $old_amount));
+                Yii::$app->session->setFlash('error', 'Превишен количество товара ' . $model->goods->name  . ' от расхода № '. $model->rasxodedGoods->rasxod->number .', доступное количество: ' . ($free + $old_amount));
                 return $this->redirect(Yii::$app->request->referrer);
             }
 

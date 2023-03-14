@@ -38,7 +38,7 @@ class PrixodGoodsSearch extends PrixodGoods
                 'client_id'], 'integer'],
             [['amount', 'cost', 'cost_usd'], 'number'],
             [['client_name'], 'string'],
-            [['from', 'to'], 'safe']
+            [['from', 'to', 'myPageSize'], 'safe']
         ];
     }
 
@@ -99,6 +99,7 @@ class PrixodGoodsSearch extends PrixodGoods
 
         $query->andFilterWhere(['like', 'c.name', $this->client_name]);
 
+        $dataProvider->pagination->pageSize = $this->myPageSize ?? 20;
         return $dataProvider;
     }
     
@@ -144,6 +145,7 @@ class PrixodGoodsSearch extends PrixodGoods
 
         $query->andFilterWhere(['like', 'c.name', $this->client_name]);
 
+        $dataProvider->pagination->pageSize = $this->myPageSize ?? 20;
         return $dataProvider;
     }
 
@@ -189,6 +191,7 @@ class PrixodGoodsSearch extends PrixodGoods
 
         $query->andFilterWhere(['like', 'c.name', $this->client_name]);
 
+        $dataProvider->pagination->pageSize = $this->myPageSize ?? 20;
         return $dataProvider;
     }
 }

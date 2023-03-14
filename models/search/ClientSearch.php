@@ -18,7 +18,7 @@ class ClientSearch extends Client
     {
         return [
             [['id', 'status'], 'integer'],
-            [['name', 'address', 'tel'], 'safe'],
+            [['name', 'address', 'tel', 'myPageSize'], 'safe'],
         ];
     }
 
@@ -69,6 +69,7 @@ class ClientSearch extends Client
             ->andFilterWhere(['like', 'address', $this->address])
             ->andFilterWhere(['like', 'tel', $this->tel]);
 
+        $dataProvider->pagination->pageSize = $this->myPageSize ?? 20;
         return $dataProvider;
     }
 }
