@@ -206,7 +206,7 @@ class PrixodController extends Controller
         $searchModel->from = date('Y-01-01');
         $searchModel->to = date('Y-m-d');
 
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider = $searchModel->searchByGoods($this->request->queryParams);
 
         $searchModel->from = dateView($searchModel->from);
         $searchModel->to = dateView($searchModel->to);

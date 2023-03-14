@@ -47,3 +47,6 @@ tests/_support/_generated
 
 # command for removing htacces files from git
 # git rm --cached .htaccess
+
+# for goods img files
+/web/img/goods/
