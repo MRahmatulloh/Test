@@ -80,6 +80,42 @@ class PrixodGoodsSearch extends PrixodGoods
 
         $this->load($params);
 
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        $query->andFilterWhere([
+            'prixod_id' => $this->prixod_id,
+            'goods_id' => $this->goods_id,
+            'currency_id' => $this->currency_id,
+            'amount' => $this->amount,
+            'cost' => $this->cost,
+            'cost_usd' => $this->cost_usd,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+        ]);
+
+        $query->andFilterWhere(['like', 'c.name', $this->client_name]);
+
+        return $dataProvider;
+    }
+    
+    public function searchByGoods($params)
+    {
+        $query = PrixodGoods::find()
+            ->joinWith(['prixod p', 'prixod.client c'])
+            ->orderBy(['p.date' => SORT_DESC, 'p.id' => SORT_DESC]);
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
         if (!$this->to)
             $this->to = date('Y-m-d');
         if (!$this->from)
