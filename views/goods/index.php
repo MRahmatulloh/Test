@@ -35,7 +35,7 @@ AppAsset::register($this);
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'layout' => '{summary}' . Html::activeDropDownList($searchModel, 'myPageSize', [20 => 20, 50 => 50, 100 => 100, 300 => 300, 500 => 500], ['id' => 'myPageSize', 'class' => 'dropdown-menu']) . "{items}<br/>{pager}",
+        'layout' => '{summary}' . Html::activeDropDownList($searchModel, 'myPageSize', [20 => 20, 50 => 50, 100 => 100, 300 => 300, 500 => 500], ['id' => 'myPageSize']) . "{items}<br/>{pager}",
         'filterModel' => $searchModel,
         'filterSelector' => '#myPageSize',
         'columns' => [
