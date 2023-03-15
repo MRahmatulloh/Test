@@ -5,6 +5,7 @@ use app\models\Currency;
 use app\modules\cash\models\PaymentReason;
 use kartik\date\DatePicker;
 use kartik\select2\Select2;
+use yii\bootstrap4\Modal;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -58,13 +59,24 @@ use yii\widgets\ActiveForm;
             ]) ?>
         </div>
         <div class="col-4">
-            <?= $form->field($model, 'reason_id')->widget(Select2::className(),[
-                'data' => PaymentReason::selectList(['type_id' => PaymentReason::TYPE_EXPENSE]),
-                'options' => ['placeholder' => 'Выберите ...'],
-                'pluginOptions' => [
-                    'allowClear' => true
-                ],
-            ]) ?>
+            <div class="row">
+                <div class="col-11">
+                    <?= $form->field($model, 'reason_id')->widget(Select2::className(), [
+                        'data' => PaymentReason::selectList(['type_id' => PaymentReason::TYPE_EXPENSE]),
+                        'options' => ['placeholder' => 'Выберите ...'],
+                        'pluginOptions' => [
+                            'allowClear' => true,
+                            'class' => 'form-control w-100',
+                        ],
+                    ]) ?>
+                </div>
+                <div class="col-1">
+                    <h6> </h6>
+                    <div class="input-group-append" id="modalButton">
+                        <span class="input-group-text form-control bg-primary"> <i class='fas fa-plus'></i> </span>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-4">
             <?= $form->field($model, 'comment')->textarea(['maxlength' => true, 'rows' => 2]) ?>
@@ -79,3 +91,26 @@ use yii\widgets\ActiveForm;
     <?php ActiveForm::end(); ?>
 
 </div>
+
+<?php
+Modal::begin([
+    'title' => 'Цель платежа',
+    'id' => 'modal',
+    'size' => 'modal-lg',
+]);
+echo "<div id='modalContent'></div>";
+Modal::end();
+?>
+
+<?php
+
+$js = <<<JS
+    $(document).on('click', '#modalButton', function() {
+        $('#modal').modal('show')
+            .find('#modalContent')
+            .load('/cash/payment-reason/create-ajax');
+    });
+JS;
+
+$this->registerJs($js);
+?>

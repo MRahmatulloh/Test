@@ -15,6 +15,8 @@ use yii\grid\GridView;
 $this->title = 'Курс валюты';
 $this->params['breadcrumbs'][] = $this->title;
 AppAsset::register($this);
+$this->registerJsFile('/js/chart/highcharts.min.js');
+$this->registerJsFile('/js/chart/highcharts-more.min.js');
 ?>
 
 <div class="kurs-index">
@@ -28,6 +30,12 @@ AppAsset::register($this);
                 <?= Html::a("<i class='fas fa-arrow-circle-down white_text'></i> " . 'Обновление', ['update-kurs'], ['class' => 'btn btn-primary']) ?>
                 <?= Html::a("<i class='fas fa-plus white_text'></i> " . ' Новое', ['create'], ['class' => 'btn btn-success']) ?>
             </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div id="currencyChart"></div>
         </div>
     </div>
 
@@ -66,7 +74,7 @@ AppAsset::register($this);
                 'buttons' => [
 
                     'update' => function ($url, $model) {
-                        return \yii\helpers\Html::a(
+                        return Html::a(
                             ' <span class="fas fa-edit"> </span> ',
                             $url
                         );
@@ -90,5 +98,52 @@ AppAsset::register($this);
         ],
     ]); ?>
 
-
 </div>
+
+<?php
+$rates = json_encode(array_column($chartData, 'rate'));
+$dates = json_encode(array_column($chartData, 'date'));
+
+$js = <<<JS
+    let rates = {$rates};
+    let dates = {$dates};
+        var options = {
+          series: [{
+            name: "Desktops",
+            data: rates
+        }],
+          chart: {
+          height: 300,
+          type: 'line',
+          zoom: {
+            enabled: false
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'straight'
+        },
+        title: {
+          text: 'Курс валюты за текущий месяц',
+          align: 'left'
+        },
+        grid: {
+          row: {
+            colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+            opacity: 0.5
+          }
+        },
+        xaxis: {
+          categories: dates
+        }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#currencyChart"), options);
+        chart.render();
+
+JS;
+
+$this->registerJs($js);
+?>

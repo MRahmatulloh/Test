@@ -43,9 +43,12 @@ class CurrencyRatesController extends Controller
         $searchModel = new CurrencyRatesSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
+        $chartData = CurrencyRates::getChartData();
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'chartData' => $chartData,
         ]);
     }
 

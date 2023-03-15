@@ -1,12 +1,12 @@
 <?php
 
+use app\models\Currency;
 use yii\helpers\Html;
 
 /** @var yii\web\View $this */
-/** @var app\models\Kurs $model */
-/** @var array $moneyList */
+/** @var app\models\CurrencyRates $model */
 
-$this->title = 'Обновление: ' . $moneyList[$model->kod] .' на '. dateView($model->date);
+$this->title = 'Обновление: ' . Currency::selectListByCode()[$model->code] .' на '. dateView($model->date);
 $this->params['breadcrumbs'][] = ['label' => 'Kurs', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';

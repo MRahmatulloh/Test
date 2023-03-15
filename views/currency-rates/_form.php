@@ -1,12 +1,14 @@
 <?php
 
 use app\assets\AppAsset;
+use app\models\Currency;
 use kartik\date\DatePicker;
+use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var app\models\Kurs $model */
+/** @var app\models\CurrencyRates $model */
 /** @var yii\widgets\ActiveForm $form */
 AppAsset::register($this);
 ?>
@@ -26,8 +28,8 @@ AppAsset::register($this);
             ]); ?>
         </div>
         <div class="col-4">
-            <?= $form->field($model, 'code')->widget(\kartik\select2\Select2::className(),[
-                'data' => \app\models\Currency::selectListByCode(),
+            <?= $form->field($model, 'code')->widget(Select2::className(),[
+                'data' => Currency::selectListByCode(),
                 'options' => ['placeholder' => 'Выберите валюты ...'],
                 'pluginOptions' => [
                     'allowClear' => true

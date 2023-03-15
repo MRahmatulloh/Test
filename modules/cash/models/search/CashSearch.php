@@ -37,7 +37,7 @@ class CashSearch extends MyModel
             'client_id' => 'Клиент',
             'client_name' => 'Клиент',
             'payment_type_id' => 'Тип платежа',
-            'reason_id' => 'Причина',
+            'reason_id' => 'Цель платежа',
             'comment' => 'Комментарий'
         ];
     }

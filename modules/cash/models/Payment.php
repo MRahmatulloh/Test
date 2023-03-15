@@ -83,7 +83,7 @@ class Payment extends MyModel
             'currency_id' => 'Валюта',
             'client_id' => 'Клиент',
             'payment_type_id' => 'Тип платежа',
-            'reason_id' => 'Причина',
+            'reason_id' => 'Цель платежа',
             'comment' => 'Комментарий',
             'created_by' => 'Created By',
             'updated_by' => 'Updated By',

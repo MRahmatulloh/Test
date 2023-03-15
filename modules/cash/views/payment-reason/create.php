@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\modules\cash\models\PaymentReason $model */
 
-$this->title = 'Create Payment Reason';
+$this->title = 'Назначение платежа';
 $this->params['breadcrumbs'][] = ['label' => 'Причины оплаты', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

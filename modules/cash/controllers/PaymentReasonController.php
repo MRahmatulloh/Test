@@ -76,6 +76,27 @@ class PaymentReasonController extends Controller
         ]);
     }
 
+    public function actionCreateAjax()
+    {
+        $model = new PaymentReason();
+
+        if ($this->request->isPost) {
+            if ($model->load($this->request->post())) {
+                $model->created_by = Yii::$app->user->identity->id;
+                if ($model->save()) {
+                    Yii::$app->session->setFlash('success', Yii::t('app', 'Данные успешно сохранены'));
+                    return $this->redirect(Yii::$app->request->referrer);
+                } else {
+                    Yii::$app->session->setFlash('error', Yii::t('app', 'Произошла ошибка при сохранении данных'));
+                }
+            }
+        }
+
+        return $this->renderAjax('_form_ajax', [
+            'model' => $model,
+        ]);
+    }
+
     /**
      * Updates an existing PaymentReason model.
      * If update is successful, the browser will be redirected to the 'view' page.

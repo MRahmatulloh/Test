@@ -103,4 +103,15 @@ class CurrencyRates extends MyModel
             return ($amount * ($given_curr_rate->rate ?? 1)) / ($usd_rate->rate ?? 1);
         }
     }
+
+    public static function getChartData(){
+        return self::find()
+            ->select(['date', 'rate'])
+            ->where(['code' => 840])
+            ->andWhere(['>=', 'date', date('Y-m-01')])
+            ->andWhere(['<=', 'date', date('Y-m-d')])
+            ->orderBy(['date' => SORT_ASC])
+            ->asArray()
+            ->all();
+    }
 }
