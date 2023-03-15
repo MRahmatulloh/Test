@@ -109,7 +109,7 @@ $js = <<<JS
     let dates = {$dates};
         var options = {
           series: [{
-            name: "Desktops",
+            name: "Значение",
             data: rates
         }],
           chart: {
