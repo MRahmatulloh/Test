@@ -239,4 +239,9 @@ class User extends ActiveRecord implements IdentityInterface
     public static function selectList(){
         return ArrayHelper::map(self::find()->asArray()->all(),'id','fio');
     }
+
+    public function can($permission)
+    {
+        return Yii::$app->user->can($permission) || Yii::$app->user->can('Administrator');
+    }
 }

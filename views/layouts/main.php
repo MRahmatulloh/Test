@@ -157,24 +157,26 @@ AppAsset::register($this);
             </ul>
         </li>
 
-        <li class="">
-            <a class="has-arrow" href="#" aria-expanded="false">
-                <div class="nav_icon_small">
-                    <img src="/img/menu-icon/18.svg" alt="">
-                </div>
-                <div class="nav_title">
-                    <span>RBAC</span>
-                </div>
-            </a>
-            <ul>
-                <li><a href="/admin/user">Пользователи</a></li>
-                <li><a href="/admin/assignment">Назначения</a></li>
-                <li><a href="/admin/role">Роли</a></li>
-                <li><a href="/admin/route">Роуты</a></li>
-                <li><a href="/admin/rule">Правилы</a></li>
-                <li><a href="/admin/permission">Разрешения</a></li>
-            </ul>
-        </li>
+        <?php if (!Yii::$app->user->isGuest && Yii::$app->user->identity->can('Administrator')): ?>
+            <li class="">
+                <a class="has-arrow" href="#" aria-expanded="false">
+                    <div class="nav_icon_small">
+                        <img src="/img/menu-icon/18.svg" alt="">
+                    </div>
+                    <div class="nav_title">
+                        <span>RBAC</span>
+                    </div>
+                </a>
+                <ul>
+                    <li><a href="/admin/user">Пользователи</a></li>
+                    <li><a href="/admin/assignment">Назначения</a></li>
+                    <li><a href="/admin/role">Роли</a></li>
+                    <li><a href="/admin/route">Роуты</a></li>
+                    <li><a href="/admin/rule">Правилы</a></li>
+                    <li><a href="/admin/permission">Разрешения</a></li>
+                </ul>
+            </li>
+        <?php endif; ?>
     </ul>
 </nav>
 
