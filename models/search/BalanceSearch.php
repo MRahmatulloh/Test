@@ -17,6 +17,7 @@ class BalanceSearch extends MyModel
     public $warehouse_id;
     public $warehouse_name;
     public $ostatok;
+    public $myPageSize;
 
     /**
      * {@inheritdoc}

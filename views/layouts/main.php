@@ -44,7 +44,7 @@ AppAsset::register($this);
             <ul>
                 <li><a href="index_2.html">Дашбоард</a></li>
                 <li><a href="index_3.html">Наценка товаров</a></li>
-                <li><a href="/dolg">Долг клиентов</a></li>
+                <li><a href="/debt-analysis">Долг клиентов</a></li>
                 <li><a href="/commodity-circulation">Товарооборот</a></li>
             </ul>
         </li>
@@ -59,7 +59,7 @@ AppAsset::register($this);
             </a>
             <ul>
                 <li><a href="/cash/cash">Касса</a></li>
-                <li><a href="/cash/payment">Оплаты</a></li>
+                <li><a href="/cash/payment">Платежи</a></li>
                 <li><a href="/cash/expense">Расходы</a></li>
             </ul>
         </li>
