@@ -45,7 +45,6 @@ AppAsset::register($this);
                 <li><a href="index_2.html">Дашбоард</a></li>
                 <li><a href="index_3.html">Наценка товаров</a></li>
                 <li><a href="/debt-analysis">Долг клиентов</a></li>
-                <li><a href="/commodity-circulation">Товарооборот</a></li>
             </ul>
         </li>
         <li class="">

@@ -59,6 +59,8 @@ class PaymentReason extends MyModel
             [['type_id'], 'required'],
             [['type_id', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
             [['name'], 'string', 'max' => 255],
+            [['name'], 'unique'],
+            [['type_id'], 'in', 'range' => array_keys(self::TYPES)],
         ];
     }
 
