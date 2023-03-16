@@ -339,4 +339,106 @@ class RasxodController extends Controller
         }
         echo "okey brat";
     }
+
+    public function actionPrintCount($id)
+    {
+        $rasxod = $this::findModel($id);
+        $path = 'files/templates/';
+
+        if (!empty($rasxod)) {
+            $file = 'talabnoma_bez_summi.docx';
+            $template = new TemplateProcessor( $path . $file);
+
+            $variable = 'number';
+            $value = $rasxod->number;
+            $template->setValue($variable, $value);
+
+            $variable = 'date';
+            $value = dateView($rasxod->date);
+            $template->setValue($variable, $value);
+
+            $variable = 'client';
+            $value = $rasxod->client->name;
+            $value = str_replace('&', '&amp;', $value);
+            $template->setValue($variable, $value);
+
+            $variable = 'clientLocal';
+            $value = 'ООО «EASY MARKET»';
+            $value = str_replace('&', '&amp;', $value);
+            $template->setValue($variable, $value);
+
+            $variable = 'warehouse';
+            $value = $rasxod->warehouse->name;
+            $template->setValue($variable, $value);
+
+            $result = $rasxod->rasxodGoods;
+
+            // tovar degan shablon bor satrni nusxalash
+            $template->cloneRow('tovar', count($result));
+            $k = 1;
+            $summa = 0;
+            $summa_amount = 0;
+            /** @var $tovar RasxodGoods */
+            foreach ($result as $tovar) {
+
+                $kk = $tovar->amount * $tovar->cost;
+                $summa += $kk;
+                $summa_amount += $tovar->amount;
+
+                $variable = 'n#' . $k;
+                $value = $k;
+                $template->setValue($variable, $value);
+
+                $variable = 'tovar#' . $k;
+                $value = $tovar->goods->code . '-' . $tovar->goods->name;
+                $value = str_replace("&", " ", $value);
+                $template->setValue($variable, $value);
+
+                $variable = 'u#' . $k;
+                $value = 'шт.';
+                $template->setValue($variable, $value);
+
+                $variable = 'amount#' . $k;
+                $value = pul2($tovar->amount, 2);
+                $template->setValue($variable, $value);
+
+                $variable = 'cost#' . $k;
+                $value = pul2($tovar->cost, 2);
+                $template->setValue($variable, $value);
+
+                $variable = 'money#' . $k;
+                $value = $tovar->currency->name;
+                $template->setValue($variable, $value);
+
+                $variable = 'summa#' . $k;
+                $value = pul2($kk, 2);
+                $template->setValue($variable, $value);
+
+                $k++;
+            }
+
+            $variable = 'amo_total';
+            $value = pul2($summa_amount, 2);
+            $template->setValue($variable, $value);
+
+            $variable = 'sum_total';
+            $value = pul2($summa, 2);
+            $template->setValue($variable, $value);
+
+            $date = str_replace("-", "_", DateBase($rasxod->date));
+            $number = str_replace("/", "_", $rasxod->number);
+            $path .= $date . '_' . $number . '_' . 'nakladnoy.docx';
+
+            $template->saveAs($path);
+            $real_file = \Yii::getAlias('@webroot') . '/' . $path;
+
+            $resp = \Yii::$app->response->sendFile($real_file);
+
+            if (fileExists($real_file))
+                unlink($real_file);
+
+            return $resp;
+        }
+        echo "okey brat";
+    }
 }

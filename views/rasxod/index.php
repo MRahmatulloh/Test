@@ -111,12 +111,19 @@ AppAsset::register($this);
 
             [
                 'class' => ActionColumn::className(),
-                'template' => '{print} {update} {delete}',
+                'template' => '{print} {print-count} {update} {delete}',
                 'buttons' => [
 
                     'print' => function ($url, $model) {
                         return Html::a(
-                            ' <span class="fas fa-clipboard-check"> </span> ',
+                            ' <span class="fas fa-envelope-open-text"> </span> ',
+                            $url
+                        );
+                    },
+
+                    'print-count' => function ($url, $model) {
+                        return Html::a(
+                            ' <span class="fas fa-envelope-open"> </span> ',
                             $url
                         );
                     },
