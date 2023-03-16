@@ -5,6 +5,7 @@ use app\models\Category;
 use app\models\Goods;
 use app\models\Warehouse;
 use kartik\select2\Select2;
+use yii\bootstrap5\Modal;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
@@ -37,18 +38,16 @@ AppAsset::register($this);
             ['class' => 'yii\grid\SerialColumn'],
 
             [
-                'label' => 'Фото товара',
-                'format' => 'raw',
-                'value' => function($data){
-                    return Html::img('@web'.'/img/goods/' . $data['goods_img'], ['class' => 'img-fluid', 'width' => '80px']);
-                }
-            ],
-
-            [
                 'label' => 'Товар',
                 'attribute' => 'goods_id',
-                'value' => function ($data) {
-                    return $data['goods_code'] . ' - ' . $data['goods_name'];
+                'format' => 'raw',
+                'value' => function($data){
+                    return Html::a($data['goods_code'] . ' - ' . $data['goods_name'], '#', [
+                        'title' => 'Просмотр товара',
+                        'data-url' => '/img/goods/' . $data['goods_img'],
+                        'data-pjax' => '0',
+                        'class' => 'modalButton'
+                    ]);
                 },
                 'filter' => Select2::widget([
                     'model' => $searchModel,
@@ -113,3 +112,28 @@ AppAsset::register($this);
     ]); ?>
 
 </div>
+
+<?php
+Modal::begin([
+    'title' => 'Фото товара',
+    'id' => 'modal',
+    'size' => 'modal-lg',
+]);
+echo "<div id='modalContent' style='width: min-content!important;'><img src='' alt='Нет фото товара' id='image' width='500px'></div>";
+Modal::end();
+?>
+
+<?php
+
+$js = <<<JS
+
+    $(document).on('click', '.modalButton', function() {
+        $('#image').attr('src', $(this).data('url'));
+        
+        $('#modal').modal('show');
+    });
+
+JS;
+
+$this->registerJs($js);
+?>

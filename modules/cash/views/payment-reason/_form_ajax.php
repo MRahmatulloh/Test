@@ -14,10 +14,10 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
 
     <div class="row d-block">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-12">
             <?= $form->field($model, 'type_id')->widget(Select2::className(), [
                 'data' => $model::TYPES,
                 'options' => ['placeholder' => 'Выберите ...'],
