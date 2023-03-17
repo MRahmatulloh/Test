@@ -1,9 +1,12 @@
 <?php
 
 use app\assets\AppAsset;
+use app\models\Client;
+use app\models\Goods;
 use app\models\PrixodGoods;
 use app\models\RasxodGoods;
 use kartik\select2\Select2;
+use yii\bootstrap5\Modal;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\helpers\Html;
@@ -52,23 +55,20 @@ AppAsset::register($this);
             ],
 
             [
-                'label' => 'Фото товара',
-                'format' => 'raw',
-                'value' => function ($model) {
-                    /** @var $model RasxodGoods */
-                    return Html::img('@web' . '/img/goods/' . $model->goods->img, ['class' => 'img-fluid', 'width' => '80px']);
-                }
-            ],
-
-            [
                 'attribute' => 'goods_id',
-                'value' => function ($data) {
-                    return $data->goods->code . '-' . $data->goods->name;
+                'format' => 'raw',
+                'value' => function($model){
+                    return Html::a($model->goods->code .'-'.$model->goods->name, '#', [
+                        'title' => 'Просмотр товара',
+                        'data-url' => '/img/goods/' . $model->goods->img,
+                        'data-pjax' => '0',
+                        'class' => 'modalButton'
+                    ]);
                 },
                 'filter' => Select2::widget([
                     'model' => $searchModel,
                     'attribute' => 'goods_id',
-                    'data' => \app\models\Goods::selectList(),
+                    'data' => Goods::selectList(),
                     'initValueText' => $searchModel->goods_id,
                     'options' => ['placeholder' => 'Выберите товар ...'],
                     'pluginOptions' => [
@@ -110,7 +110,7 @@ AppAsset::register($this);
                 'filter' => Select2::widget([
                     'model' => $searchModel,
                     'attribute' => 'currency_id',
-                    'data' => \app\models\Client::selectList(),
+                    'data' => Client::selectList(),
                     'initValueText' => $searchModel->currency_id,
                     'options' => ['placeholder' => 'Выберите ...'],
                     'pluginOptions' => [
@@ -122,6 +122,31 @@ AppAsset::register($this);
     ]); ?>
 
 </div>
+
+<?php
+Modal::begin([
+    'title' => 'Фото товара',
+    'id' => 'modal',
+    'size' => 'modal-lg',
+]);
+echo "<div id='modalContent' style='width: min-content!important;'><img src='' alt='Нет фото товара' id='image' width='500px'></div>";
+Modal::end();
+?>
+
+<?php
+
+$js = <<<JS
+
+    $(document).on('click', '.modalButton', function() {
+        $('#image').attr('src', $(this).data('url'));
+        
+        $('#modal').modal('show');
+    });
+
+JS;
+
+$this->registerJs($js);
+?>
 
 <?php
 ob_start();
