@@ -76,6 +76,20 @@ AppAsset::register($this);
             ],
 
             [
+                'label' => 'Партия',
+                'format' => 'raw',
+                'value' => function (RasxodGoods $model) {
+                    return Html::a(
+                        '<i class="fas fa-shopping-cart"> ' . $model->rasxod->number . ' </i>',
+                        \Yii::$app->getUrlManager()->createUrl(
+                            array('rasxod/goods-list', 'rasxod_id' => $model->rasxod->id)
+                        )
+                    );
+                },
+                'contentOptions' => ['class' => 'text-center'],
+            ],
+
+            [
                 'attribute' => 'goods_id',
                 'label' => 'Товар',
                 'format' => 'raw',
