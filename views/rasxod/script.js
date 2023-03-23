@@ -17,6 +17,9 @@ $(document).ready(function() {
     elPrixodGoods.change(function (e) {
         var prixod_goods_id = elPrixodGoods.val();
         let rasxod_id = $('#rasxod-id').val();
+        elAmount.val(null);
+        elCurrency.empty().append('<option value="">Выберите</option>');
+        elCost.val(null);
         changeCostCurrency(prixod_goods_id, rasxod_id);
     });
 
@@ -39,10 +42,6 @@ $(document).ready(function() {
                     elPrixodGoods.append('<option value="' + data[i].id + '">' + data[i].name + '</option>');
                 });
                 elPrixodGoods.prop("disabled", false);
-            },
-
-            error: function () {
-                alert('Error - Qayta takrorlang!');
             }
         });
     }
