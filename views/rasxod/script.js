@@ -15,8 +15,9 @@ $(document).ready(function() {
     });
 
     elPrixodGoods.change(function (e) {
-        var rasxod_goods_id = elPrixodGoods.val();
-        changeCostCurrency(rasxod_goods_id);
+        var prixod_goods_id = elPrixodGoods.val();
+        let rasxod_id = $('#rasxod-id').val();
+        changeCostCurrency(prixod_goods_id, rasxod_id);
     });
 
     function changeGoods(prixod_id) {
@@ -46,11 +47,11 @@ $(document).ready(function() {
         });
     }
 
-    function changeCostCurrency(rasxod_goods_id) {
+    function changeCostCurrency(prixod_goods_id, rasxod_id) {
         $.ajax({
             url: "<?=url(['prixod-goods/get-cost-currency'])?>",
             method: "POST",
-            data: {rasxod_goods_id: rasxod_goods_id, _csrf: yii.getCsrfToken()},
+            data: {prixod_goods_id: prixod_goods_id, rasxod_id: rasxod_id, _csrf: yii.getCsrfToken()},
             dataType: "json",
 
             success: function (data) {

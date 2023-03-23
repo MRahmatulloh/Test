@@ -105,7 +105,7 @@ class RasxodGoodsController extends Controller
                 $used = RasxodGoods::getPrixodedAmount($model->prixod_goods_id) ?? 0;
                 $free = $model->prixodGoods->amount - $used;
 
-                if (($free - $model->amount) < 0) {
+                if (($free + $old_amount - $model->amount) < 0) {
                     Yii::$app->session->setFlash('error', 'Не хвататет количество товара ' . $model->prixodGoods->goods->name . ' от прихода № '. $model->prixodGoods->prixod->number .', доступное количество: ' . ($free + $old_amount));
                     return $this->redirect(Yii::$app->request->referrer);
                 }

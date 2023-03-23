@@ -264,7 +264,7 @@ class ReturnController extends Controller
             $template->setValue($variable, $value);
 
             $variable = 'client';
-            $value = 'ООО «EASY MARKET»';
+            $value = 'ООО «7 MARKET»';
             $value = str_replace('&', '&amp;', $value);
             $template->setValue($variable, $value);
 
@@ -366,7 +366,7 @@ class ReturnController extends Controller
             $template->setValue($variable, $value);
 
             $variable = 'client';
-            $value = 'ООО «EASY MARKET»';
+            $value = 'ООО «7 MARKET»';
             $value = str_replace('&', '&amp;', $value);
             $template->setValue($variable, $value);
 

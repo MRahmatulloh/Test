@@ -31,20 +31,20 @@ class Rasxod extends MyModel
 {
     use NumberGenerationTrait;
     const TYPES = [
-        1 => '100% тўлов',
-        2 => 'Предоплата',
+        1 => 'Оплата 100%',
+        2 => 'Перечисление',
         3 => 'Рассрочка',
     ];
 
     const TYPES_ALL = [
-        1 => '100% тўлов',
-        2 => 'Предоплата',
+        1 => 'Оплата 100%',
+        2 => 'Перечисление',
         3 => 'Рассрочка',
         4 => 'Перемещение',
     ];
 
     public const TYPE_FULL_PAYMENT = 1;
-    public const TYPE_PREPAYMENT = 2;
+    public const TYPE_TRANSFER = 2;
     public const TYPE_CREDIT = 3;
     public const TYPE_MOVEMENT = 4;
 

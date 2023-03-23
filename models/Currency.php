@@ -23,6 +23,9 @@ class Currency extends MyModel
 {
     use ItemsTrait;
 
+    public const USD = 3;
+    public const SUM = 1;
+
     /**
      * {@inheritdoc}
      */
