@@ -73,13 +73,13 @@ class AppAsset extends AssetBundle
 //        "vendors/vectormap-home/vectormap-2.0.2.min.js",
 //        "vendors/vectormap-home/vectormap-world-mill-en.js",
         "vendors/apex_chart/apex-chart2.js",
-//        "vendors/apex_chart/apex_dashboard.js",
+        "vendors/apex_chart/apex_dashboard.js",
         "vendors/chart_am/core.js",
         "vendors/chart_am/charts.js",
         "vendors/chart_am/animated.js",
         "vendors/chart_am/kelly.js",
         "vendors/chart_am/chart-custom.js",
-//        "js/dashboard_init.js",
+        "js/dashboard_init.js",
         "js/custom.js",
     ];
     public $depends = [
