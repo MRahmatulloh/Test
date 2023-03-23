@@ -261,7 +261,7 @@ class RasxodController extends Controller
             $template->setValue($variable, $value);
 
             $variable = 'clientLocal';
-            $value = 'ООО «EASY MARKET»';
+            $value = 'ООО «7 MARKET»';
             $value = str_replace('&', '&amp;', $value);
             $template->setValue($variable, $value);
 
@@ -363,7 +363,7 @@ class RasxodController extends Controller
             $template->setValue($variable, $value);
 
             $variable = 'clientLocal';
-            $value = 'ООО «EASY MARKET»';
+            $value = 'ООО «7 MARKET»';
             $value = str_replace('&', '&amp;', $value);
             $template->setValue($variable, $value);
 

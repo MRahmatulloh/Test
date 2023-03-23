@@ -1203,6 +1203,3 @@ function sql_in($array, $prefix)
     $sql = substr($in, 0, -2) . ') ';
     return array($sql, $params);
 }
-
-
-

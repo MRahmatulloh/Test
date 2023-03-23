@@ -1,9 +1,8 @@
 <?php
 
 use app\assets\AppAsset;
-use app\models\Category;
 use app\models\Goods;
-use app\models\Warehouse;
+use app\models\Pricelist;
 use kartik\select2\Select2;
 use yii\bootstrap5\Modal;
 use yii\helpers\Html;
@@ -12,20 +11,23 @@ use yii\grid\ActionColumn;
 use yii\grid\GridView;
 
 /** @var yii\web\View $this */
-/** @var app\models\search\BalanceSearch $searchModel */
+/** @var app\models\search\PricelistSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Текущий остаток на ' . date('d.m.Y');
+$this->title = 'Прайслист';
 $this->params['breadcrumbs'][] = $this->title;
 AppAsset::register($this);
 ?>
-<div class="category-index">
+<div class="pricelist-index">
 
     <div class="row">
         <div class="col-6">
             <h2><?= Html::encode($this->title) ?></h2>
         </div>
         <div class="col-6">
+            <p class="text-right">
+                <?= Html::a("<i class='fas fa-plus white_text'></i> " . ' Новое', ['create'], ['class' => 'btn btn-success']) ?>
+            </p>
         </div>
     </div>
 
@@ -38,13 +40,18 @@ AppAsset::register($this);
             ['class' => 'yii\grid\SerialColumn'],
 
             [
-                'label' => 'Товар',
+                'attribute' => 'date',
+                'format' => ['date', 'php:d.m.Y'],
+                'filter' => ''
+            ],
+
+            [
                 'attribute' => 'goods_id',
                 'format' => 'raw',
-                'value' => function($data){
-                    return Html::a($data['goods_code'] . ' - ' . $data['goods_name'], '#', [
+                'value' => function (Pricelist $model) {
+                    return Html::a($model->goods->code . '-' . $model->goods->name, '#', [
                         'title' => 'Просмотр товара',
-                        'data-url' => '/img/goods/' . $data['goods_img'],
+                        'data-url' => '/img/goods/' . $model->goods->img,
                         'data-pjax' => '0',
                         'class' => 'modalButton'
                     ]);
@@ -62,52 +69,39 @@ AppAsset::register($this);
             ],
 
             [
-                'label' => 'Приход',
-                'attribute' => 'in_amount',
-                'value' => function ($data) {
-                    return pul2($data['in_amount'], 2);
+                'attribute' => 'price_full',
+                'value' => function (Pricelist $model) {
+                    return pul2($model->price_full, 2);
                 },
                 'contentOptions' => ['class' => 'text-right'],
                 'filter' => ''
             ],
 
             [
-                'label' => 'Расход',
-                'attribute' => 'out_amount',
-                'value' => function ($data) {
-                    return pul2($data['out_amount'], 2);
+                'attribute' => 'price_transfer',
+                'value' => function (Pricelist $model) {
+                    return pul2($model->price_transfer, 2);
                 },
                 'contentOptions' => ['class' => 'text-right'],
                 'filter' => ''
             ],
 
             [
-                'label' => 'Остаток',
-                'attribute' => 'ostatok',
-                'value' => function ($data) {
-                    return pul2($data['ostatok'], 2);
+                'attribute' => 'price_credit',
+                'value' => function (Pricelist $model) {
+                    return pul2($model->price_credit, 2);
                 },
                 'contentOptions' => ['class' => 'text-right'],
                 'filter' => ''
             ],
 
             [
-                'label' => 'Склад',
-                'attribute' => 'warehouse_id',
-                'value' => function ($data) {
-                    return $data['warehouse_name'] ?? 'Все';
-                },
-                'filter' => Select2::widget([
-                    'model' => $searchModel,
-                    'attribute' => 'warehouse_id',
-                    'data' => ['Все'] + Warehouse::selectList(),
-                    'initValueText' => $searchModel->warehouse_id ?? 'Все',
-                    'options' => ['placeholder' => 'Выберите ...'],
-                    'pluginOptions' => [
-                        'allowClear' => true
-                    ],
-                ]),
-            ]
+                'class' => ActionColumn::className(),
+                'template' => '{update} {delete}',
+                'urlCreator' => function ($action, Pricelist $model, $key, $index, $column) {
+                    return Url::toRoute([$action, 'id' => $model->id]);
+                }
+            ],
         ],
     ]); ?>
 

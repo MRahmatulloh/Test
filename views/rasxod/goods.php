@@ -5,6 +5,7 @@ use app\models\Currency;
 use app\models\Goods;
 use app\models\Prixod;
 use app\models\PrixodGoods;
+use app\models\Rasxod;
 use app\models\RasxodGoods;
 use kartik\select2\Select2;
 use yii\bootstrap5\Modal;
@@ -20,7 +21,7 @@ use yii\widgets\ActiveForm;
 /** @var app\models\RasxodGoods $model */
 /** @var yii\widgets\ActiveForm $form */
 
-$this->title = 'Расход № ' . $searchModel->rasxod->number . ' на ' . $searchModel->rasxod->client->name;
+$this->title = 'Расход № ' . $searchModel->rasxod->number . ' | ' .Rasxod::TYPES_ALL[$searchModel->rasxod->type] . ' на ' . $searchModel->rasxod->client->name;
 $this->params['breadcrumbs'][] = $this->title;
 AppAsset::register($this);
 
@@ -66,6 +67,7 @@ AppAsset::register($this);
                         'allowClear' => true
                     ],
                 ]) ?>
+                <?= $form->field($model->rasxod, 'id')->hiddenInput()->label(false) ?>
             </div>
             <div class="col-2">
                 <h6> </h6>
@@ -204,33 +206,6 @@ AppAsset::register($this);
     ]); ?>
 
 </div>
-
-
-<?php
-Modal::begin([
-    'title' => 'Фото товара',
-    'id' => 'modal',
-    'size' => 'modal-lg',
-]);
-echo "<div id='modalContent' style='width: min-content!important;'><img src='' alt='Нет фото товара' id='image' width='500px'></div>";
-Modal::end();
-?>
-
-<?php
-
-$js = <<<JS
-
-    $(document).on('click', '.modalButton', function() {
-        $('#image').attr('src', $(this).data('url'));
-        
-        $('#modal').modal('show');
-    });
-
-JS;
-
-$this->registerJs($js);
-?>
-
 <?php
 ob_start();
 include "script.js";

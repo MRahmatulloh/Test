@@ -216,33 +216,6 @@ AppAsset::register($this);
         ],
     ]); ?>
 </div>
-
-
-<?php
-Modal::begin([
-    'title' => 'Фото товара',
-    'id' => 'modal',
-    'size' => 'modal-lg',
-]);
-echo "<div id='modalContent' style='width: min-content!important;'><img src='' alt='Нет фото товара' id='image' width='500px'></div>";
-Modal::end();
-?>
-
-<?php
-
-$js = <<<JS
-
-    $(document).on('click', '.modalButton', function() {
-        $('#image').attr('src', $(this).data('url'));
-        
-        $('#modal').modal('show');
-    });
-
-JS;
-
-$this->registerJs($js);
-?>
-
 <?php
 ob_start();
 include "script.js";

@@ -27,11 +27,6 @@ AppAsset::register($this);
 
             </div>
         </div>
-    </div>
-
-
-
-
-    <?php ActiveForm::end(); ?>
+    </div>    <?php ActiveForm::end(); ?>
 
 </div>

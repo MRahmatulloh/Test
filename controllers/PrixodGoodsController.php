@@ -2,11 +2,15 @@
 
 namespace app\controllers;
 
+use app\models\Currency;
 use app\models\CurrencyRates;
+use app\models\Pricelist;
 use app\models\PrixodGoods;
+use app\models\Rasxod;
 use app\models\RasxodGoods;
 use app\models\search\PrixodGoodsSearch;
 use Yii;
+use yii\helpers\Html;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -99,7 +103,7 @@ class PrixodGoodsController extends Controller
             $used = RasxodGoods::getPrixodedAmount($model->id);
             $curr_amount = $model->amount;
 
-            if ($curr_amount < $used){
+            if ($curr_amount < $used) {
                 Yii::$app->session->setFlash('error', 'Уменьшился количество товара, минимальная количество которую можно уменьшить: ' . $used);
                 return $this->redirect(Yii::$app->request->referrer);
             }
@@ -131,8 +135,8 @@ class PrixodGoodsController extends Controller
             $curr_amount = $model->amount;
             $free = $all_amount - $used;
 
-            if (($free + $old_amount ) < $curr_amount){
-                Yii::$app->session->setFlash('error', 'Превишен количество товара ' . $model->goods->name  . ' от расхода № '. $model->rasxodedGoods->rasxod->number .', доступное количество: ' . ($free + $old_amount));
+            if (($free + $old_amount) < $curr_amount) {
+                Yii::$app->session->setFlash('error', 'Превишен количество товара ' . $model->goods->name . ' от расхода № ' . $model->rasxodedGoods->rasxod->number . ', доступное количество: ' . ($free + $old_amount));
                 return $this->redirect(Yii::$app->request->referrer);
             }
 
@@ -186,7 +190,8 @@ class PrixodGoodsController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionSelectGoodsAvailable(){
+    public function actionSelectGoodsAvailable()
+    {
 
         $post = Yii::$app->request->post();
         $prixod_id = $post['prixod_id'];
@@ -216,19 +221,50 @@ class PrixodGoodsController extends Controller
         die();
     }
 
-    public function actionGetCostCurrency(){
+    public function actionGetCostCurrency()
+    {
         $post = Yii::$app->request->post();
-        $rasxod_goods_id = $post['rasxod_goods_id'];
-        $model = PrixodGoods::findOne($rasxod_goods_id); // проверка на существование
+        $prixod_goods_id = $post['prixod_goods_id'];
+        $rasxod_id = $post['rasxod_id'];
+
+        $model = PrixodGoods::findOne($prixod_goods_id); // проверка на существование
         if (!$model)
             return [];
+
+        $rasxod = Rasxod::findOne($rasxod_id);
+
+        $pricelist = Pricelist::find()
+            ->where(['goods_id' => $model->goods_id])
+            ->andWhere(['<=', 'date', dateBase($rasxod->date)])
+            ->orderBy(['date' => SORT_DESC, 'id' => SORT_DESC])
+            ->one();
 
         $used = RasxodGoods::find()
             ->where(['prixod_goods_id' => $model->id])
             ->sum('amount') ?? 0;
 
         $free = $model->amount - $used;
+        $cost = $model->cost;
+        $currency_id = $model->currency_id;
+        $currency_name = $model->currency->name;
 
-        return json_encode(['cost' => $model->cost, 'amount' => $free, 'currency_id' => $model->currency_id, 'currency_name' => $model->currency->name]);
+        if ($pricelist) {
+            if ($rasxod->type == Rasxod::TYPE_CREDIT) {
+                $cost = $pricelist->price_credit;
+            }
+
+            if ($rasxod->type == Rasxod::TYPE_TRANSFER) {
+                $cost = $pricelist->price_transfer;
+            }
+
+            if ($rasxod->type == Rasxod::TYPE_FULL_PAYMENT) {
+                $cost = $pricelist->price_full;
+            }
+
+            $currency_id = Currency::USD;
+            $currency_name = 'USD';
+        }
+
+        return json_encode(['cost' => $cost, 'amount' => $free, 'currency_id' => $currency_id, 'currency_name' => $currency_name]);
     }
 }
