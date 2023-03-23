@@ -42,7 +42,7 @@ AppAsset::register($this);
                 </div>
             </a>
             <ul>
-                <li><a href="index_2.html">Дашбоард</a></li>
+                <li><a href="/dashboard">Дашборд</a></li>
                 <li><a href="/debt-analysis">Долг клиентов</a></li>
                 <li><a href="/sold-loss-analysis">Продано с убытком</a></li>
             </ul>
