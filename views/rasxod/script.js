@@ -1,66 +1,62 @@
-$(document).ready(function() {
+$(function () {
+    const prixodSelect = $('#rasxodgoods-prixod_id');
+    const goodsSelect = $('#rasxodgoods-prixod_goods_id');
+    const costInput = $('#rasxodgoods-cost');
+    const currencySelect = $('#rasxodgoods-currency_id');
+    const amountInput = $('#rasxodgoods-amount');
+    const select2Chosen = $('#select2-chosen');
 
-    let elPrixod = $("#rasxodgoods-prixod_id");
-    let elPrixodGoods = $('#rasxodgoods-prixod_goods_id');
-    let elCost = $('#rasxodgoods-cost');
-    let elCurrency = $('#rasxodgoods-currency_id');
-    let elAmount = $('#rasxodgoods-amount');
-
-    elPrixod.change(function (e) {
-        var prixod_id = elPrixod.val();
-        changeGoods(prixod_id);
-        elAmount.val(null);
-        elCurrency.empty().append('<option value="">Выберите</option>');
-        elCost.val(null);
-    });
-
-    elPrixodGoods.change(function (e) {
-        var prixod_goods_id = elPrixodGoods.val();
-        let rasxod_id = $('#rasxod-id').val();
-        elAmount.val(null);
-        elCurrency.empty().append('<option value="">Выберите</option>');
-        elCost.val(null);
-        changeCostCurrency(prixod_goods_id, rasxod_id);
-    });
-
-    function changeGoods(prixod_id) {
+    function fetchAvailableGoods(prixodId) {
         $.ajax({
-            url: "<?=url(['prixod-goods/select-goods-available'])?>",
-            method: "POST",
-            data: {prixod_id: prixod_id, _csrf: yii.getCsrfToken()},
-            dataType: "json",
+            url: '<?=url(['prixod-goods/select-goods-available'])?>',
+            method: 'POST',
+            data: { prixod_id: prixodId, _csrf: yii.getCsrfToken() },
+            dataType: 'json',
             beforeSend: function () {
-                $('#select2-chosen').text("");
-                elPrixodGoods.empty().append('<option value="">Выберите</option>');
-                // clientni tanlay olmaydigan qilib turamiz
-                elPrixodGoods.prop("disabled", true);
+                select2Chosen.text('');
+                goodsSelect.empty().append('<option value="">Выберите</option>').prop('disabled', true);
             },
-
             success: function (data) {
-                // console.log(data);
+                goodsSelect.prop('disabled', false);
                 $.each(data, function (i) {
-                    elPrixodGoods.append('<option value="' + data[i].id + '">' + data[i].name + '</option>');
+                    goodsSelect.append($('<option>', { value: data[i].id, text: data[i].name }));
                 });
-                elPrixodGoods.prop("disabled", false);
             }
         });
     }
 
-    function changeCostCurrency(prixod_goods_id, rasxod_id) {
+    function fetchCostCurrency(prixodGoodsId, rasxodId) {
         $.ajax({
-            url: "<?=url(['prixod-goods/get-cost-currency'])?>",
-            method: "POST",
-            data: {prixod_goods_id: prixod_goods_id, rasxod_id: rasxod_id, _csrf: yii.getCsrfToken()},
-            dataType: "json",
-
+            url: '<?=url(['prixod-goods/get-cost-currency'])?>',
+            method: 'POST',
+            data: { prixod_goods_id: prixodGoodsId, rasxod_id: rasxodId, _csrf: yii.getCsrfToken() },
+            dataType: 'json',
             success: function (data) {
-                elCost.val(data.cost);
-                elCurrency.val(data.currency_id);
-                elAmount.val(data.amount);
-                elCurrency.empty().append('<option value="'+data.currency_id+'">'+data.currency_name+'</option>');
-            },
+                costInput.val(data.cost);
+                currencySelect.val(data.currency_id).trigger('change');
+                amountInput.val(data.amount);
+            }
         });
     }
 
-    elPrixod.trigger('change');
+    prixodSelect.on('change', function () {
+        const prixodId = $(this).val();
+        clearForm();
+        fetchAvailableGoods(prixodId);
+    });
+
+    goodsSelect.on('change', function () {
+        const prixodGoodsId = $(this).val();
+        const rasxodId = $('#rasxod-id').val();
+        clearForm();
+        fetchCostCurrency(prixodGoodsId, rasxodId);
+    });
+
+    function clearForm() {
+        amountInput.val(null);
+        costInput.val(null);
+        currencySelect.val(null).trigger('change');
+    }
+
+    prixodSelect.trigger('change');
 });
