@@ -8,16 +8,19 @@ use yii\widgets\ActiveForm;
 /** @var app\modules\cash\models\PaymentReason $model */
 /** @var yii\widgets\ActiveForm $form */
 ?>
+<style>
+    .modal-body {
+        margin: 0!important;
+    }
+</style>
 
-<div class="payment-reason-form">
+<div class="payment-reason-form w-100">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <div class="row d-block">
-        <div class="col-md-12">
+
             <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
-        </div>
-        <div class="col-md-12">
+
             <?= $form->field($model, 'type_id')->widget(Select2::className(), [
                 'data' => $model::TYPES,
                 'options' => ['placeholder' => 'Выберите ...'],
@@ -25,14 +28,12 @@ use yii\widgets\ActiveForm;
                     'allowClear' => true
                 ],
             ]) ?>
-        </div>
-        <div class="col-md-6">
+
             <div class="form-group">
                 <h6> </h6>
                 <?= Html::submitButton('Добавить', ['class' => 'btn btn-success']) ?>
             </div>
-        </div>
-    </div>
+
 
     <?php ActiveForm::end(); ?>
 

@@ -60,7 +60,7 @@ use yii\widgets\ActiveForm;
         </div>
         <div class="col-4">
             <div class="row">
-                <div class="col-11">
+                <div class="col-10">
                     <?= $form->field($model, 'reason_id')->widget(Select2::className(), [
                         'data' => PaymentReason::selectList(['type_id' => PaymentReason::TYPE_EXPENSE]),
                         'options' => ['placeholder' => 'Выберите ...'],
@@ -70,10 +70,10 @@ use yii\widgets\ActiveForm;
                         ],
                     ]) ?>
                 </div>
-                <div class="col-1">
+                <div class="col-2">
                     <h6> </h6>
                     <div class="input-group-append" id="modalButton">
-                        <span class="input-group-text form-control bg-primary"> <i class='fas fa-plus'></i> </span>
+                        <span class="input-group-text form-control bg-primary justify-content-center"> <i class='fas fa-plus'></i> </span>
                     </div>
                 </div>
             </div>
@@ -96,7 +96,7 @@ use yii\widgets\ActiveForm;
 Modal::begin([
     'title' => 'Цель платежа',
     'id' => 'modal',
-    'size' => 'modal-lg',
+    'size' => 'modal-md',
 ]);
 echo "<div id='modalContent'></div>";
 Modal::end();

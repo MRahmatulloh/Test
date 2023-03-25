@@ -19,6 +19,11 @@ AppAsset::register($this);
     <?php $this->head() ?>
     <title>Easy Contract System</title>
     <link rel="icon" href=<?= Yii::getAlias('@web')?>"/img/mini_logo.png" type="image/png">
+    <style>
+        .row{
+            --bs-gutter-x: 0rem!important;
+        }
+    </style>
 </head>
 <body class="" style="background-image: url(<?= Yii::$app->request->baseUrl . '/img/bg.jpg'; ?>); background-size: cover; background-repeat: no-repeat">
 <?php $this->beginBody() ?>

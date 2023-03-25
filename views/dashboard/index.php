@@ -8,6 +8,7 @@ use yii\helpers\Html;
 /** @var yii\data\ActiveDataProvider $dataProvider */
 /** @var string $from */
 /** @var string $to */
+/** @var array $data */
 
 $this->title = 'Dashboard';
 $this->params['breadcrumbs'][] = $this->title;
@@ -47,7 +48,8 @@ AppAsset::register($this);
                                             </div>
                                             <div class="col-md-2">
                                                 <label>&nbsp;</label>
-                                                <button class="btn btn-primary" type="submit"><?= Yii::t('app', 'ОК') ?></button>
+                                                <button class="btn btn-primary"
+                                                        type="submit"><?= Yii::t('app', 'ОК') ?></button>
                                             </div>
                                         </div>
 
@@ -88,14 +90,14 @@ AppAsset::register($this);
                                 <div class="Sales_Details_plan">
                                     <div class="row">
                                         <div class="col-lg-4">
-                                            <div class="single_plan d-flex align-items-center justify-content-between">
+                                            <div class="single_plan d-flex align-items-center just['total]ify-content-between">
                                                 <div class="plan_left d-flex align-items-center">
                                                     <div class="thumb">
-                                                        <img src="img/icon2/3.svg" alt="">
+                                                        <img src="img/icon2/1.svg" alt="">
                                                     </div>
                                                     <div>
-                                                        <h5>+$2,034</h5>
-                                                        <span>Приход</span>
+                                                        <h5>$<?= pul2($data['total']['rasxod'], 2) ?></h5>
+                                                        <span>Sotildi</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -104,11 +106,11 @@ AppAsset::register($this);
                                             <div class="single_plan d-flex align-items-center justify-content-between">
                                                 <div class="plan_left d-flex align-items-center">
                                                     <div class="thumb">
-                                                        <img src="img/icon2/1.svg" alt="">
+                                                        <img src="img/icon2/3.svg" alt="">
                                                     </div>
                                                     <div>
-                                                        <h5>-$706</h5>
-                                                        <span>Расход</span>
+                                                        <h5>$<?= pul2($data['total']['prixod'], 2) ?></h5>
+                                                        <span>Olindi</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -120,8 +122,8 @@ AppAsset::register($this);
                                                         <img src="img/icon2/2.svg" alt="">
                                                     </div>
                                                     <div>
-                                                        <h5>=$1200</h5>
-                                                        <span>Доход</span>
+                                                        <h5>$<?= pul2($data['total']['profit'], 2) ?></h5>
+                                                        <span>Foyda</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -170,8 +172,8 @@ AppAsset::register($this);
                                                         <img src="img/icon2/3.svg" alt="">
                                                     </div>
                                                     <div>
-                                                        <h5>$2,034</h5>
-                                                        <span>Приход</span>
+                                                        <h5>+$<?= pul2($data['kassa_total']['kassa_kirim'],2) ?></h5>
+                                                        <span>Kirim</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -183,13 +185,24 @@ AppAsset::register($this);
                                                         <img src="img/icon2/1.svg" alt="">
                                                     </div>
                                                     <div>
-                                                        <h5>$706</h5>
-                                                        <span>Расход</span>
+                                                        <h5>-$<?= pul2($data['kassa_total']['kassa_chiqim'],2) ?></h5>
+                                                        <span>Chiqim</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
+                                            <div class="single_plan d-flex align-items-center justify-content-between">
+                                                <div class="plan_left d-flex align-items-center">
+                                                    <div class="thumb">
+                                                        <img src="img/icon2/2.svg" alt="">
+                                                    </div>
+                                                    <div>
+                                                        <h5>=$<?= pul2($data['kassa_total']['kassa_kirim'] - $data['kassa_total']['kassa_chiqim'], 2) ?></h5>
+                                                        <span>Farq</span>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -393,7 +406,8 @@ AppAsset::register($this);
                                     </div>
                                     <div class="header_more_tool">
                                         <div class="dropdown">
-                                            <span class="dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                                            <span class="dropdown-toggle" id="dropdownMenuButton"
+                                                  data-bs-toggle="dropdown">
                                             <i class="ti-more-alt"></i>
                                             </span>
                                             <div class="dropdown-menu dropdown-menu-right"
@@ -546,7 +560,8 @@ AppAsset::register($this);
                                     </div>
                                     <div class="header_more_tool">
                                         <div class="dropdown">
-                                            <span class="dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                                            <span class="dropdown-toggle" id="dropdownMenuButton"
+                                                  data-bs-toggle="dropdown">
                                             <i class="ti-more-alt"></i>
                                             </span>
                                             <div class="dropdown-menu dropdown-menu-right"
@@ -693,3 +708,96 @@ AppAsset::register($this);
     </section>
 
 </div>
+
+<?php
+$rasxod = json_encode(array_column($data['rasxod'], 'summa'));
+$prixod = json_encode(array_column($data['prixod'], 'summa'));
+$profit = json_encode(array_column($data['profit'], 'summa'));
+
+$labels = json_encode(array_column($data['rasxod'], 'date'));
+
+$js = <<<JS
+const rasxod = $rasxod;
+const prixod = $prixod;
+const profit = $profit;
+const labels = $labels;
+
+SotuvOptions = {
+    chart: {height: 339, type: "line", stacked: !1, toolbar: {show: !1}},
+    stroke: {width: [2, 3], curve: "smooth"},
+    colors: ["#ff7ea5", "#20c997"],
+    series: [
+        {
+        name: "Sotuv",
+        type: "line",
+        data: rasxod
+        }, 
+        {
+            name: "Foyda", 
+            type: "line", 
+            data: profit
+        }
+        ],
+    labels: labels,
+    markers: {size: 0},
+    xaxis: {type: "date"},
+    yaxis: {title: {text: "Mablag'"}},
+    tooltip: {
+        shared: !0, intersect: !1, y: {
+            formatter: function (e) {
+                return void 0 !== e ? e.toFixed(0) + " USD" : e;
+            },
+        },
+    },
+    grid: {borderColor: "#f1f1f1"},
+};
+(chart = new ApexCharts(document.querySelector("#management_bar"), SotuvOptions)).render();
+
+KassaOptions = {
+    chart: {height: 339, type: "line", stacked: !1, toolbar: {show: !1}},
+    stroke: {width: [2, 4], curve: "smooth"},
+    plotOptions: {bar: {columnWidth: "30%"}},
+    colors: ["#9767FD", "#ff7ea5"],
+    series: [
+        {
+        name: "Kirim",
+        type: "line",
+        data: rasxod
+        }, 
+        {
+            name: "Chiqim", 
+            type: "line", 
+            data: profit
+        }
+        ],
+    // fill: {
+    //     opacity: [0.85, 1],
+    //     gradient: {
+    //         inverseColors: !1,
+    //         shade: "light",
+    //         type: "vertical",
+    //         opacityFrom: 0.85,
+    //         opacityTo: 0.55,
+    //         stops: [0, 100, 100, 100]
+    //     }
+    // },
+    labels: labels,
+    markers: {size: 0},
+    xaxis: {type: "date"},
+    yaxis: {title: {text: "Mablag'"}},
+    tooltip: {
+        shared: !0, intersect: !1, y: {
+            formatter: function (e) {
+                return void 0 !== e ? e.toFixed(0) + " USD" : e;
+            },
+        },
+    },
+    grid: {borderColor: "#f1f1f1"},
+};
+(chart = new ApexCharts(document.querySelector("#management_bar1"), KassaOptions)).render();
+
+JS;
+
+$this->registerJs($js);
+?>
+
