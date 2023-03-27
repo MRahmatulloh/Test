@@ -26,7 +26,7 @@ class DashboardController extends Controller
     public function actionIndex($from = null, $to = null)
     {
         $from = $from ?: date('Y-m-01');
-        $to = $to ?: date('Y-m-01');
+        $to = $to ?: date('Y-m-d');
 
         $data = $this->dashboardDataService->getData($from, $to);
 
