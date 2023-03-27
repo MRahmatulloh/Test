@@ -215,7 +215,7 @@ AppAsset::register($this);
                     </div>
                 </div>
                 <div class="row ">
-                    <div class="col-xl-4 ">
+                    <div class="col-xl-3 ">
                         <div class="white_card card_height_100 mb_30 user_crm_wrapper">
                             <div class="row">
                                 <div class="col-lg-6">
@@ -291,26 +291,9 @@ AppAsset::register($this);
                         <div class="white_card card_height_100 mb_30">
                             <div class="white_card_header">
                                 <div class="row align-items-center">
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-12">
                                         <div class="main-title">
                                             <h3 class="m-0">TOP 5 Mijozlar</h3>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-8">
-                                        <div class="row justify-content-end">
-                                            <div class="col-lg-8 d-flex justify-content-end">
-                                                <div class="serach_field-area theme_bg d-flex align-items-center">
-                                                    <div class="search_inner">
-                                                        <form action="#">
-                                                            <div class="search_field">
-                                                                <input type="text" placeholder="Search">
-                                                            </div>
-                                                            <button type="submit"><img src="img/icon/icon_search.svg"
-                                                                                       alt=""></button>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -326,7 +309,7 @@ AppAsset::register($this);
                                                 <span class="f_s_14 f_w_400 text_color_11"><?= $client['name'] ?></span>
                                             </div>
                                             <div class="user_info">
-                                                <?= $client['summa'] ?>
+                                                <?= pul2($client['summa'], 2) ?> $
                                             </div>
                                         </div>
                                     <?php endforeach; ?>
@@ -334,7 +317,7 @@ AppAsset::register($this);
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-5">
                         <div class="white_card card_height_100 mb_20 ">
                             <div class="white_card_header">
                                 <div class="box_header m-0">
