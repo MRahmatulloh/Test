@@ -247,7 +247,9 @@ class PrixodController extends Controller
             $template->setValue($variable, $value);
 
             $variable = 'type';
-            $value = $prixod::TYPES[$prixod->type];
+            $value = null;
+            if($prixod->type == $prixod::TYPE_RETURN)
+                $value = 'Возврат';
             $template->setValue($variable, $value);
 
             $variable = 'date';
@@ -362,7 +364,9 @@ class PrixodController extends Controller
             $template->setValue($variable, $value);
 
             $variable = 'type';
-            $value = $prixod::TYPES[$prixod->type];
+            $value = null;
+            if($prixod->type == $prixod::TYPE_RETURN)
+                $value = 'Возврат';
             $template->setValue($variable, $value);
 
             $variable = 'client';
