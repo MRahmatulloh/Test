@@ -254,6 +254,12 @@ class ReturnController extends Controller
             $value = $prixod->number;
             $template->setValue($variable, $value);
 
+            $variable = 'type';
+            $value = null;
+            if($prixod->type == $prixod::TYPE_RETURN)
+                $value = 'Возврат';
+            $template->setValue($variable, $value);
+
             $variable = 'date';
             $value = dateView($prixod->date);
             $template->setValue($variable, $value);
@@ -354,6 +360,12 @@ class ReturnController extends Controller
 
             $variable = 'number';
             $value = $prixod->number;
+            $template->setValue($variable, $value);
+
+            $variable = 'type';
+            $value = null;
+            if($prixod->type == $prixod::TYPE_RETURN)
+                $value = 'Возврат';
             $template->setValue($variable, $value);
 
             $variable = 'date';

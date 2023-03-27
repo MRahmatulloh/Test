@@ -246,6 +246,12 @@ class PrixodController extends Controller
             $value = $prixod->number;
             $template->setValue($variable, $value);
 
+            $variable = 'type';
+            $value = null;
+            if($prixod->type == $prixod::TYPE_RETURN)
+                $value = 'Возврат';
+            $template->setValue($variable, $value);
+
             $variable = 'date';
             $value = dateView($prixod->date);
             $template->setValue($variable, $value);
@@ -355,6 +361,12 @@ class PrixodController extends Controller
             $variable = 'clientLocal';
             $value = $prixod->client->name;
             $value = str_replace('&', '&amp;', $value);
+            $template->setValue($variable, $value);
+
+            $variable = 'type';
+            $value = null;
+            if($prixod->type == $prixod::TYPE_RETURN)
+                $value = 'Возврат';
             $template->setValue($variable, $value);
 
             $variable = 'client';
