@@ -231,7 +231,8 @@
             responsive: true,
             searching: false,
             info: false,
-            paging: false
+            paging: false,
+            "order": [[3, "desc"]],
         });
     }
     if ($('.lms_table_active3').length) {

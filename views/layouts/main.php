@@ -207,7 +207,7 @@ AppAsset::register($this);
                     <div class="line_icon open_miniSide d-none d-lg-block">
                         <img src="/img/line_img.png" alt="">
                     </div>
-                    <div class="serach_field-area d-flex align-items-center">
+                    <div class="serach_field-area d-flex align-items-center d-none">
                         <div class="search_inner">
                             <form action="#">
                                 <div class="search_field">
