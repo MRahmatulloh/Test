@@ -30,8 +30,6 @@ class DashboardController extends Controller
 
         $data = $this->dashboardDataService->getData($from, $to);
 
-//        prd($data);
-
         return $this->render('index', [
             'from' => $from,
             'to' => $to,
