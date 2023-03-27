@@ -728,9 +728,9 @@ SotuvOptions = {
     colors: ["#ff7ea5", "#20c997"],
     series: [
         {
-        name: "Sotuv",
-        type: "line",
-        data: rasxod
+            name: "Sotuv",
+            type: "line",
+            data: rasxod
         }, 
         {
             name: "Foyda", 
@@ -753,6 +753,19 @@ SotuvOptions = {
 };
 (chart = new ApexCharts(document.querySelector("#management_bar"), SotuvOptions)).render();
 
+JS;
+
+$rasxod = json_encode(array_column($data['kassa'], 'chiqim_summa'));
+$prixod = json_encode(array_column($data['kassa'], 'kirim_summa'));
+
+$labels = json_encode(array_column($data['kassa'], 'date'));
+
+$js .= <<<JS
+
+const rasxod_kassa = $rasxod;
+const prixod_kassa = $prixod;
+const labels_kassa = $labels;
+
 KassaOptions = {
     chart: {height: 339, type: "line", stacked: !1, toolbar: {show: !1}},
     stroke: {width: [2, 4], curve: "smooth"},
@@ -760,14 +773,14 @@ KassaOptions = {
     colors: ["#9767FD", "#ff7ea5"],
     series: [
         {
-        name: "Kirim",
-        type: "line",
-        data: rasxod
-        }, 
-        {
-            name: "Chiqim", 
+            name: "Kirim", 
             type: "line", 
-            data: profit
+            data: prixod_kassa
+        },
+        {
+            name: "Chiqim",
+            type: "line",
+            data: rasxod_kassa
         }
         ],
     // fill: {
@@ -781,7 +794,7 @@ KassaOptions = {
     //         stops: [0, 100, 100, 100]
     //     }
     // },
-    labels: labels,
+    labels: labels_kassa,
     markers: {size: 0},
     xaxis: {type: "date"},
     yaxis: {title: {text: "Mablag'"}},

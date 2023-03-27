@@ -61,37 +61,44 @@ class DashboardDataService extends Model
             'profit' => array_sum(array_column($result['profit'], 'summa')),
         ];
 
-        $kassa_kirim_sql = "
+        $kassa_sql = "
             select
-                round(ifnull(sum(p.summa_usd), 0), 2) as summa,
-                p.date
-            from payment p
-            where p.date between :from and :to
-            group by p.date";
+                round(sum(ifnull(t.chiqim_summa, 0)), 2) as chiqim_summa,
+                round(sum(ifnull(t.kirim_summa, 0)), 2) as kirim_summa,
+                t.date
+            from (
+                     select
+                         round(ifnull(sum(e.summa_usd), 0), 2) as chiqim_summa,
+                         0 as kirim_summa,
+                         e.date as date
+                     from expense e
+                     where e.date between :from and :to
+                     group by e.date
+            
+                     union all
+            
+                     select
+                         0 as chiqim_summa,
+                         round(ifnull(sum(p.summa_usd), 0), 2) as kirim_summa,
+                         p.date as date
+                     from payment p
+                     where p.date between :from and :to
+                     group by p.date
+            
+                 ) as t
+            
+            group by t.date 
+        ";
 
-        $kassa_chiqim_sql = "
-            select
-                round(ifnull(sum(e.summa_usd), 0), 2) as summa,
-                e.date
-            from expense e
-            where e.date between :from and :to
-            group by e.date";
-
-        $result['kassa_kirim'] = Yii::$app->db->createCommand($kassa_kirim_sql)
-            ->bindValue(':from', $from)
-            ->bindValue(':to', $to)
-            ->queryAll();
-
-        $result['kassa_chiqim'] = Yii::$app->db->createCommand($kassa_chiqim_sql)
+        $result['kassa'] = Yii::$app->db->createCommand($kassa_sql)
             ->bindValue(':from', $from)
             ->bindValue(':to', $to)
             ->queryAll();
 
         $result['kassa_total'] = [
-            'kassa_kirim' => array_sum(array_column($result['kassa_kirim'], 'summa')),
-            'kassa_chiqim' => array_sum(array_column($result['kassa_chiqim'], 'summa')),
+            'kassa_kirim' => array_sum(array_column($result['kassa'], 'kirim_summa')),
+            'kassa_chiqim' => array_sum(array_column($result['kassa'], 'chiqim_summa')),
         ];
-
 
         return $result;
     }
