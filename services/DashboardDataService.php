@@ -145,7 +145,7 @@ class DashboardDataService extends Model
             where r.date between :from and :to
             group by g.name
             order by summa desc
-            limit 5
+            limit 7
         ";
 
         $result['top_goods'] = Yii::$app->db->createCommand($top_goods_sql)
