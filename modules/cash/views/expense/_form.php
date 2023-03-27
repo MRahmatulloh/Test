@@ -5,7 +5,7 @@ use app\models\Currency;
 use app\modules\cash\models\PaymentReason;
 use kartik\date\DatePicker;
 use kartik\select2\Select2;
-use yii\bootstrap4\Modal;
+use yii\bootstrap5\Modal;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
