@@ -138,7 +138,7 @@ class DashboardDataService extends Model
             select
                 concat(g.code,'-',g.name) as name,
                 sum(rg.amount) as amount,
-                round(ifnull(sum(rg.cost_usd), 0), 2) as summa
+                round(ifnull(sum(rg.cost_usd * rg.amount), 0), 2) as summa
             from rasxod_goods rg
                      left join rasxod r on r.id = rg.rasxod_id
                      left join goods g on g.id = rg.goods_id
