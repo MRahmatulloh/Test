@@ -251,6 +251,10 @@ class RasxodController extends Controller
             $value = $rasxod->number;
             $template->setValue($variable, $value);
 
+            $variable = 'type';
+            $value = null;
+            $template->setValue($variable, $value);
+
             $variable = 'date';
             $value = dateView($rasxod->date);
             $template->setValue($variable, $value);
@@ -351,6 +355,10 @@ class RasxodController extends Controller
 
             $variable = 'number';
             $value = $rasxod->number;
+            $template->setValue($variable, $value);
+
+            $variable = 'type';
+            $value = null;
             $template->setValue($variable, $value);
 
             $variable = 'date';
