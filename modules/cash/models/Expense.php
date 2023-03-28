@@ -5,6 +5,7 @@ namespace app\modules\cash\models;
 use app\models\Client;
 use app\models\Currency;
 use app\models\MyModel;
+use Yii;
 use yii\behaviors\TimestampBehavior;
 
 /**
@@ -121,5 +122,62 @@ class Expense extends MyModel
     public function getReason()
     {
         return $this->hasOne(PaymentReason::class, ['id' => 'reason_id']);
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        $user = Yii::$app->user->identity;
+
+        if ($insert) {
+            $text =
+                "№: #Чиким #Ч" . $this->id . PHP_EOL .
+                'Статус: Янги' . PHP_EOL .
+                'Сана: ' . dateView($this->date) . PHP_EOL .
+                'Клиент: ' . $this->client->name . PHP_EOL .
+                'Сумма: ' . pul2($this->summa,2) . ' ' . $this->currency->name . PHP_EOL .
+                'Толов тури: ' . Expense::PAYMENT_TYPES[$this->payment_type_id] . PHP_EOL .
+                'Толов максади: ' . $this->reason->name . PHP_EOL .
+                'Киритди: ' . $user->fio . PHP_EOL;
+
+            Yii::$app->telegram->sendMessage([
+                'chat_id' => '-1001937395913',
+                'text' => $text,
+                "parse_mode" => "markdown",
+                "reply_markup" => json_encode(["inline_keyboard" => [
+                    [
+                        [
+                            "text" => "Очиб кориш",
+                            "url" => "http://" . $_SERVER['SERVER_NAME'] . \Yii::$app->getUrlManager()->createUrl(['cash/expense/index', 'ExpenseSearch[id]' => $this->id])
+                        ]
+                    ]
+                ]])
+            ]);
+        } else {
+            $text =
+                "№: #Чиким #Ч" . $this->id . PHP_EOL .
+                'Статус: Янгиланди' . PHP_EOL .
+                'Сана: ' . dateView($this->date) . PHP_EOL .
+                'Клиент: ' . $this->client->name . PHP_EOL .
+                'Сумма: ' . pul2($this->summa,2) . ' ' . $this->currency->name . PHP_EOL .
+                'Толов тури: ' . Expense::PAYMENT_TYPES[$this->payment_type_id] . PHP_EOL .
+                'Толов максади: ' . $this->reason->name . PHP_EOL .
+                'Киритди: ' . $user->fio . PHP_EOL;
+
+            Yii::$app->telegram->sendMessage([
+                'chat_id' => '-1001937395913',
+                'text' => $text,
+                "parse_mode" => "markdown",
+                "reply_markup" => json_encode(["inline_keyboard" => [
+                    [
+                        [
+                            "text" => "Очиб кориш",
+                            "url" => "http://" . $_SERVER['SERVER_NAME'] . \Yii::$app->getUrlManager()->createUrl(['cash/expense/index', 'ExpenseSearch[id]' => $this->id])
+                        ]
+                    ]
+                ]])
+            ]);
+
+        }
+        return true;
     }
 }

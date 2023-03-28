@@ -9,6 +9,7 @@ $config = [
     'id' => 'yii_basic_appx',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+    'timeZone' => 'Asia/Tashkent',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
@@ -17,13 +18,16 @@ $config = [
     'modules' => [
         'admin' => [
             'class' => 'mdm\admin\Module',
-//            'layout' => 'left-menu',
         ],
         'cash' => [
             'class' => 'app\modules\cash\Module',
         ],
     ],
     'components' => [
+        'telegram' => [
+            'class' => 'app\components\Telegram',
+            'botToken' => '6144336497:AAGNaip1Imyz18UvddVhdH2vlZg74F37LQ0',
+        ],
         'request' => [
             'cookieValidationKey' => '9gBv8QfLRRNsxapHihClqPNQs03euDhl',
             'baseUrl' => ''
