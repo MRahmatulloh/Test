@@ -242,7 +242,7 @@ AppAsset::register($this);
                                         </div>
                                         <div class="crm_body">
                                             <h4><?= $data['goods_total'] ?></h4>
-                                            <p>Tovarlar</p>
+                                            <p>Tovarlar turi</p>
                                         </div>
                                     </div>
                                 </div>

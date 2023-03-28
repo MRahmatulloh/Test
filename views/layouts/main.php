@@ -208,7 +208,7 @@ AppAsset::register($this);
                         <img src="/img/line_img.png" alt="">
                     </div>
                     <div class="serach_field-area d-flex align-items-center d-none">
-                        <div class="search_inner">
+                        <div class="search_inner d-none">
                             <form action="#">
                                 <div class="search_field">
                                     <input type="text" placeholder="Search">
