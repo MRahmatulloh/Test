@@ -62,6 +62,7 @@ AppAsset::register($this);
                     <h6> </h6>
                     <?= Html::submitButton('Добавить', ['class' => 'btn btn-success']) ?>
                     <?= Html::a("<i class='fas fa-arrow-up white_text'></i>", ['/prixod/index'], ['class' => 'btn btn-primary']) ?>
+                    <?= Html::a("<i class='fas fa-arrow-up white_text'></i>", Url::to(['/prixod/nakladnoy', 'prixod_id' => $model->prixod_id]), ['class' => 'btn btn-dark']) ?>
             </div>
          </div>
 
@@ -203,3 +204,16 @@ AppAsset::register($this);
     ]); ?>
 
 </div>
+
+<?php
+
+$script = <<< JS
+    html2canvas(document.body).then(function(canvas) {
+        document.body.appendChild(canvas);
+        console.log(canvas.toDataURL("image/png"))
+    });
+JS;
+
+$this->registerJs($script, yii\web\View::POS_READY);
+
+?>

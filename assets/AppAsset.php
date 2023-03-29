@@ -81,6 +81,7 @@ class AppAsset extends AssetBundle
         "vendors/chart_am/chart-custom.js",
         "js/dashboard_init.js",
         "js/custom.js",
+        'js/html2canvas.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',

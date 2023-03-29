@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use Screen\Capture;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -89,6 +90,15 @@ class SiteController extends Controller
         ]);
     }
 
+    public function actionTest()
+    {
+        $url = 'http://new.ec.loc/site/index';
+
+        $screenCapture = new Capture($url);
+        $screenCapture->setImageType('png');
+        $screenCapture->save(Yii::getAlias('@webroot') . '/test.png');
+
+    }
     /**
      * Logout action.
      *

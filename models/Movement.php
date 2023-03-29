@@ -236,7 +236,8 @@ class Movement extends MyModel
                 $prixodGoods->goods_id = $movementGood->goods_id;
                 $prixodGoods->amount = $movementGood->amount;
                 $prixodGoods->cost = $movementGood->cost_return;
-                $prixodGoods->currency_id = $rasxod_goods->currency_id;
+                $prixodGoods->cost_usd = CurrencyRates::getSummaUsd($movementGood->movement->date,  $movementGood->currency_id, $movementGood->cost_return);
+                $prixodGoods->currency_id = $movementGood->currency_id;
                 $prixodGoods->rasxod_goods_id = $movementGood->rasxod_goods_id;
 
                 if (!$prixodGoods->save()) {
@@ -250,6 +251,7 @@ class Movement extends MyModel
                 $rasxodGoods->amount = $movementGood->amount;
                 $rasxodGoods->cost = $movementGood->cost;
                 $rasxodGoods->currency_id = $movementGood->currency_id;
+                $rasxodGoods->cost_usd = CurrencyRates::getSummaUsd($movementGood->movement->date,  $movementGood->currency_id, $movementGood->cost);
                 $rasxodGoods->prixod_goods_id = $prixodGoods->id;
 
                 if (!$rasxodGoods->save()) {
