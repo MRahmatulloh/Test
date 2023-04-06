@@ -2,6 +2,7 @@
 
 namespace mdm\admin\controllers;
 
+use app\controllers\MyController;
 use Yii;
 use mdm\admin\models\Assignment;
 use mdm\admin\models\searchs\Assignment as AssignmentSearch;

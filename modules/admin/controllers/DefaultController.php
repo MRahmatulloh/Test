@@ -2,6 +2,7 @@
 
 namespace mdm\admin\controllers;
 
+use app\controllers\MyController;
 use Yii;
 
 /**
@@ -10,7 +11,7 @@ use Yii;
  * @author Misbahul D Munir <misbahuldmunir@gmail.com>
  * @since 1.0
  */
-class DefaultController extends \yii\web\Controller
+class DefaultController extends MyController
 {
 
     /**

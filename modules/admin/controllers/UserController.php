@@ -2,6 +2,7 @@
 
 namespace mdm\admin\controllers;
 
+use app\controllers\MyController;
 use mdm\admin\components\UserStatus;
 use mdm\admin\models\form\ChangePassword;
 use mdm\admin\models\form\Login;
