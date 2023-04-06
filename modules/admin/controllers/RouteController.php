@@ -2,6 +2,7 @@
 
 namespace mdm\admin\controllers;
 
+use app\controllers\MyController;
 use Yii;
 use mdm\admin\models\Route;
 use yii\web\Controller;

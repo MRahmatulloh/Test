@@ -2,6 +2,7 @@
 
 namespace mdm\admin\controllers;
 
+use app\controllers\MyController;
 use Yii;
 use mdm\admin\models\BizRule;
 use yii\web\Controller;

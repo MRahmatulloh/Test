@@ -2,6 +2,7 @@
 
 namespace mdm\admin\components;
 
+use app\controllers\MyController;
 use Yii;
 use mdm\admin\models\AuthItem;
 use mdm\admin\models\searchs\AuthItem as AuthItemSearch;
