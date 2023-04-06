@@ -7,7 +7,7 @@ use Yii;
 use yii\data\SqlDataProvider;
 use yii\web\Controller;
 
-class DebtAnalysisController extends Controller
+class DebtAnalysisController extends MyController
 {
     /**
      * Displays homepage.

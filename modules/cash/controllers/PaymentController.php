@@ -2,6 +2,7 @@
 
 namespace app\modules\cash\controllers;
 
+use app\controllers\MyController;
 use app\models\CurrencyRates;
 use app\modules\cash\models\Payment;
 use app\modules\cash\models\search\PaymentSearch;
@@ -13,7 +14,7 @@ use yii\filters\VerbFilter;
 /**
  * PaymentController implements the CRUD actions for Payment model.
  */
-class PaymentController extends Controller
+class PaymentController extends MyController
 {
     /**
      * @inheritDoc

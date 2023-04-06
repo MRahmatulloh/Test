@@ -9,7 +9,7 @@ use yii\data\ArrayDataProvider;
 use yii\data\SqlDataProvider;
 use yii\web\Controller;
 
-class BalanceController extends Controller
+class BalanceController extends MyController
 {
     /**
      * Displays homepage.

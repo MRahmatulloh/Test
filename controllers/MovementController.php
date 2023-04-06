@@ -16,7 +16,7 @@ use yii\filters\VerbFilter;
 /**
  * MovementController implements the CRUD actions for Movement model.
  */
-class MovementController extends Controller
+class MovementController extends MyController
 {
     /**
      * @inheritDoc

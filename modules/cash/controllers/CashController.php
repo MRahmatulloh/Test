@@ -2,6 +2,7 @@
 
 namespace app\modules\cash\controllers;
 
+use app\controllers\MyController;
 use app\modules\cash\models\search\CashSearch;
 use Yii;
 use yii\web\Controller;
@@ -9,7 +10,7 @@ use yii\web\Controller;
 /**
  * Default controller for the `cash` module
  */
-class CashController extends Controller
+class CashController extends MyController
 {
     /**
      * Renders the index view for the module

@@ -17,7 +17,7 @@ use mdm\admin\components\Configs;
  * @author Misbahul D Munir <misbahuldmunir@gmail.com>
  * @since 1.0
  */
-class RuleController extends Controller
+class RuleController extends MyController
 {
 
     /**

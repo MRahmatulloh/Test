@@ -15,7 +15,7 @@ use yii\filters\VerbFilter;
 /**
  * RasxodGoodsController implements the CRUD actions for RasxodGoods model.
  */
-class RasxodGoodsController extends Controller
+class RasxodGoodsController extends MyController
 {
     /**
      * @inheritDoc

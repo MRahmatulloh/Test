@@ -2,6 +2,7 @@
 
 namespace app\modules\cash\controllers;
 
+use app\controllers\MyController;
 use app\models\CurrencyRates;
 use app\modules\cash\models\Expense;
 use app\modules\cash\models\search\ExpenseSearch;
@@ -13,7 +14,7 @@ use yii\filters\VerbFilter;
 /**
  * ExpenseController implements the CRUD actions for Expense model.
  */
-class ExpenseController extends Controller
+class ExpenseController extends MyController
 {
     /**
      * @inheritDoc

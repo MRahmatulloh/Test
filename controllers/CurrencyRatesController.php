@@ -13,7 +13,7 @@ use yii\filters\VerbFilter;
 /**
  * CurrencyRatesController implements the CRUD actions for CurrencyRates model.
  */
-class CurrencyRatesController extends Controller
+class CurrencyRatesController extends MyController
 {
     /**
      * @inheritDoc

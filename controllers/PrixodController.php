@@ -20,7 +20,7 @@ use function PHPUnit\Framework\fileExists;
 /**
  * PrixodController implements the CRUD actions for Prixod model.
  */
-class PrixodController extends Controller
+class PrixodController extends MyController
 {
     /**
      * @inheritDoc

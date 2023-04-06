@@ -18,7 +18,7 @@ use function PHPUnit\Framework\fileExists;
 /**
  * RasxodController implements the CRUD actions for Rasxod model.
  */
-class RasxodController extends Controller
+class RasxodController extends MyController
 {
     /**
      * @inheritDoc
