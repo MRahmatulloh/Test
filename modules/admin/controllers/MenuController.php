@@ -16,7 +16,7 @@ use mdm\admin\components\Helper;
  * @author Misbahul D Munir <misbahuldmunir@gmail.com>
  * @since 1.0
  */
-class MenuController extends Controller
+class MenuController extends MyController
 {
 
     /**

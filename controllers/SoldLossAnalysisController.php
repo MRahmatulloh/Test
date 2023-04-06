@@ -9,7 +9,7 @@ use yii\data\ActiveDataProvider;
 use yii\data\SqlDataProvider;
 use yii\web\Controller;
 
-class SoldLossAnalysisController extends Controller
+class SoldLossAnalysisController extends MyController
 {
     /**
      * Displays homepage.

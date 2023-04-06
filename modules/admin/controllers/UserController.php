@@ -22,7 +22,7 @@ use yii\web\NotFoundHttpException;
 /**
  * User controller
  */
-class UserController extends Controller
+class UserController extends MyController
 {
     private $_oldMailPath;
 

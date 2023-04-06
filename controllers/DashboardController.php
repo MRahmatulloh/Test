@@ -5,7 +5,7 @@ namespace app\controllers;
 use app\services\DashboardDataService;
 use yii\web\Controller;
 
-class DashboardController extends Controller
+class DashboardController extends MyController
 {
     /**
      * @var DashboardDataService

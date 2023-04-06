@@ -20,7 +20,7 @@ use yii\rbac\Item;
  * @author Misbahul D Munir <misbahuldmunir@gmail.com>
  * @since 1.0
  */
-class ItemController extends Controller
+class ItemController extends MyController
 {
 
     /**

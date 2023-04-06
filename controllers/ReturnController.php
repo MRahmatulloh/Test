@@ -19,7 +19,7 @@ use function PHPUnit\Framework\fileExists;
 /**
  * ReturnController implements the CRUD actions for Prixod model.
  */
-class ReturnController extends Controller
+class ReturnController extends MyController
 {
     /**
      * @inheritDoc

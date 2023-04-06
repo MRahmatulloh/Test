@@ -18,7 +18,7 @@ use yii\filters\VerbFilter;
 /**
  * PrixodGoodsController implements the CRUD actions for PrixodGoods model.
  */
-class PrixodGoodsController extends Controller
+class PrixodGoodsController extends MyController
 {
     /**
      * @inheritDoc

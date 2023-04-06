@@ -13,7 +13,7 @@ use yii\filters\VerbFilter;
 /**
  * MovementGoodsController implements the CRUD actions for MovementGoods model.
  */
-class MovementGoodsController extends Controller
+class MovementGoodsController extends MyController
 {
     /**
      * @inheritDoc

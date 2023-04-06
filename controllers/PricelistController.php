@@ -12,7 +12,7 @@ use yii\filters\VerbFilter;
 /**
  * PricelistController implements the CRUD actions for Pricelist model.
  */
-class PricelistController extends Controller
+class PricelistController extends MyController
 {
     /**
      * @inheritDoc

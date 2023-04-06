@@ -13,7 +13,7 @@ use yii\filters\VerbFilter;
  * @author Misbahul D Munir <misbahuldmunir@gmail.com>
  * @since 1.0
  */
-class RouteController extends Controller
+class RouteController extends MyController
 {
     public function behaviors()
     {

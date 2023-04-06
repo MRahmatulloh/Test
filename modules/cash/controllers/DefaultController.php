@@ -2,12 +2,13 @@
 
 namespace app\modules\cash\controllers;
 
+use app\controllers\MyController;
 use yii\web\Controller;
 
 /**
  * Default controller for the `cash` module
  */
-class DefaultController extends Controller
+class DefaultController extends MyController
 {
     /**
      * Renders the index view for the module

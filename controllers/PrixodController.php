@@ -20,7 +20,7 @@ use function PHPUnit\Framework\fileExists;
 /**
  * PrixodController implements the CRUD actions for Prixod model.
  */
-class PrixodController extends Controller
+class PrixodController extends MyController
 {
     /**
      * @inheritDoc
@@ -451,5 +451,37 @@ class PrixodController extends Controller
             return $resp;
         }
         echo "okey brat";
+    }
+
+    public function actionNakladnoy($prixod_id)
+    {
+        $this->layout = 'other';
+        $searchModel = new PrixodGoodsSearch(['prixod_id' => $prixod_id]);
+        $model = new PrixodGoods(['prixod_id' => $prixod_id]);
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        if ($this->request->isPost) {
+            $post = $this->request->post();
+            $base64_string = $post['data'];
+            $filename = 'image.jpg';
+
+            $base64_string = str_replace('data:image/png;base64,', '', $base64_string);
+            $base64_string = str_replace(' ', '+', $base64_string);
+
+            $fileData = base64_decode($base64_string);
+            file_put_contents($filename, $fileData);
+            $telegram = Yii::$app->telegram;
+            $telegram->sendPhoto([
+                'chat_id' => '-1001937395913',
+                'caption' => "№".$model->prixod->number." ".date("d.m.Y", strtotime($model->prixod->date)),
+                'photo' => $filename,
+            ]);
+        }
+
+
+        return $this->render('nakladnoy', [
+            'dataProvider' => $dataProvider,
+            'model' => $model,
+        ]);
     }
 }

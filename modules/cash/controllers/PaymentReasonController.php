@@ -3,6 +3,7 @@
 namespace app\modules\cash\controllers;
 
 use app\components\ItemsTrait;
+use app\controllers\MyController;
 use app\modules\cash\models\PaymentReason;
 use app\modules\cash\models\search\PaymentReasonSearch;
 use Yii;
@@ -13,7 +14,7 @@ use yii\filters\VerbFilter;
 /**
  * PaymentReasonController implements the CRUD actions for PaymentReason model.
  */
-class PaymentReasonController extends Controller
+class PaymentReasonController extends MyController
 {
     use ItemsTrait;
     /**

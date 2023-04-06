@@ -12,7 +12,7 @@ use yii\filters\VerbFilter;
 /**
  * WarehouseController implements the CRUD actions for Warehouse model.
  */
-class WarehouseController extends Controller
+class WarehouseController extends MyController
 {
     /**
      * @inheritDoc
